@@ -16,6 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".RecommendDetailActivity" />
+        <activity android:name=".BookDetailActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".MyPageActivity" />
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".ReadBookActivity" />
+        <activity android:name=".FavoriteBookActivity"></activity>
     </application>
 
 </manifest>
