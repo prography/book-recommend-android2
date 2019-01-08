@@ -9,28 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class SearchFragment extends Fragment {
+public class SearchResultFragment extends Fragment {
 
-    MainActivity activity;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        activity = (MainActivity) getActivity(); //?
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        activity = null; //??
-    }
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_search, container, false);
-
-
         return rootView;
     }
 }

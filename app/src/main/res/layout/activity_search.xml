@@ -6,4 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
 
+    <include layout="@layout/toolbar"
+        />
+
+
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btn_back">
+
+        <!--<fragment-->
+            <!--android:id="@+id/search_result_fragment"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+
+    </FrameLayout>
+
 </android.support.constraint.ConstraintLayout>
