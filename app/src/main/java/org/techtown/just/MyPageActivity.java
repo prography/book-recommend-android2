@@ -1,10 +1,18 @@
 package org.techtown.just;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -13,6 +21,7 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
     @BindView(R.id.btn_main)
     Button btn_main;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

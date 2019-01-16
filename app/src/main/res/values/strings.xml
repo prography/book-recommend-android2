@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name"> Today`s book </string>
+    <string name="app_name"> TODAY`S TAG </string>
     <string name="facebook_app_id">348691859153848</string>
+    <string name="fb_login_protocol_scheme">fb348691859153848</string>
 
 
 </resources>
