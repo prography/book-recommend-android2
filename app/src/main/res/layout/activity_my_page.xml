@@ -10,8 +10,9 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="mypage"
+        android:text=" 마이페이지 "
         android:textSize="30dp"/>
+
 
     <Button
         android:id="@+id/btn_main"
@@ -20,7 +21,70 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:text="main으로"
+        app:layout_constraintLeft_toRightOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/profile_img"
+        android:padding="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="50dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        />
+
+    <TextView
+        android:id="@+id/profile_name"
+        android:text = "facebook_name"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:layout_marginTop="50sp"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintLeft_toRightOf="@id/profile_img"
+        />
+
+    <Button
+        android:id="@+id/mod_profile"
+        android:text = "프로필 수정"
+        android:textSize="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:layout_marginTop="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/profile_name"
+        app:layout_constraintLeft_toRightOf="@id/profile_img"
+        />
+
+    <TextView
+        android:id="@+id/readbook"
+        android:text="읽은 책"
+        android:textSize="30dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_img"
+        />
+
+    <TextView
+        android:id="@+id/interest_book"
+        android:text="관심 책"
+        android:textSize="30dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/readbook"
+        />
 
 </android.support.constraint.ConstraintLayout>

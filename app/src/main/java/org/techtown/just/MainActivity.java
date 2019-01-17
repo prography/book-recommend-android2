@@ -15,6 +15,8 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
@@ -26,6 +28,8 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     String sfName = "myFile";
+    Boolean isLoggedIn ;
+
     @BindView(R.id.btn_my)
     Button btnMy;
     @BindView(R.id.text)
@@ -68,22 +72,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //아무거나를 선택하면 나머지는 false로
         checkBox_anything.setOnCheckedChangeListener(this);
 
-        //jdk 사용이 달라서 직접 코드에서 해시키 생성.
-//        try {
-//            PackageInfo info = getPackageManager().getPackageInfo(
-//                    "org.techtown.just",
-//                    PackageManager.GET_SIGNATURES);
-//            for (android.content.pm.Signature signature : info.signatures) {
-//                MessageDigest md = MessageDigest.getInstance("SHA");
-//                md.update(signature.toByteArray());
-//                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//            }
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
+        //access token 유효성 확인
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        isLoggedIn = accessToken != null && !accessToken.isExpired();
 
+
+        //jdk 사용이 달라서 직접 코드에서 해시키 생성.
+/*        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "org.techtown.just",
+                    PackageManager.GET_SIGNATURES);
+            for (android.content.pm.Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+*/
     } // end of onCreate
 
     @Override
@@ -98,19 +107,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.btn_my:
                 // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
-                SharedPreferences sf = getSharedPreferences(sfName, 0);
+                SharedPreferences sf = getSharedPreferences(sfName, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sf.edit();//저장하려면 editor가 필요
 
-                int i = sf.getInt("my", 0);
-                if (i == 1)
+                editor.putBoolean("my", isLoggedIn); // 입력
+//                editor.putInt("my", 1); // 입력
+                editor.commit(); // 파일에 최종 반영함
+
+                boolean Login_success = sf.getBoolean("my", true);
+                if (Login_success == false)
                     intent = new Intent(this, LoginActivity.class);
                 else
                     intent = new Intent(this, MyPageActivity.class);
 
                 startActivity(intent);
 
-                editor.putInt("my", 1); // 입력
-                editor.commit(); // 파일에 최종 반영함
                 break;
 
             case R.id.button:

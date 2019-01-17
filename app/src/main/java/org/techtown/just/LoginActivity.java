@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.login.widget.LoginButton;
@@ -20,6 +22,10 @@ public class LoginActivity extends AppCompatActivity {
     private Login_FacebookActivity mLoginCallback;
     private CallbackManager callbackManager;
 
+    //access token 유효성 확인
+    AccessToken accessToken = AccessToken.getCurrentAccessToken();
+    Boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +40,19 @@ public class LoginActivity extends AppCompatActivity {
         btn_facebook_login.setReadPermissions(Arrays.asList("public_profile","email"));
         btn_facebook_login.registerCallback(callbackManager, mLoginCallback);
     }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Log.e("Login_onRestart",": e");
+        //로그인 성공시 mypage activity로
+        if(isLoggedIn==true) {
+            Intent intent = new Intent(this, MyPageActivity.class);
+            startActivity(intent);
+        }
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
