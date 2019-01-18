@@ -4,17 +4,31 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -40,11 +54,64 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     TagNames tagNames;
 
+
+    Retrofit retrofit;
+    ApiService apiService;
+    Data data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+//        doJSONParser();
+        //recyclerview
+        RecyclerView view = (RecyclerView) findViewById(R.id.main_recyclerview);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        MyRecyclerViewAdapter myRecyclerViewAdapter = new MyRecyclerViewAdapter();
+        view.setLayoutManager(layoutManager);
+        view.setAdapter(myRecyclerViewAdapter);
+
+        retrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL).build();
+        apiService = retrofit.create(ApiService.class);
+        Call<ResponseBody> comment = apiService.getComment(1);
+        comment.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result = response.body().string();
+                    Log.v("Test", result); //받아온 데이터
+                    try {
+                        JSONArray jsonArray = new JSONArray(result);
+                        data = new Data();
+                        for (int i = 0 ; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            data.setPostId(jsonObject.getInt("postId"));
+                            data.setId(jsonObject.getInt("id"));
+                            data.setName(jsonObject.getString("name"));
+                            data.setMail(jsonObject.getString("mail"));
+                            data.setBody(jsonObject.getString("body"));
+                            //dataArrayList.add(data);
+                            text.setText(data.toString());
+                            Log.v("Test", jsonObject.toString());
+
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
 
         //checkbox의 text <- tagNames의 text 대입
         tagNames = new TagNames();
@@ -120,6 +187,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for (int i = 0; i < cb.length; i++)
                 cb[i].setClickable(true);
     }
+
+    void doJSONParser(){
+        StringBuffer sb = new StringBuffer();
+
+        String str =
+                "[{'name':'배트맨','age':43,'address':'고담'},"+
+                        "{'name':'슈퍼맨','age':36,'address':'뉴욕'},"+
+                        "{'name':'앤트맨','age':25,'address':'LA'}]";
+
+        try {
+            JSONArray jarray = new JSONArray(str);   // JSONArray 생성
+            for(int i=0; i < jarray.length(); i++){
+                JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+                String address = jObject.getString("address");
+                String name = jObject.getString("name");
+                int age = jObject.getInt("age");
+
+                sb.append(
+                        "주소:" + address +
+                                "이름:" + name +
+                                "나이:" + age + "\n"
+                );
+            }
+            //tv.setText(sb.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    } // end doJSONParser()
 }
 
 
