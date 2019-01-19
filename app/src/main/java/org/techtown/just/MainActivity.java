@@ -1,74 +1,55 @@
 package org.techtown.just;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.Base64;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.facebook.AccessToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.List;
-import com.facebook.AccessToken;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.Signature;
 import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     String sfName = "myFile";
-    Boolean isLoggedIn ;
+    Boolean isLoggedIn;
 
     @BindView(R.id.btn_my)
     ImageView btnMy;
     @BindView(R.id.text)
     TextView text;
-    @BindView(R.id.checkBox_anything)
-    CheckBox checkBox_anything;
-    @BindView(R.id.checkBox1)
-    CheckBox checkBox1;
-    @BindView(R.id.checkBox2)
-    CheckBox checkBox2;
-    @BindView(R.id.checkBox3)
-    CheckBox checkBox3;
-
+//    @BindView(R.id.checkBox_anything)
+//    CheckBox checkBox_anything;
+//    @BindView(R.id.checkBox1)
+//    CheckBox checkBox1;
+//    @BindView(R.id.checkBox2)
+//    CheckBox checkBox2;
+//    @BindView(R.id.checkBox3)
+//    CheckBox checkBox3;
     @BindView(R.id.button)
     Button button;
     @BindView(R.id.btn_posts)
     Button btnPosts;
+    @BindView(R.id.flowLayout)
+    FlowLayout flowLayout;
 
     CheckBox[] cb;
 
 
     TagNames tagNames;
-
-
-
 
 
     @Override
@@ -81,16 +62,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        doJSONParser();
 
 
-
-
-
-
-
         //checkbox의 text <- tagNames의 text 대입
         tagNames = new TagNames();
-        cb = new CheckBox[]{checkBox1, checkBox2, checkBox3};
+
+
+
+//        cb = new CheckBox[]{checkBox1, checkBox2, checkBox3};
+
         for (int i = 0; i < tagNames.getTags().length; i++)
-            cb[i].setText(tagNames.getTags()[i]);
+            flowLayout.addTag(tagNames.getTags()[i]);
+
+        flowLayout.relayoutToAlign();
+
 
         //btnMy
         btnMy.setOnClickListener(this);
@@ -98,7 +81,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         btnPosts.setOnClickListener(this);
 
         //아무거나를 선택하면 나머지는 false로
-        checkBox_anything.setOnCheckedChangeListener(this);
+//        checkBox_anything.setOnCheckedChangeListener(this);
 
         //access token 유효성 확인
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -123,6 +106,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 */
     } // end of onCreate
 
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -137,7 +121,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.btn_my:
                 // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
 
-               getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
+                getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
                 if (isLoggedIn == false)
                     intent = new Intent(this, LoginActivity.class);
                 else
@@ -152,14 +136,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 String s = "";
                 intent = new Intent(this, RecommendDetailActivity.class);
 
-                if (checkBox_anything.isChecked()) { //아무거나 선택 시
-                    int randomNum = random.nextInt(cb.length);
-                    intent.putExtra("randomNum", randomNum);
-                } else {
-                    for (int j = 0; j < tagNames.getTags().length; j++)
-                        if (cb[j].isChecked() == true)
-                            tagNames.setTagIndex(j);
-                }
+                tagNames.updateSelectedTags(flowLayout.getCheckedTagValues());
 
                 intent.putExtra("tagNames", tagNames);
                 startActivity(intent);
@@ -174,14 +151,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        if (checkBox_anything.isChecked())
-            for (int i = 0; i < cb.length; i++) {
-                cb[i].setChecked(false);
-                cb[i].setClickable(false);
-            }
-        else
-            for (int i = 0; i < cb.length; i++)
-                cb[i].setClickable(true);
+//        if (checkBox_anything.isChecked())
+//            for (int i = 0; i < cb.length; i++) {
+//                cb[i].setChecked(false);
+//                cb[i].setClickable(false);
+//            }
+//        else
+//            for (int i = 0; i < cb.length; i++)
+//                cb[i].setClickable(true);
     }
 
     void doJSONParser() {

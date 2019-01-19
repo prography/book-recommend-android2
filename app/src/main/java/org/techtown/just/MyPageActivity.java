@@ -49,8 +49,8 @@ import static android.widget.GridLayout.HORIZONTAL;
 
 public class MyPageActivity extends AppCompatActivity implements View.OnClickListener{
 
-    @BindView(R.id.btn_main)
-    Button btn_main;
+    @BindView(R.id.btn_back)
+    ImageView btn_main;
     @BindView(R.id.profile_name)
     TextView user_name;
     @BindView(R.id.mod_profile)
@@ -170,7 +170,7 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
 
                 switch (view.getId()) {
-                    case R.id.btn_main:
+                    case R.id.btn_back:
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -192,6 +192,9 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
                         break;
                 }
     }//onClick
+
+
+
 
 }
 

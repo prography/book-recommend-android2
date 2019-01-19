@@ -21,7 +21,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.btn_search)
     ImageView btnSearch;
     @BindView(R.id.btn_my)
-    Button btnMy;
+    ImageView btnMy;
 
     String sfName = "myFile";
 

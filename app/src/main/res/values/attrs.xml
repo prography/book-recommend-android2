@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="FlowLayout">
+        <attr name="lineSpacing" format="dimension" />
+        <attr name="child_leftpadding" format="dimension" />
+        <attr name="child_toppadding" format="dimension" />
+
+        <attr name="maxLine" format="integer" />
+    </declare-styleable>
+
+</resources>
