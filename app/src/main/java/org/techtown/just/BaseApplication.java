@@ -29,9 +29,7 @@ public class BaseApplication extends Application {
 
         //kakao sdk초기화
         KakaoSDK.init(new KakaoSDKAdapter());
-
         localStore = new LocalStore(this);
-
     }
 
     @Override
