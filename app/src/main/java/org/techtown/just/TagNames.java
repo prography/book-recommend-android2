@@ -1,22 +1,38 @@
 package org.techtown.just;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class TagNames implements Serializable {
-    private String[] tags = {"행복", "슬픔", "힐링"};
-    private int[] tagIndex;
+    private String[] tags = {"행복", "슬픔", "힐링", "스릴러", "고전", "SF", "드라마", "따뜻함", "시리즈물", "고전명작", "한국", "영국", "미스터리"};
+    private ArrayList<String> selectedTags = new ArrayList<>();
 
-    public String[] getTags() { return tags; }
-    public int[] getTagIndex() { return tagIndex; }
+    public String[] getTags() {
+        return tags;
+    }
 
-    public void setTagIndex(int i) {
-        tagIndex[i] = 1;
+    public void addSelectedTag(String tag) {
+        selectedTags.add(tag);
+    }
+
+    public void clearSelectedTags() {
+        selectedTags.clear();
+    }
+
+    public void updateSelectedTags(ArrayList<String> tags) {
+        selectedTags.clear();
+        selectedTags.addAll(tags);
+    }
+
+    public void addSelectedTags(ArrayList<String> tags) {
+        selectedTags.addAll(tags);
+    }
+
+    public ArrayList<String> getSelectedTags() {
+        return selectedTags;
     }
 
     public TagNames() {
-        tagIndex = new int[tags.length];
 
-        for (int i = 0; i < tags.length; i++)
-            tagIndex[i] = 0;
     }
 }

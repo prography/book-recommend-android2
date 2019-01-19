@@ -37,9 +37,8 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
         TagNames tagNames = (TagNames) intent.getSerializableExtra("tagNames");
         String s = "";
         if (randomNum == -1) {
-            for (int i = 0; i < tagNames.getTagIndex().length; i++)
-                if (tagNames.getTagIndex()[i] == 1)
-                    s += tagNames.getTags()[i] + " ";
+            for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
+                s += tagNames.getSelectedTags().get(i) + " ";
         } else { //아무거나 선택 시
             s = tagNames.getTags()[randomNum];
         }
