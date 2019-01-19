@@ -6,20 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
     <TextView
         android:id="@+id/login_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="login"/>
+        android:textSize="30dp"
+        android:text="로그인 방식을 선택해주세요 :)"/>
 
+    <Button
+        android:id="@+id/btn_custom_kakao"
+        android:text="카카오 로그인"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.kakao.usermgmt.LoginButton
+        android:id="@+id/btn_kakao_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
+        <Button
+            android:id="@+id/btn_custom_facebook"
+            android:text="페이스북 로그인"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     <com.facebook.login.widget.LoginButton
-        android:layout_below="@+id/login_label"
-        android:id="@+id/login_button"
+        android:id="@+id/btn_facebook_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
+        android:layout_marginBottom="30dp"
+        android:visibility="gone"
+        />
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

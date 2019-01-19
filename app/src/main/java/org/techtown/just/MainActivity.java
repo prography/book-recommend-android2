@@ -26,7 +26,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     String sfName = "myFile";
     Boolean isLoggedIn ;
@@ -108,18 +108,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.btn_my:
                 // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
-                SharedPreferences sf = getSharedPreferences(sfName, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sf.edit();//저장하려면 editor가 필요
 
-                editor.putBoolean("my", isLoggedIn); // 입력
-//                editor.putInt("my", 1); // 입력
-                editor.commit(); // 파일에 최종 반영함
-
-                boolean Login_success = sf.getBoolean("my", true);
-                if (Login_success == false)
+               getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
+                if (isLoggedIn == false)
                     intent = new Intent(this, LoginActivity.class);
                 else
-                    intent = new Intent(this, MyPageActivity.class);
+                    intent = new Intent(this, LoginActivity.class);
 
                 startActivity(intent);
 
