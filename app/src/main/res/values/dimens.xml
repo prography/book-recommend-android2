@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="icon_size">24dp</dimen>
+    <dimen name="icon_size_with_padding">34dp</dimen>
+    <dimen name="icon_padding">5dp</dimen>
+    <dimen name="side_margin">16dp</dimen>
+    <dimen name="side_margin_small">8dp</dimen>
+    <dimen name="side_margin_large">24dp</dimen>
+    <dimen name="title_text_size">19sp</dimen>
+    <dimen name="subtitle_text_size">16sp</dimen>
+    <dimen name="text_size">16sp</dimen>
+
+    <dimen name="title_text_leading">19sp</dimen>
+    <dimen name="title_text_padding">8sp</dimen>
+    <dimen name="subtitle_text_leading">19sp</dimen>
+    <dimen name="subtitle_text_padding">7sp</dimen>
+    <dimen name="text_leading">16sp</dimen>
+    <dimen name="text_padding">5sp</dimen>
+
+    <dimen name="toolbar_height">51dp</dimen>
+
+    <dimen name="button_radius">2.5dp</dimen>
+    <dimen name="button_height">45dp</dimen>
+
+</resources>
