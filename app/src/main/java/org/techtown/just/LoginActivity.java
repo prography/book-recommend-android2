@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
+import com.facebook.login.Login;
 import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
@@ -20,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     private Context mContext;
 
     private LoginButton btn_facebook_login, btn_kakao_login;
-    private Button btn_customKakao, btn_customFacebook;
+    private Button btn_customFacebook, btn_customKakao;
 
     private Login_FacebookActivity mLoginCallback;
     private CallbackManager callbackManager;
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_facebook_login.setReadPermissions(Arrays.asList("public_profile","email"));
         btn_facebook_login.registerCallback(callbackManager, mLoginCallback);
 
+        btn_kakao_login=(LoginButton)findViewById(R.id.btn_kakao_login);
         btn_customKakao=(Button)findViewById(R.id.btn_custom_kakao);
         btn_customKakao.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -50,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                 btn_kakao_login.performClick();
             }
         });
-        //btn_customKakao = (LoginButton)findViewById(R.id.btn_kakao_login);
+        btn_kakao_login = (LoginButton)findViewById(R.id.btn_kakao_login);
     }
 
     @Override
