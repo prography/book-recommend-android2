@@ -2,44 +2,22 @@ package org.techtown.just;
 
 import android.content.Intent;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
-import android.media.Image;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
+import com.kakao.kakaotalk.response.KakaoTalkProfile;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InputStream;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -66,8 +44,10 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
     private ProfilePictureView profilePictureView;
 
-    Profile profile = Profile.getCurrentProfile();
-    final String link = profile.getProfilePictureUri(200,200).toString();
+    Profile facebookProfile = Profile.getCurrentProfile();
+    KakaoTalkProfile kakaoTalkProfile ;
+
+    final String link = facebookProfile.getProfilePictureUri(200,200).toString();
 
     Handler handler = new Handler(); //외부쓰레드에서 메인 ui화면을 그릴 때 사용
 
@@ -83,7 +63,7 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
         ButterKnife.bind(this);
 
         profilePictureView = (ProfilePictureView) findViewById(R.id.profile_img);
-        //round profile image
+        //round facebookProfile image
         profilePictureView.setBackground(new ShapeDrawable(new OvalShape()));
         if(Build.VERSION.SDK_INT>=21){
             profilePictureView.setClipToOutline(true);
@@ -109,12 +89,16 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
     public void basic_setting(){
 
-        user_name.setText(profile.getName());
-
+        //if facebook로그인시
+        user_name.setText(facebookProfile.getName());
         profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
-        //id값으로 profile uri설정
-        profilePictureView.setProfileId(profile.getId());
+        //id값으로 facebookProfile uri설정
+        profilePictureView.setProfileId(facebookProfile.getId());
 
+        //if kakao 로그인시
+//        user_name.setText(kakaoTalkProfile.getNickName());
+//        profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
+//        profilePictureView.setProfileId(kakaoTalkProfile.getProfileImageUrl());
     }
 
     public void readbook_setting(){
@@ -192,6 +176,7 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
                         break;
                 }
     }//onClick
+
 
 }
 

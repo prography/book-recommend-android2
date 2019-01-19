@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.kakao.auth.ISessionConfig;
+import com.kakao.kakaotalk.response.KakaoTalkProfile;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -77,8 +79,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         isLoggedIn = accessToken != null && !accessToken.isExpired();
 
-
-        //jdk 사용이 달라서 직접 코드에서 해시키 생성.
+        //직접 코드에서 해시키 생성.
 /*        try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "org.techtown.just",
