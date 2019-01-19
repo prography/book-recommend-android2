@@ -22,5 +22,6 @@
 
     <dimen name="button_radius">2.5dp</dimen>
     <dimen name="button_height">45dp</dimen>
+    <dimen name="button_side_padding">8dp</dimen>
 
 </resources>

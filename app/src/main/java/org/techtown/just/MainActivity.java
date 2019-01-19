@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Boolean isLoggedIn ;
 
     @BindView(R.id.btn_my)
-    Button btnMy;
+    ImageView btnMy;
     @BindView(R.id.text)
     TextView text;
     @BindView(R.id.checkBox_anything)
