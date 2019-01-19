@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        //aaaa
         Intent intent;
         Random random = new Random();
         switch (view.getId()) {
