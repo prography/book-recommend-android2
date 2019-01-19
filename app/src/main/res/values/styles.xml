@@ -8,4 +8,30 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="TitleTextTheme" parent="@android:style/TextAppearance.Small">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/title_text_size</item>
+        <item name="android:lineSpacingExtra">@dimen/title_text_leading</item>
+        <item name="android:paddingTop">@dimen/title_text_padding</item>
+        <item name="android:paddingBottom">@dimen/title_text_padding</item>
+    </style>
+
+    <style name="SubTitleTextTheme" parent="@android:style/TextAppearance.Small">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/subtitle_text_size</item>
+        <item name="android:lineSpacingExtra">@dimen/subtitle_text_leading</item>
+        <item name="android:paddingTop">@dimen/subtitle_text_padding</item>
+        <item name="android:paddingBottom">@dimen/subtitle_text_padding</item>
+    </style>
+
+
+    <style name="TextTheme" parent="@android:style/TextAppearance.Small">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:lineSpacingExtra">@dimen/text_leading</item>
+        <item name="android:paddingTop">@dimen/text_padding</item>
+        <item name="android:paddingBottom">@dimen/text_padding</item>
+    </style>
+
 </resources>
