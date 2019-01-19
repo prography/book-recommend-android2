@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name"> Today`s book </string>
+    <string name="app_name"> TODAY`S TAG </string>
     <string name="facebook_app_id">348691859153848</string>
+    <string name="fb_login_protocol_scheme">fb348691859153848</string>
+    <string name="kakao_app_key">07db5418bc6534cc4fc1afad7c0ebe19</string>
 
 
 </resources>

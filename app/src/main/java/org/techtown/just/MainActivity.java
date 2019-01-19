@@ -2,15 +2,20 @@ package org.techtown.just;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +25,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
+import com.facebook.AccessToken;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -29,11 +39,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     String sfName = "myFile";
+    Boolean isLoggedIn ;
+
     @BindView(R.id.btn_my)
-    Button btnMy;
+    ImageView btnMy;
     @BindView(R.id.text)
     TextView text;
     @BindView(R.id.checkBox_anything)
@@ -58,8 +70,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -86,6 +100,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //아무거나를 선택하면 나머지는 false로
         checkBox_anything.setOnCheckedChangeListener(this);
 
+        //access token 유효성 확인
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+
+        //jdk 사용이 달라서 직접 코드에서 해시키 생성.
+/*        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "org.techtown.just",
+                    PackageManager.GET_SIGNATURES);
+            for (android.content.pm.Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+*/
     } // end of onCreate
 
     @Override
@@ -101,19 +136,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.btn_my:
                 // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
-                SharedPreferences sf = getSharedPreferences(sfName, 0);
-                SharedPreferences.Editor editor = sf.edit();//저장하려면 editor가 필요
 
-                int i = sf.getInt("my", 0);
-                if (i == 0)
+               getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
+                if (isLoggedIn == false)
                     intent = new Intent(this, LoginActivity.class);
                 else
-                    intent = new Intent(this, MyPageActivity.class);
+                    intent = new Intent(this, LoginActivity.class);
 
                 startActivity(intent);
 
-                editor.putInt("my", 1); // 입력
-                editor.commit(); // 파일에 최종 반영함
                 break;
 
             case R.id.button:

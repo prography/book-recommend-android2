@@ -4,24 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FavoriteBookActivity">
+    tools:context=".Login_FacebookActivity">
 
     <TextView
-        android:id="@+id/tv"
-        android:textSize="20dp"
+        android:id="@+id/login_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="관심 책 액티비티"
-        />
+        android:text="login"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_int"
-        android:layout_width="match_parent"
+
+    <com.facebook.login.widget.LoginButton
+        android:layout_below="@+id/login_label"
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layoutManager="android.support.v7.widget.GridLayoutManager"
-        app:spanCount="3"
-        app:layout_constraintTop_toBottomOf="@+id/tv"
-        />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp" />
+
 
 </android.support.constraint.ConstraintLayout>

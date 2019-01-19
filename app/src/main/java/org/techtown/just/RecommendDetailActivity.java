@@ -21,7 +21,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
     @BindView(R.id.btn_search)
     ImageView btnSearch;
     @BindView(R.id.btn_my)
-    Button btnMy;
+    ImageView btnMy;
 
     String sfName = "myFile";
 
@@ -61,13 +61,13 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
                 SharedPreferences sf = getSharedPreferences(sfName, 0);
                 SharedPreferences.Editor editor = sf.edit();//저장하려면 editor가 필요
 
-                int i = sf.getInt("my", 0);
-                if (i == 0)
-                    intent = new Intent(this, LoginActivity.class);
-                else
-                    intent = new Intent(this, MyPageActivity.class);
-
-                startActivity(intent);
+//                int i = sf.getInt("my", 0);
+//                if (i == 0)
+//                    intent = new Intent(this, LoginActivity.class);
+//                else
+//                    intent = new Intent(this, MyPageActivity.class);
+//
+//                startActivity(intent);
                 break;
 
             case R.id.btn_back:
