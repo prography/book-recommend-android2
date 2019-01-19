@@ -5,9 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-
-        android:allowBackup="true"
         android:name=".BaseApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -16,7 +15,6 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
@@ -52,7 +50,9 @@
             </intent-filter>
         </activity>
         <!-- <activity android:name=".Login_FacebookActivity"></activity> -->
-        <activity android:name=".Mod_ProfileActivity"></activity>
+        <activity android:name=".Mod_ProfileActivity" />
+        <activity android:name=".PostDetailActivity"></activity>
+        <activity android:name=".PostsActivity"></activity>
     </application>
 
 </manifest>

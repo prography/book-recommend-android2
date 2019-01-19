@@ -11,11 +11,15 @@ import java.util.List;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<Comment> commentArrayList = new ArrayList<>();
+    private ArrayList<Post> postArrayList = new ArrayList<>();
+    private OnClickListener clickListener;
 
+    public void setClickListener(OnClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 
-    public void addComments(List<Comment> comments) {
-        commentArrayList.addAll(comments);
+    public void addComments(List<Post> posts) {
+        postArrayList.addAll(posts);
         notifyDataSetChanged();
     }
 
@@ -34,14 +38,27 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         //데이터를 넣어주는 부분. 바인딩하는 부분
 
+        final Post post = postArrayList.get(position);
 
-        ((RowCell) holder).str.setText(commentArrayList.get(position).toString());
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.str:
+                        clickListener.onPostClick(post);
+                        break;
+                }
+            }
+
+        };
+
+        ((RowCell) holder).str.setText(postArrayList.get(position).toString());
     }
 
     @Override
     public int getItemCount() {
         //카운터
-        return commentArrayList.size();
+        return postArrayList.size();
     }
 
     //소스코드 절약해주는 부분 static 넣으면 더 좋음
