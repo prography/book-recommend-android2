@@ -40,17 +40,16 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         final Post post = postArrayList.get(position);
 
-        View.OnClickListener listener = new View.OnClickListener() {
+        ((RowCell) holder).str.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
+            public void onClick(View view) {
+                switch (view.getId()) {
                     case R.id.str:
                         clickListener.onPostClick(post);
                         break;
                 }
             }
-
-        };
+        });
 
         ((RowCell) holder).str.setText(postArrayList.get(position).toString());
     }
