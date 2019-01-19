@@ -6,6 +6,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
 import com.facebook.AccessToken;
 
 import java.security.MessageDigest;
@@ -25,6 +34,10 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -46,11 +59,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @BindView(R.id.button)
     Button button;
+    @BindView(R.id.btn_posts)
+    Button btnPosts;
 
     CheckBox[] cb;
 
 
     TagNames tagNames;
+
+
+
 
 
     @Override
@@ -60,15 +78,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+//        doJSONParser();
+
+
+
+
+
+
+
         //checkbox의 text <- tagNames의 text 대입
         tagNames = new TagNames();
-        cb = new CheckBox[] {checkBox1, checkBox2, checkBox3};
+        cb = new CheckBox[]{checkBox1, checkBox2, checkBox3};
         for (int i = 0; i < tagNames.getTags().length; i++)
             cb[i].setText(tagNames.getTags()[i]);
 
         //btnMy
         btnMy.setOnClickListener(this);
         button.setOnClickListener(this);
+        btnPosts.setOnClickListener(this);
 
         //아무거나를 선택하면 나머지는 false로
         checkBox_anything.setOnCheckedChangeListener(this);
@@ -103,6 +130,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onClick(View view) {
+        //aaaa
         Intent intent;
         Random random = new Random();
         switch (view.getId()) {
@@ -127,8 +155,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 if (checkBox_anything.isChecked()) { //아무거나 선택 시
                     int randomNum = random.nextInt(cb.length);
                     intent.putExtra("randomNum", randomNum);
-                }
-                else {
+                } else {
                     for (int j = 0; j < tagNames.getTags().length; j++)
                         if (cb[j].isChecked() == true)
                             tagNames.setTagIndex(j);
@@ -137,6 +164,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 intent.putExtra("tagNames", tagNames);
                 startActivity(intent);
                 break;
+            case R.id.btn_posts:
+                intent = new Intent(this, PostsActivity.class);
+                startActivity(intent);
+                break;
+
         }
     }
 
@@ -151,6 +183,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             for (int i = 0; i < cb.length; i++)
                 cb[i].setClickable(true);
     }
+
+    void doJSONParser() {
+        StringBuffer sb = new StringBuffer();
+
+        String str =
+                "[{'name':'배트맨','age':43,'address':'고담'}," +
+                        "{'name':'슈퍼맨','age':36,'address':'뉴욕'}," +
+                        "{'name':'앤트맨','age':25,'address':'LA'}]";
+
+        try {
+            JSONArray jarray = new JSONArray(str);   // JSONArray 생성
+            for (int i = 0; i < jarray.length(); i++) {
+                JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+                String address = jObject.getString("address");
+                String name = jObject.getString("name");
+                int age = jObject.getInt("age");
+
+                sb.append(
+                        "주소:" + address +
+                                "이름:" + name +
+                                "나이:" + age + "\n"
+                );
+            }
+            //tv.setText(sb.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    } // end doJSONParser()
 }
 
 
