@@ -3,14 +3,14 @@ package org.techtown.just;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 
-import java.io.IOException;
+import org.techtown.just.model.LoginResult;
+import org.techtown.just.model.LoginToken;
+import org.techtown.just.network.NetworkManager;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,41 +22,90 @@ public class Login2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
 
-        Call<Login> login = NetworkManagerLogin.getApiService().register("dahee", "dahee123", "deg9810@naver.com");
-        login.enqueue(new Callback<Login>() {
+        String id = "id";
+        String pw = "pw!#@"; //PW는 반드시 특수문자 포함해야된다함
+        String email = "email@email.com";
+        register(id, pw, email);
+    }
+
+
+    private void register(final String id, final String pw, final String email) {
+        Call<JsonObject> login = NetworkManager.getLoginApi().register(id, pw, email);
+        login.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<Login> call, Response<Login> response) {
-                try {
-                    String result = response.body().string();
-                    Log.v("Test", result); //받아온 데이터
-                    try {
-                        JSONArray jsonArray = new JSONArray(result);
-                        data = new Data();
-                        for (int i = 0 ; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            data.setPostId(jsonObject.getInt("postId"));
-                            data.setId(jsonObject.getInt("id"));
-                            data.setName(jsonObject.getString("name"));
-                            data.setEmail(jsonObject.getString("email"));
-                            data.setBody(jsonObject.getString("body"));
-                            //dataArrayList.add(data);
-                            text.setText(data.toString());
-                            Log.v("Test", jsonObject.toString());
-
-
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    login(id, pw, email);
+                } else {
+                    Toast.makeText(Login2Activity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                 }
+
             }
 
             @Override
-            public void onFailure(Call<Login> call, Throwable t) {
-
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(Login2Activity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
+
+
+    private void login(String id, String pw, String email) {
+
+        final Call<LoginResult> login = NetworkManager.getLoginApi().login(id, pw, email);
+        login.enqueue(new Callback<LoginResult>() {
+            @Override
+            public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                if (response.isSuccessful()) {
+                    LoginResult loginResult = response.body();
+                    LoginToken token = loginResult.getTokens();
+
+                    //TODO : token을 sharedPreference에 저장하기!!
+
+                    /**
+                     * 1.앱에서 로그아웃할때, sharedPreference에서 토큰 관련한 정보들을 삭제해야함~
+                     * 2.앱실행시 sharedPreference에 token들이 존재한다면,token값들이 유효한지 먼저 확인하고, 자동로그인 시켜주면됩니당
+                     * 2-1. 토큰 유효성 검증
+                     */
+                } else {
+                    Toast.makeText(Login2Activity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<LoginResult> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(Login2Activity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+//    private void validToken(String accessToken, String idToken, String refreshToken){
+//        final Call<JsonObject> login = NetworkManager.getLoginApi().validToken(accessToken, idToken, refreshToken);
+//        login.enqueue(new Callback<JsonObject>() {
+//            @Override
+//            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+//                if (response.isSuccessful()) {
+//
+//                } else {
+//                    //TODO : 저장되어있던 token들 sharedPreference에서 지우기!! + 로그인하는 화면으로 돌아가게 하기
+//                    Toast.makeText(Login2Activity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<JsonObject> call, Throwable t) {
+//                t.printStackTrace();
+//                Toast.makeText(Login2Activity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+
+
+
 }

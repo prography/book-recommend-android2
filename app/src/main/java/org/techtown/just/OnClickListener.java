@@ -1,7 +1,6 @@
 package org.techtown.just;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import org.techtown.just.model.Post;
 
 public interface OnClickListener {
     public void onPostClick(Post post);

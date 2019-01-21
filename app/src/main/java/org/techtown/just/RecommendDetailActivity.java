@@ -5,9 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.techtown.just.model.TagNames;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

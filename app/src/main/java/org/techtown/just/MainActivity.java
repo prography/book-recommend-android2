@@ -1,13 +1,7 @@
 package org.techtown.just;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,16 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
-import com.kakao.auth.ISessionConfig;
-import com.kakao.kakaotalk.response.KakaoTalkProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.TagNames;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.Signature;
 import java.util.Random;
 
 import butterknife.BindView;

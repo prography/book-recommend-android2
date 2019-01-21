@@ -8,6 +8,8 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.techtown.just.model.Tag;
+import org.techtown.just.network.NetworkManager;
 
 import java.io.IOException;
 
@@ -31,7 +33,7 @@ public class TagsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tags);
         ButterKnife.bind(this);
 
-        Call<ResponseBody> tagList = NetworkManagerBook.getApiService().getTags();
+        Call<ResponseBody> tagList = NetworkManager.getBookApi().getTags();
         tagList.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -41,7 +43,7 @@ public class TagsActivity extends AppCompatActivity {
                     try {
                         JSONArray jsonArray = new JSONArray(result);
                         tag = new Tag();
-                        for (int i = 0 ; i < jsonArray.length(); i++) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             tag.setId(jsonObject.getInt("id"));
                             tag.setName(jsonObject.getString("name"));

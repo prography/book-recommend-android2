@@ -19,6 +19,8 @@ import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
 import com.kakao.kakaotalk.response.KakaoTalkProfile;
 
+import org.techtown.just.model.BookInfo;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
