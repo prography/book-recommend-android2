@@ -20,6 +20,7 @@ import com.kakao.usermgmt.response.model.UserProfile;
 import java.util.Arrays;
 
 import static com.kakao.auth.Session.getCurrentSession;
+import static org.techtown.just.LocalStore.my;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,9 +35,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private CallbackManager callbackManager;
     private KakaoSessionCallback callback;
 
-    //access token 유효성 확인
-    AccessToken accessToken = AccessToken.getCurrentAccessToken();
-    Boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+//    //access token 유효성 확인
+//    AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//    Boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+    static Boolean isLoggedIn ;
+
 
 
     @Override
@@ -46,17 +49,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mContext=getApplicationContext();
         FacebookSdk.sdkInitialize(mContext);
 
-        callbackManager = CallbackManager.Factory.create();
-        mLoginCallback=new Login_FacebookActivity();
 
 //        callback = new KakaoSessionCallback(LoginActivity.this);
 //        getCurrentSession().addCallback(callback);
         //kakaocallback = new KakaoSessionCallback();
 
-
         btn_facebook_login =(LoginButton) findViewById(R.id.btn_facebook_login);
-        btn_facebook_login.setReadPermissions(Arrays.asList("public_profile","email"));
-        btn_facebook_login.registerCallback(callbackManager, mLoginCallback);
 
 //        btn_kakao_login=(LoginButton)findViewById(R.id.btn_kakao_login);
         btn_customKakao=(Button)findViewById(R.id.btn_custom_kakao);
@@ -68,14 +66,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    protected void onResume(){
-        super.onResume();
+    protected void onRestart(){
+        super.onRestart();
         Log.e("Login_onRestart",": e");
-        //로그인 성공시 mypage activity로
-        if(isLoggedIn==true) {
-            Intent intent = new Intent(this, MyPageActivity.class);
-            startActivity(intent);
-        }
+
+        //checkLogin();
 
     }
 
@@ -91,12 +86,41 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_custom_kakao :
+            case R.id.btn_custom_kakao:
                 btn_kakao_login.performClick();
                 break;
             case R.id.btn_custom_facebook:
+
+                //facebook login
+                callbackManager = CallbackManager.Factory.create();
+                mLoginCallback = new Login_FacebookActivity();
+                btn_facebook_login.setReadPermissions(Arrays.asList("public_profile"));
+                btn_facebook_login.registerCallback(callbackManager, mLoginCallback);
+
                 btn_facebook_login.performClick();
+
                 break;
         }
+
+    }
+
+
+
+    public void checkLogin(){
+
+        //access token 유효성 확인
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        LocalStore.getBooleanValue(LocalStore.my,isLoggedIn);
+        //로그인 성공시 mypage activity로
+        if(isLoggedIn==true) {
+            Intent intent = new Intent(this, MyPageActivity.class);
+            //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
+
+
     }
 }

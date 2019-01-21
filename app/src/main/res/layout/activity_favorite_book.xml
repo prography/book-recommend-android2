@@ -6,12 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".FavoriteBookActivity">
 
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <TextView
         android:id="@+id/tv"
         android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="관심 책 액티비티"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         />
 
     <android.support.v7.widget.RecyclerView

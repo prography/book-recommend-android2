@@ -27,20 +27,34 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.CallbackManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Mod_ProfileActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static org.techtown.just.BaseApplication.getLocalStore;
+
+public class Mod_ProfileActivity extends AppCompatActivity implements View.OnClickListener{
+
+    @BindView(R.id.btn_back)
+    ImageView bt_back;
+
 
     //requestCode 선택한 사진에 대한 요청 값 구분 용도
     private final int CAMERA_CODE=1111;
     private final int GALLERY_CODE=1112;
 
+    private CallbackManager callbackManager;
+    private Login_FacebookActivity mLoginCallback;
 
     private Uri photoUri , albumUri , imageUri;
     private String currentPhotoPath;//파일경로
@@ -55,36 +69,29 @@ public class Mod_ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mod__profile);
 
+        ButterKnife.bind(this);
+
+
         imageButton = (ImageButton) findViewById(R.id.profile_img);
         tv_name = (TextView) findViewById(R.id.profile_ID);
         tv_name.setText("Wonny");
         rename = (Button)findViewById(R.id.edit_name);
+        facebook = (Button)findViewById(R.id.facebook_logout) ;
 
         imageButton.setBackground(new ShapeDrawable(new OvalShape()));
         if(Build.VERSION.SDK_INT>=21){
             imageButton.setClipToOutline(true);
         }
 
-        imageButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                show();
-            }
-        });
+        imageButton.setOnClickListener(this);
+        facebook.setOnClickListener(this);
+        bt_back.setOnClickListener(this);
 
-        rename.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                //Intent intent = new Intent(getApplicationContext(), RenameActivity.class);
-                //intent.putExtra("nickname",tv_name.getText());
-                //startActivity(intent);
-            }
-        });
     }
 
     void show(){
 
-//        checkPermission();
+        checkPermission();
 
         final CharSequence[] items = new CharSequence[]{"사진 촬영","앨범에서 선택"};
 
@@ -421,5 +428,34 @@ public class Mod_ProfileActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_back :
+                finish();
 
+                break;
+            case R.id.profile_img:
+                show();
+                break;
+
+            case R.id.facebook_logout:
+                //callbackManager = CallbackManager.Factory.create();
+                mLoginCallback = new Login_FacebookActivity();
+                mLoginCallback.disconnectFromFacebook();
+
+                Intent intent = new Intent(this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                startActivity(intent);
+
+                break;
+
+            case R.id.edit_name:
+                //Intent intent = new Intent(getApplicationContext(), RenameActivity.class);
+                //intent.putExtra("nickname",tv_name.getText());
+                //startActivity(intent);
+                break;
+        }
+    }
 }

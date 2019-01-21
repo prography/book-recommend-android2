@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.Profile;
@@ -24,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.widget.GridLayout.HORIZONTAL;
+import static org.techtown.just.BaseApplication.getLocalStore;
 
 public class MyPageActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -43,6 +45,7 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
     RecyclerView rc_Intbook;
 
     private ProfilePictureView profilePictureView;
+    Boolean isLoggedIn;
 
     Profile facebookProfile = Profile.getCurrentProfile();
     KakaoTalkProfile kakaoTalkProfile ;
@@ -82,8 +85,16 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    protected void onResume(){
-        super.onResume();
+    protected void onRestart(){
+        super.onRestart();
+        //
+//        getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
+//        if (isLoggedIn == false) {
+//            Intent intent = new Intent(this, LoginActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
+
 
     }
 
