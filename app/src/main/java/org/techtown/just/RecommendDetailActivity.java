@@ -39,9 +39,9 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
         String s = "";
         if (randomNum == -1) {
             for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
-                s += tagNames.getSelectedTags().get(i) + " ";
+                s += tagNames.getSelectedTags().get(i).getTag_name() + " ";
         } else { //아무거나 선택 시
-            s = tagNames.getTags()[randomNum];
+            //s = tagNames.getTags()[randomNum];
         }
         textView.setText(s);
 

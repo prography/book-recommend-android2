@@ -10,6 +10,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.techtown.just.model.Post;
 import org.techtown.just.model.Tag;
 import org.techtown.just.network.NetworkManager;
 
@@ -36,31 +37,16 @@ public class TagsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tags);
         ButterKnife.bind(this);
 
-        Call<ResponseBody> tagList = NetworkManager.getBookApi().getTags();
-        tagList.enqueue(new Callback<ResponseBody>() {
+        Call<List<Tag>> list = NetworkManager.getBookApi().getTags();
+        list.enqueue(new Callback<List<Tag>>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    String result = response.body().string();
-                    Log.v("Test", result); //받아온 데이터
-                    try {
-                        JSONArray jsonArray = new JSONArray(result);
-                        tag = new Tag();
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            tag.setId(jsonObject.getInt("id"));
-                            tag.setName(jsonObject.getString("name"));
-                            text.setText(tag.toString());
-                            Log.v("Test", jsonObject.toString());
+            public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
+                List<Tag> tags = response.body();
+                String s = "";
+                for (int i = 0 ; i < tags.size(); i++)
+                    s += tags.get(i).toString() + "\n";
 
-
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                text.setText(s);
             }
 
             @Override

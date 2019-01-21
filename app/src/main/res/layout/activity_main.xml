@@ -40,7 +40,7 @@
             android:layout_marginTop="40dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="오늘은 뭘 읽어볼까?"
+            android:text="오늘은 뭘 읽어볼까!?"
             android:textSize="35dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +58,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
 
         <org.techtown.just.FlowLayout
             android:id="@+id/flowLayout"
