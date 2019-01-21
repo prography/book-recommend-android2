@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import org.techtown.just.model.Post;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

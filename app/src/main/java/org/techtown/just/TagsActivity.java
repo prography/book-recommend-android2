@@ -1,15 +1,20 @@
 package org.techtown.just;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.techtown.just.model.Tag;
+import org.techtown.just.network.NetworkManager;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +36,7 @@ public class TagsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tags);
         ButterKnife.bind(this);
 
-        Call<ResponseBody> tagList = NetworkManagerBook.getApiService().getTags();
+        Call<ResponseBody> tagList = NetworkManager.getBookApi().getTags();
         tagList.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -41,7 +46,7 @@ public class TagsActivity extends AppCompatActivity {
                     try {
                         JSONArray jsonArray = new JSONArray(result);
                         tag = new Tag();
-                        for (int i = 0 ; i < jsonArray.length(); i++) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             tag.setId(jsonObject.getInt("id"));
                             tag.setName(jsonObject.getString("name"));
@@ -59,8 +64,8 @@ public class TagsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            public void onFailure(Call<List<Tag>> call, Throwable t) {
+                Toast.makeText(TagsActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -1,4 +1,4 @@
-package org.techtown.just;
+package org.techtown.just.model;
 
     public class Comment {
         //json 파싱

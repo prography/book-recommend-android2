@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import java.util.ArrayList;
+import org.techtown.just.model.BookInfo;
 
-import butterknife.BindView;
+import java.util.ArrayList;
 
 public class FavoriteBookActivity extends AppCompatActivity {
 
