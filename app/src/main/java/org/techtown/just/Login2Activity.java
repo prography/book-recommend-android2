@@ -84,27 +84,27 @@ public class Login2Activity extends AppCompatActivity {
         });
     }
 
-//    private void validToken(String accessToken, String idToken, String refreshToken){
-//        final Call<JsonObject> login = NetworkManager.getLoginApi().validToken(accessToken, idToken, refreshToken);
-//        login.enqueue(new Callback<JsonObject>() {
-//            @Override
-//            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-//                if (response.isSuccessful()) {
-//
-//                } else {
-//                    //TODO : 저장되어있던 token들 sharedPreference에서 지우기!! + 로그인하는 화면으로 돌아가게 하기
-//                    Toast.makeText(Login2Activity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JsonObject> call, Throwable t) {
-//                t.printStackTrace();
-//                Toast.makeText(Login2Activity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void validateToken(String accessToken, String idToken, String refreshToken){
+        final Call<JsonObject> login = NetworkManager.getLoginApi().validateToken(accessToken, idToken, refreshToken);
+        login.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+
+                } else {
+                    //TODO : 저장되어있던 token들 sharedPreference에서 지우기!! + 로그인하는 화면으로 돌아가게 하기
+                    Toast.makeText(Login2Activity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(Login2Activity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
 

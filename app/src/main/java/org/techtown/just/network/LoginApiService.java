@@ -24,10 +24,10 @@ public interface LoginApiService {
                             @Field("pw") String pw,
                             @Field("email") String email);
 
-//    @FormUrlEncoded
-//    @POST("/auth/valid/")
-//    Call<JsonObject> validToken(@Field("accessToken") String accessToken,
-//                                 @Field("idToken") String idToken,
-//                                 @Field("refreshToken") String refreshToken);
+    @FormUrlEncoded
+    @POST("/auth2/validate/")
+    Call<JsonObject> validateToken(@Field("accessToken") String accessToken,
+                                   @Field("idToken") String idToken,
+                                   @Field("refreshToken") String refreshToken);
 
 }
