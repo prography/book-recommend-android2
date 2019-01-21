@@ -18,6 +18,7 @@ public class NetworkManagerBook {
 
         return new Retrofit.Builder()
                 .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(ApiServiceBook.API_URL).build();
     }
 

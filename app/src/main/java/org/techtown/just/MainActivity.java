@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 startActivity(intent);
                 break;
             case R.id.btn_login:
-                intent = new Intent(this, LoginActivity.class);
+                intent = new Intent(this, Login2Activity.class);
                 startActivity(intent);
                 break;
         }

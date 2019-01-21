@@ -1,27 +1,27 @@
 package org.techtown.just;
 
 public class Tag {
-    int id;
-    String name;
+    int tag_id;
+    String tag_name;
 
     @Override
     public String toString() {
-        return id + " : " + name;
+        return tag_id + " : " + tag_name;
     }
 
-    public int getId() {
-        return id;
+    public int getTag_id() {
+        return tag_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTag_id(int tag_id) {
+        this.tag_id = tag_id;
     }
 
-    public String getName() {
-        return name;
+    public String getTag_name() {
+        return tag_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTag_name(String tag_name) {
+        this.tag_name = tag_name;
     }
 }
