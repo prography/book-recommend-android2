@@ -14,4 +14,9 @@ public class BookInfo implements Serializable {
         this.book_name = book_name;
     }
 
+    public BookInfo(int id){
+        this.id = id;
+//        this.book_name = book_name;
+    }
+
 }

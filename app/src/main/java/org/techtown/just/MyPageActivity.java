@@ -116,13 +116,13 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
         ArrayList<BookInfo> BookInfoArrayList = new ArrayList<>();
 
-        BookInfoArrayList.add(new BookInfo("배"));
-        BookInfoArrayList.add(new BookInfo("고"));
-        BookInfoArrayList.add(new BookInfo("오"));
-        BookInfoArrayList.add(new BookInfo("프"));
-        BookInfoArrayList.add(new BookInfo("으"));
-        BookInfoArrayList.add(new BookInfo("다"));
-        BookInfoArrayList.add(new BookInfo("아"));
+        BookInfoArrayList.add(new BookInfo(1));
+        BookInfoArrayList.add(new BookInfo(2));
+//        BookInfoArrayList.add(new BookInfo("오"));
+//        BookInfoArrayList.add(new BookInfo("프"));
+//        BookInfoArrayList.add(new BookInfo("으"));
+//        BookInfoArrayList.add(new BookInfo("다"));
+//        BookInfoArrayList.add(new BookInfo("아"));
 
         rc_Readbook=(RecyclerView)findViewById(R.id.rc_readbook);
         rc_Readbook.setHasFixedSize(true);
@@ -143,9 +143,9 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
         BookInfoArrayList2.add(new BookInfo("로"));
         BookInfoArrayList2.add(new BookInfo("로"));
         BookInfoArrayList2.add(new BookInfo("해"));
-        BookInfoArrayList2.add(new BookInfo("주"));
-        BookInfoArrayList2.add(new BookInfo("세"));
-        BookInfoArrayList2.add(new BookInfo("요"));
+//        BookInfoArrayList2.add(new BookInfo("주"));
+//        BookInfoArrayList2.add(new BookInfo("세"));
+//        BookInfoArrayList2.add(new BookInfo("요"));
 
         rc_Intbook=(RecyclerView)findViewById(R.id.rc_intbook);
         rc_Intbook.setHasFixedSize(true);
