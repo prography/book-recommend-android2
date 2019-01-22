@@ -1,5 +1,7 @@
 package org.techtown.just.network;
 
+import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.Post;
 import org.techtown.just.model.Tag;
 
 import java.util.List;
@@ -9,6 +11,7 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface BookApiService {
@@ -26,4 +29,11 @@ public interface BookApiService {
 
     @GET("tags/")
     Call<List<Tag>> getTags();
+
+    @GET("books/listwithtag/{tags}/")
+    Call<List<BookInfo>> getListWithTag(@Path("tags") String tags);
+
+    @GET("books/listwithtag/{isbn}/")
+    Call<List<BookInfo>> getBookInfoWithIsbn(@Path("isbn") String isbn);
+
 }
