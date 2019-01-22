@@ -1,4 +1,4 @@
-package org.techtown.just;
+package org.techtown.just.model;
 
 import java.io.Serializable;
 

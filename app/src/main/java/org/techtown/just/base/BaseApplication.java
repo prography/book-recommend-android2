@@ -1,9 +1,12 @@
-package org.techtown.just;
+package org.techtown.just.base;
 
 
 import android.app.Application;
 
 import com.kakao.auth.KakaoSDK;
+
+import org.techtown.just.KakaoSDKAdapter;
+import org.techtown.just.LocalStore;
 
 public class BaseApplication extends Application {
 

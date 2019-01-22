@@ -8,6 +8,8 @@ import com.kakao.auth.IApplicationConfig;
 import com.kakao.auth.ISessionConfig;
 import com.kakao.auth.KakaoAdapter;
 
+import org.techtown.just.base.BaseApplication;
+
 public class KakaoSDKAdapter extends KakaoAdapter {
 
     @Override

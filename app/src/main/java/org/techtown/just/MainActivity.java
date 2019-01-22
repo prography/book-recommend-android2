@@ -1,6 +1,5 @@
 package org.techtown.just;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -16,12 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
-import com.kakao.auth.ISessionConfig;
-import com.kakao.kakaotalk.response.KakaoTalkProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.TagNames;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -51,6 +50,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     Button button;
     @BindView(R.id.btn_posts)
     Button btnPosts;
+    @BindView(R.id.btn_tags)
+    Button btnTags;
+    @BindView(R.id.btn_login)
+    Button btnLogin;
     @BindView(R.id.flowLayout)
     FlowLayout flowLayout;
 
@@ -87,6 +90,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         btnMy.setOnClickListener(this);
         button.setOnClickListener(this);
         btnPosts.setOnClickListener(this);
+        btnTags.setOnClickListener(this);
+        btnLogin.setOnClickListener(this);
 
         //아무거나를 선택하면 나머지는 false로
 //        checkBox_anything.setOnCheckedChangeListener(this);
@@ -161,7 +166,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 intent = new Intent(this, PostsActivity.class);
                 startActivity(intent);
                 break;
-
+            case R.id.btn_tags:
+                intent = new Intent(this, TagsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_login:
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 

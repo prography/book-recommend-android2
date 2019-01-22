@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.techtown.just.model.BookInfo;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;

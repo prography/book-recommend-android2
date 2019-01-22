@@ -1,17 +1,12 @@
 package org.techtown.just;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import org.techtown.just.model.Post;
 
 public class PostsActivity extends AppCompatActivity implements OnClickListener {
 
@@ -31,19 +26,19 @@ public class PostsActivity extends AppCompatActivity implements OnClickListener 
         myRecyclerViewAdapter.setClickListener(this);
 
         //retrofit
-        Call<List<Post>> post = NetworkManager.getApiService().getPostList();
-        post.enqueue(new Callback<List<Post>>() {
-            @Override
-            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                List<Post> posts = response.body();
-                myRecyclerViewAdapter.addComments(posts);
-            }
-
-            @Override
-            public void onFailure(Call<List<Post>> call, Throwable t) {
-                Toast.makeText(PostsActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        Call<List<Post>> post = NetworkManager.getApiService().getPostList();
+//        post.enqueue(new Callback<List<Post>>() {
+//            @Override
+//            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+//                List<Post> posts = response.body();
+//                myRecyclerViewAdapter.addComments(posts);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Post>> call, Throwable t) {
+//                Toast.makeText(PostsActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     @Override
