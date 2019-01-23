@@ -30,13 +30,11 @@ import java.net.URL;
 import java.util.Arrays;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-import static org.techtown.just.BaseApplication.getLocalStore;
+import static org.techtown.just.base.BaseApplication.getLocalStore;
 
 public class Login_FacebookActivity implements FacebookCallback<LoginResult> {
 
-    MyPageActivity myPageActivity;
-    LoginActivity loginActivity;
-//    Context mContext;
+    Context mContext;
 //
 //    public Login_FacebookActivity(Context Context){
 //        mContext = Context;
@@ -45,9 +43,19 @@ public class Login_FacebookActivity implements FacebookCallback<LoginResult> {
     //로그인 성공시 호출
     @Override
     public void onSuccess(LoginResult loginResult) {
+//
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try{
+//                    URL url = new URL();
+//                }
+//            }
+//        });
 
         getLocalStore().setBooleanValue(LocalStore.my, true);
-        Log.e("Callback::", "onSuccess");
+        Log.d("Callback::", "onSuccess");
+        Log.d("FB_BooleanValue::", ""+getLocalStore().getBooleanValue(LocalStore.my,true));
         requestMe(loginResult.getAccessToken());
 //        loginActivity = new LoginActivity();
 //        loginActivity.checkLogin();
@@ -72,6 +80,9 @@ public class Login_FacebookActivity implements FacebookCallback<LoginResult> {
 
                 LoginManager.getInstance().logOut();
                 getLocalStore().setBooleanValue(LocalStore.my, false);
+                Log.d("Callback :: ", "onCompleted");
+                Log.d("FB_BooleanValue :: ", ""+getLocalStore().getBooleanValue(LocalStore.my,false));
+
             }
         }).executeAsync();
     }
@@ -88,7 +99,7 @@ public class Login_FacebookActivity implements FacebookCallback<LoginResult> {
             public void onCompleted(JSONObject object, GraphResponse response) {
 
                 //myPageActivity = new MyPageActivity();
-                Log.e("result", object.toString());
+                Log.v("result", object.toString());
                 //myPageActivity.basic_setting(object);
                 try{
 //                    String email = object.getString("email");

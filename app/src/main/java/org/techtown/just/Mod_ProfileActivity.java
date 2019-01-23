@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
+import com.kakao.auth.Session;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +42,8 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static org.techtown.just.BaseApplication.getLocalStore;
+import static com.kakao.usermgmt.api.UserApi.requestLogout;
+
 
 public class Mod_ProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -55,7 +57,7 @@ public class Mod_ProfileActivity extends AppCompatActivity implements View.OnCli
 
     private CallbackManager callbackManager;
     private Login_FacebookActivity mLoginCallback;
-
+    private KakaoSessionCallback kakaoSessionCallback;
     private Uri photoUri , albumUri , imageUri;
     private String currentPhotoPath;//파일경로
     String mlmageCaptureName;//이미지 이름
@@ -456,6 +458,12 @@ public class Mod_ProfileActivity extends AppCompatActivity implements View.OnCli
                 //intent.putExtra("nickname",tv_name.getText());
                 //startActivity(intent);
                 break;
+
+//            case R.id.kakao_logout :
+//                if(Session.getCurrentSession().isOpened()){
+//                    kakaoSessionCallback.requestLogout();
+//                }
+//                break;
         }
     }
 }

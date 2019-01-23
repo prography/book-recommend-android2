@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
+import com.kakao.auth.AuthType;
+import com.kakao.auth.Session;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +34,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     String sfName = "myFile";
-    Boolean isLoggedIn;
+    Boolean isLoggedIn, id;
 
     @BindView(R.id.btn_my)
     ImageView btnMy;
@@ -96,7 +98,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //아무거나를 선택하면 나머지는 false로
 //        checkBox_anything.setOnCheckedChangeListener(this);
 
-        //access token 유효성 확인
+        //kakao session 확인
+//         Session session = Session.getCurrentSession();
+//         session.open(AuthType.KAKAO_LOGIN_ALL,MainActivity.this);
+
+        //access token 유효성 확인 - 최초 1번
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         isLoggedIn = accessToken != null && !accessToken.isExpired();
 /*
@@ -119,12 +125,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     } // end of onCreate
 
     @Override
+    protected void onResume(){
+        super.onResume();
+
+        isLoggedIn =  getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
+        Log.d("Main_onResume :: ", "isLoggedIn : "+isLoggedIn);
+
+
+
+    }
+    @Override
     protected void onRestart(){
         super.onRestart();
 
         //token재확인
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        isLoggedIn = accessToken != null && !accessToken.isExpired();
+//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//        isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        isLoggedIn =  getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
+        Log.d("Main_onRestart :: ", "isLoggedIn : "+isLoggedIn);
+        //세션 재확인
+//        Session session = Session.getCurrentSession();
+//        session.open(AuthType.KAKAO_LOGIN_ALL,MainActivity.this);
+//        id = session.isOpened();
 
     }
 
@@ -142,11 +165,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.btn_my:
                 // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
 
-                getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
-                if (isLoggedIn == false)
-                    intent = new Intent(this, LoginActivity.class);
-                else
+//                getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
+                isLoggedIn = getLocalStore().getBooleanValue(LocalStore.my,isLoggedIn);
+                //getLocalStore().setBooleanValue(LocalStore.my, id);
+                if (isLoggedIn == true ) {
                     intent = new Intent(this, MyPageActivity.class);
+                }
+                else {
+                    intent = new Intent(this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                }
+                Log.d("Main_MY value :: ", ""+isLoggedIn);
 
                 startActivity(intent);
 
@@ -172,6 +201,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.btn_login:
                 intent = new Intent(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
         }

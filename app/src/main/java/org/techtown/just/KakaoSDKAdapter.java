@@ -1,5 +1,6 @@
 package org.techtown.just;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.kakao.auth.ApprovalType;
@@ -15,6 +16,7 @@ public class KakaoSDKAdapter extends KakaoAdapter {
     @Override
     public ISessionConfig getSessionConfig() {
         return new ISessionConfig() {
+
             @Override
             public AuthType[] getAuthTypes() {
                 // Auth Type
@@ -33,6 +35,7 @@ public class KakaoSDKAdapter extends KakaoAdapter {
                 return false;
             }
 
+            //로그인시 토큰 저장할때의 암호화 여부 지정
             @Override
             public boolean isSecureMode() {
                 return false;
@@ -40,26 +43,32 @@ public class KakaoSDKAdapter extends KakaoAdapter {
 
             @Override
             public ApprovalType getApprovalType() {
-                return null;
+                return ApprovalType.INDIVIDUAL;
             }
 
             @Override
             public boolean isSaveFormData() {
-                return false;
+                return true;
             }
         };
 
     }
 
+
     // Application이 가지고 있는 정보를 얻기 위한 인터페이스 입니다.
     @Override
     public IApplicationConfig getApplicationConfig() {
-
         return new IApplicationConfig() {
+//            @Override
+//            public Activity getTopActivity() {
+//                return BaseApplication.getCurrentActivity();
+//            }
+
             @Override
             public Context getApplicationContext() {
                 return BaseApplication.getLoginKakaoContext();
             }
+
         };
 
     }

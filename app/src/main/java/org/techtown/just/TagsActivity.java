@@ -32,7 +32,7 @@ public class TagsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags);
         ButterKnife.bind(this);
-
+/*
         Call<ResponseBody> tagList = NetworkManager.getBookApi().getTags();
         tagList.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -65,5 +65,7 @@ public class TagsActivity extends AppCompatActivity {
 
             }
         });
+        */
     }
+
 }

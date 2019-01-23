@@ -10,11 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
 import com.kakao.kakaotalk.response.KakaoTalkProfile;
@@ -27,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.widget.GridLayout.HORIZONTAL;
-import static org.techtown.just.BaseApplication.getLocalStore;
+import static org.techtown.just.base.BaseApplication.getLocalStore;
 
 public class MyPageActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -47,13 +49,20 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
     RecyclerView rc_Intbook;
 
     private ProfilePictureView profilePictureView;
-    Boolean isLoggedIn;
 
-    Profile facebookProfile = Profile.getCurrentProfile();
+    Boolean LoggedIn_FB = false;
+    Boolean LoggedIn_KK = false;
+
+//    Profile facebookProfile = Profile.getCurrentProfile();
     KakaoTalkProfile kakaoTalkProfile ;
 
-    final String link = facebookProfile.getProfilePictureUri(200,200).toString();
+    Profile facebookProfile;
+    String link;
+    //Profile facebookProfile = Profile.getCurrentProfile();
+    //String link = facebookProfile.getProfilePictureUri(200,200).toString();
 
+
+    //    final String link = facebookProfile.getProfilePictureUri(200, 200).toString();
     Handler handler = new Handler(); //외부쓰레드에서 메인 ui화면을 그릴 때 사용
 
     RecyclerView.LayoutManager mLayoutManager_1, mLayoutManager_2;
@@ -74,6 +83,11 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
             profilePictureView.setClipToOutline(true);
         }
 
+        //access token 유효성 확인 - 최초 1번
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        LoggedIn_FB = accessToken != null && !accessToken.isExpired();
+        Log.d("Mypage :: LoggedIn_FB" , ""+LoggedIn_FB);
+
         basic_setting();
 
         btn_main.setOnClickListener(this);
@@ -86,6 +100,13 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        //페북 로그인 체크
+        LoggedIn_FB =  LoggedIn_FB && getLocalStore().getBooleanValue(LocalStore.my, true);
+
+    }
     @Override
     protected void onRestart(){
         super.onRestart();
@@ -102,12 +123,25 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
     public void basic_setting(){
 
-        //if facebook로그인시
-        user_name.setText(facebookProfile.getName());
-        profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
-        //id값으로 facebookProfile uri설정
-        profilePictureView.setProfileId(facebookProfile.getId());
+        if(LoggedIn_FB == true) {
+            //if facebook로그인시
+            facebookProfile=Profile.getCurrentProfile();
+            link = facebookProfile.getProfilePictureUri(200,200).toString();
 
+            user_name.setText(facebookProfile.getName());
+            profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
+            //id값으로 facebookProfile uri설정
+            profilePictureView.setProfileId(facebookProfile.getId());
+        }
+
+        if(LoggedIn_KK == true){
+            final String link = kakaoTalkProfile.getProfileImageUrl();
+            user_name.setText(kakaoTalkProfile.getNickName());
+            profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
+            profilePictureView.setProfileId(link);
+
+
+        }
         //if kakao 로그인시
 //        user_name.setText(kakaoTalkProfile.getNickName());
 //        profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
