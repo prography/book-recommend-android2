@@ -79,8 +79,10 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 SharedPreferences.Editor editor = sf.edit();//저장하려면 editor가 필요
 
                 int i = sf.getInt("my", 0);
-                if (i == 0)
+                if (i == 0){
                     intent = new Intent(this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                }
                 else
                     intent = new Intent(this, MyPageActivity.class);
 

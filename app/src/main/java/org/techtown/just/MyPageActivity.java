@@ -10,11 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
 import com.kakao.kakaotalk.response.KakaoTalkProfile;
@@ -27,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.widget.GridLayout.HORIZONTAL;
+import static org.techtown.just.base.BaseApplication.getLocalStore;
 
 public class MyPageActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -47,11 +50,19 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
     private ProfilePictureView profilePictureView;
 
-    Profile facebookProfile = Profile.getCurrentProfile();
+    Boolean LoggedIn_FB = false;
+    Boolean LoggedIn_KK = false;
+
+//    Profile facebookProfile = Profile.getCurrentProfile();
     KakaoTalkProfile kakaoTalkProfile ;
 
-    final String link = facebookProfile.getProfilePictureUri(200,200).toString();
+    Profile facebookProfile;
+    String link;
+    //Profile facebookProfile = Profile.getCurrentProfile();
+    //String link = facebookProfile.getProfilePictureUri(200,200).toString();
 
+
+    //    final String link = facebookProfile.getProfilePictureUri(200, 200).toString();
     Handler handler = new Handler(); //외부쓰레드에서 메인 ui화면을 그릴 때 사용
 
     RecyclerView.LayoutManager mLayoutManager_1, mLayoutManager_2;
@@ -72,6 +83,11 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
             profilePictureView.setClipToOutline(true);
         }
 
+        //access token 유효성 확인 - 최초 1번
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        LoggedIn_FB = accessToken != null && !accessToken.isExpired();
+        Log.d("Mypage :: LoggedIn_FB" , ""+LoggedIn_FB);
+
         basic_setting();
 
         btn_main.setOnClickListener(this);
@@ -87,17 +103,45 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onResume(){
         super.onResume();
+        //페북 로그인 체크
+        LoggedIn_FB =  LoggedIn_FB && getLocalStore().getBooleanValue(LocalStore.my, true);
+
+    }
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        //
+//        getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
+//        if (isLoggedIn == false) {
+//            Intent intent = new Intent(this, LoginActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
+
 
     }
 
     public void basic_setting(){
 
-        //if facebook로그인시
-        user_name.setText(facebookProfile.getName());
-        profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
-        //id값으로 facebookProfile uri설정
-        profilePictureView.setProfileId(facebookProfile.getId());
+        if(LoggedIn_FB == true) {
+            //if facebook로그인시
+            facebookProfile=Profile.getCurrentProfile();
+            link = facebookProfile.getProfilePictureUri(200,200).toString();
 
+            user_name.setText(facebookProfile.getName());
+            profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
+            //id값으로 facebookProfile uri설정
+            profilePictureView.setProfileId(facebookProfile.getId());
+        }
+
+        if(LoggedIn_KK == true){
+            final String link = kakaoTalkProfile.getProfileImageUrl();
+            user_name.setText(kakaoTalkProfile.getNickName());
+            profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
+            profilePictureView.setProfileId(link);
+
+
+        }
         //if kakao 로그인시
 //        user_name.setText(kakaoTalkProfile.getNickName());
 //        profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
@@ -108,13 +152,13 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
         ArrayList<BookInfo> BookInfoArrayList = new ArrayList<>();
 
-        BookInfoArrayList.add(new BookInfo("배"));
-        BookInfoArrayList.add(new BookInfo("고"));
-        BookInfoArrayList.add(new BookInfo("오"));
-        BookInfoArrayList.add(new BookInfo("프"));
-        BookInfoArrayList.add(new BookInfo("으"));
-        BookInfoArrayList.add(new BookInfo("다"));
-        BookInfoArrayList.add(new BookInfo("아"));
+        BookInfoArrayList.add(new BookInfo("aa"));
+        BookInfoArrayList.add(new BookInfo("bb"));
+//        BookInfoArrayList.add(new BookInfo("오"));
+//        BookInfoArrayList.add(new BookInfo("프"));
+//        BookInfoArrayList.add(new BookInfo("으"));
+//        BookInfoArrayList.add(new BookInfo("다"));
+//        BookInfoArrayList.add(new BookInfo("아"));
 
         rc_Readbook=(RecyclerView)findViewById(R.id.rc_readbook);
         rc_Readbook.setHasFixedSize(true);
@@ -135,9 +179,9 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
         BookInfoArrayList2.add(new BookInfo("로"));
         BookInfoArrayList2.add(new BookInfo("로"));
         BookInfoArrayList2.add(new BookInfo("해"));
-        BookInfoArrayList2.add(new BookInfo("주"));
-        BookInfoArrayList2.add(new BookInfo("세"));
-        BookInfoArrayList2.add(new BookInfo("요"));
+//        BookInfoArrayList2.add(new BookInfo("주"));
+//        BookInfoArrayList2.add(new BookInfo("세"));
+//        BookInfoArrayList2.add(new BookInfo("요"));
 
         rc_Intbook=(RecyclerView)findViewById(R.id.rc_intbook);
         rc_Intbook.setHasFixedSize(true);

@@ -7,6 +7,40 @@
     android:background="#fafafa"
     tools:context=".Mod_ProfileActivity">
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="@dimen/icon_size_with_padding"
+            android:layout_height="@dimen/icon_size_with_padding"
+            android:layout_marginLeft="@dimen/side_margin"
+            android:padding="@dimen/icon_padding"
+            android:src="@drawable/ic_back"
+            android:tint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/textview"
+            style="@style/TextTheme"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="@dimen/side_margin_small"
+            android:layout_marginRight="@dimen/side_margin"
+            android:gravity="center_vertical"
+            android:text="MY PROFILE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_back"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
 
     <ImageButton
         android:id="@+id/profile_img"
@@ -15,10 +49,10 @@
         android:layout_height="100sp"
         android:layout_marginLeft="30dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/ic_launcher_background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         />
 
     <TextView
@@ -62,12 +96,13 @@
             android:layout_height="40dp"
             android:layout_marginTop="20dp"
             android:textSize="25sp"
-            android:text="  연결중인 계정"
+            android:text="  연결 계정 관리"
             android:textColor="#8f8f8f"
             />
 
         <Button
-            android:text="  페이스북"
+            android:text="  페이스북 로그아웃"
+            android:id="@+id/facebook_logout"
             android:textSize="25sp"
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -75,18 +110,9 @@
             />
 
         <Button
-            android:text="  카카오톡"
+            android:text="  카카오톡 로그아웃"
             android:textSize="25sp"
             android:layout_marginTop="2dp"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="#ffffff"
-            />
-
-        <Button
-            android:text="  로그아웃"
-            android:textSize="25sp"
-            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="#ffffff"
@@ -95,11 +121,12 @@
         <Button
             android:text="  탈퇴 요청"
             android:textSize="25sp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="#ffffff"
             />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

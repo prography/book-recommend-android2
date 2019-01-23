@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 public class LocalStore {
     String sfName = "today";
 
-
     /*
     Key
     */

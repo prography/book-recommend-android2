@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.techtown.just.model.BookInfo;
@@ -15,16 +16,26 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 //    private String[] mData;
 //    private LayoutInflater mInflater;
+    private MyRecyclerViewClickListener mListener;
 
+    public interface MyRecyclerViewClickListener{
+        //item 선택 클릭시
+        void onItemClicked(int position);
+    }
+
+    public void setOnClickListener(MyRecyclerViewClickListener listener){
+        mListener = listener;
+    }
+    //각각의 아이템 레퍼런스를 저장할 뷰 홀더 클래스 *리사이클러뷰홀더를 반드시 상속!
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        ImageButton my_book_img;
+        ImageView my_book_img;
         TextView my_book_name;
 
         MyViewHolder(View v){
             super(v);
-            //my_book_img = v.findViewById(R.id.myList_img);
-            my_book_name = v.findViewById(R.id.myList_text);
+            my_book_img = v.findViewById(R.id.myBookList);
+            //my_book_name = v.findViewById(R.id.myList_text);
         }
     }
     private ArrayList<BookInfo> BookInfoArrayList;
@@ -48,8 +59,22 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         //id값에 따라 image/name 설정
         //myViewHolder.my_book_img.setImageResource(BookInfoArrayList.get(position).id);
-        //myViewHolder.my_book_name.setText(BookInfoArrayList.get(position).book_name);
-        myViewHolder.my_book_name.setText(BookInfoArrayList.get(position).book_name);
+
+//        myViewHolder.my_book_name.setText(BookInfoArrayList.get(position).id);
+//        myViewHolder.my_book_name.setText(BookInfoArrayList.get(position).book_name);
+
+        //클릭 이벤트
+        if(mListener != null){
+            final int pos = position;
+            holder.itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    mListener.onItemClicked(pos);
+                }
+            });
+
+        }
+
     }
 
     @Override

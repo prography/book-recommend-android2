@@ -6,19 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".FavoriteBookActivity">
 
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <TextView
         android:id="@+id/tv"
-        android:textSize="20dp"
+        android:textSize="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="관심 책 액티비티"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:text="관심 책 리스트"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_int"
+        android:padding="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+
         app:layoutManager="android.support.v7.widget.GridLayoutManager"
         app:spanCount="3"
         app:layout_constraintTop_toBottomOf="@+id/tv"
