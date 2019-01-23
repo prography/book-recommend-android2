@@ -3,6 +3,7 @@ package org.techtown.just.network;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkManager {
 
@@ -20,6 +21,7 @@ public class NetworkManager {
 
         return new Retrofit.Builder()
                 .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(API_URL).build();
     }
 
