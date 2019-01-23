@@ -448,14 +448,15 @@ public class FlowLayout extends ViewGroup {
     }
 
     public void addTag(Tag tag) {
-        View tagView = createTagView(tag.getTag_name());
+        View tagView = createTagView(tag);
         addView(tagView);
     }
 
-    private View createTagView(String tag) {
+    private View createTagView(Tag tag) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_checkbox, null);
         CheckBox checkbox = view.findViewById(R.id.checkbox);
-        checkbox.setText(tag);
+        checkbox.setText(tag.getTag_name());
+        checkbox.setTag(tag);
         return view;
     }
 

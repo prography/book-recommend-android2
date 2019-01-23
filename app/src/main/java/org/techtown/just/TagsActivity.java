@@ -74,7 +74,7 @@ public class TagsActivity extends AppCompatActivity {
 //        });
 
         //isbn으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getBookInfoWithIsbn("9788936433598");
+        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getBookInfoWithIsbn("9788937460753");
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
