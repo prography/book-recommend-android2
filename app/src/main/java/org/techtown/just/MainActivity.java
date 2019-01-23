@@ -1,5 +1,6 @@
 package org.techtown.just;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.kakao.auth.AuthType;
@@ -22,14 +24,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
+import org.techtown.just.network.NetworkManager;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Random;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -40,14 +45,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     ImageView btnMy;
     @BindView(R.id.text)
     TextView text;
-//    @BindView(R.id.checkBox_anything)
-//    CheckBox checkBox_anything;
-//    @BindView(R.id.checkBox1)
-//    CheckBox checkBox1;
-//    @BindView(R.id.checkBox2)
-//    CheckBox checkBox2;
-//    @BindView(R.id.checkBox3)
-//    CheckBox checkBox3;
     @BindView(R.id.button)
     Button button;
     @BindView(R.id.btn_posts)
@@ -59,9 +56,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.flowLayout)
     FlowLayout flowLayout;
 
-    CheckBox[] cb;
-
-
     TagNames tagNames;
 
 
@@ -72,22 +66,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-//        doJSONParser();
-
-
-        //checkbox의 text <- tagNames의 text 대입
-        tagNames = new TagNames();
-
-
-
-//        cb = new CheckBox[]{checkBox1, checkBox2, checkBox3};
-
-        for (int i = 0; i < tagNames.getTags().length; i++)
-            flowLayout.addTag(tagNames.getTags()[i]);
-
-        flowLayout.relayoutToAlign();
-
-
         //btnMy
         btnMy.setOnClickListener(this);
         button.setOnClickListener(this);
@@ -95,8 +73,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         btnTags.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
 
-        //아무거나를 선택하면 나머지는 false로
-//        checkBox_anything.setOnCheckedChangeListener(this);
+        //checkbox의 text <- tagNames의 text 대입
+        tagNames = new TagNames();
+
+
+
+
+        //tagNames 가져오기
+        Call<List<Tag>> list = NetworkManager.getBookApi().getTags();
+        list.enqueue(new Callback<List<Tag>>() {
+            @Override
+            public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
+                List<Tag> tags = response.body();
+                tagNames.setTags(tags);
+                for (int i = 0; i < tagNames.getTags().size(); i++)
+                    flowLayout.addTag(tagNames.getTags().get(i));
+
+//                String s = "";
+//                for (int i = 0 ; i < tags.size(); i++)
+//                    s += tags.get(i).toString() + "\n";
+//
+//                text.setText(s);
+            }
+
+            @Override
+            public void onFailure(Call<List<Tag>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        flowLayout.relayoutToAlign();
 
         //kakao session 확인
 //         Session session = Session.getCurrentSession();

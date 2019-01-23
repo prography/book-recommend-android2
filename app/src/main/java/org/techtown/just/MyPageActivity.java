@@ -152,8 +152,8 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
         ArrayList<BookInfo> BookInfoArrayList = new ArrayList<>();
 
-        BookInfoArrayList.add(new BookInfo(1));
-        BookInfoArrayList.add(new BookInfo(2));
+        BookInfoArrayList.add(new BookInfo("aa"));
+        BookInfoArrayList.add(new BookInfo("bb"));
 //        BookInfoArrayList.add(new BookInfo("오"));
 //        BookInfoArrayList.add(new BookInfo("프"));
 //        BookInfoArrayList.add(new BookInfo("으"));

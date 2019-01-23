@@ -7,7 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.TextView;
+
+import org.techtown.just.model.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -446,25 +447,27 @@ public class FlowLayout extends ViewGroup {
         }
     }
 
-    public void addTag(String tag) {
+    public void addTag(Tag tag) {
         View tagView = createTagView(tag);
         addView(tagView);
     }
 
-    private View createTagView(String tag) {
+    private View createTagView(Tag tag) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_checkbox, null);
         CheckBox checkbox = view.findViewById(R.id.checkbox);
-        checkbox.setText(tag);
+        checkbox.setText(tag.getTag_name());
+        checkbox.setTag(tag);
         return view;
     }
 
-    public ArrayList<String> getCheckedTagValues() {
-        ArrayList<String> values = new ArrayList<>();
+    public List<Tag> getCheckedTagValues() {
+        List<Tag> values = new ArrayList<Tag>();
+        Tag tag = new Tag();
         for (int i = 0; i < getChildCount(); i++) {
             View child = this.getChildAt(i);
             CheckBox checkbox = child.findViewById(R.id.checkbox);
             if (checkbox != null && checkbox.isChecked()) {
-                values.add(checkbox.getText().toString());
+                values.add((Tag) checkbox.getTag());
             }
         }
         return values;

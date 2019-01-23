@@ -40,11 +40,11 @@
             android:layout_marginTop="40dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="오늘은 뭘 읽어볼까?"
+            android:text="오늘은 뭘 읽어볼까!?"
             android:textSize="35dp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/button"
@@ -59,19 +59,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-
-        <org.techtown.just.FlowLayout
-            android:id="@+id/flowLayout"
+        <ScrollView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/side_margin_large"
-            android:layout_marginRight="@dimen/side_margin_large"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/side_margin_large"
             app:layout_constraintBottom_toTopOf="@id/button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text">
 
-        </org.techtown.just.FlowLayout>
+            <org.techtown.just.FlowLayout
+                android:id="@+id/flowLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </org.techtown.just.FlowLayout>
+
+        </ScrollView>
 
 
     </android.support.constraint.ConstraintLayout>
