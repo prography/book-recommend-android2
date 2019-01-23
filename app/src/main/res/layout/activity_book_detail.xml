@@ -52,6 +52,7 @@
             android:layout_marginTop="8dp"
             android:background="#eceaea"
             android:text="책 정보"
+            android:id="@+id/booknumber"
             android:textAlignment="center"
             android:textSize="20dp"
             app:layout_constraintTop_toTopOf="parent" />

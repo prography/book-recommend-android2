@@ -4,9 +4,10 @@
     android:layout_width="100dp"
     android:layout_height="150dp"
     android:orientation="horizontal"
-    android:gravity="center"
-    android:padding="5dp"
+    android:gravity="center_horizontal"
+
     xmlns:android="http://schemas.android.com/apk/res/android">
+
 
     <!--<ImageButton-->
         <!--android:id="@+id/myList_img"-->
@@ -15,13 +16,14 @@
         <!--android:layout_gravity="center_horizontal"-->
         <!--android:layout_margin = "5dp"-->
         <!--/>-->
-    <TextView
-        android:id="@+id/myList_text"
-        android:textSize="15dp"
+    <ImageView
+        android:id="@+id/myBookList"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:background="#fff64d"
         />
 

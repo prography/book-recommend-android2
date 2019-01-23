@@ -2,7 +2,12 @@ package org.techtown.just;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -12,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.kakao.auth.AuthType;
+import com.kakao.auth.Session;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +30,6 @@ import org.techtown.just.network.NetworkManager;
 
 import java.util.List;
 import java.util.Random;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -33,7 +39,7 @@ import retrofit2.Response;
 public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     String sfName = "myFile";
-    Boolean isLoggedIn;
+    Boolean isLoggedIn, id;
 
     @BindView(R.id.btn_my)
     ImageView btnMy;
@@ -97,11 +103,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         });
         flowLayout.relayoutToAlign();
 
-        //access token 유효성 확인
+        //kakao session 확인
+//         Session session = Session.getCurrentSession();
+//         session.open(AuthType.KAKAO_LOGIN_ALL,MainActivity.this);
+
+        //access token 유효성 확인 - 최초 1번
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         isLoggedIn = accessToken != null && !accessToken.isExpired();
-
-        /*try {
+/*
+        //직접 코드에서 해시키 생성.
+        try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "org.techtown.just",
                     PackageManager.GET_SIGNATURES);
@@ -118,6 +129,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 */
     } // end of onCreate
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        isLoggedIn =  getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
+        Log.d("Main_onResume :: ", "isLoggedIn : "+isLoggedIn);
+
+
+
+    }
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+
+        //token재확인
+//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//        isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        isLoggedIn =  getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
+        Log.d("Main_onRestart :: ", "isLoggedIn : "+isLoggedIn);
+        //세션 재확인
+//        Session session = Session.getCurrentSession();
+//        session.open(AuthType.KAKAO_LOGIN_ALL,MainActivity.this);
+//        id = session.isOpened();
+
+    }
 
     @Override
     protected void onStop() {
@@ -133,11 +170,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.btn_my:
                 // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
 
-                getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
-                if (isLoggedIn == false)
+//                getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
+                isLoggedIn = getLocalStore().getBooleanValue(LocalStore.my,isLoggedIn);
+                //getLocalStore().setBooleanValue(LocalStore.my, id);
+                if (isLoggedIn == true ) {
+                    intent = new Intent(this, MyPageActivity.class);
+                }
+                else {
                     intent = new Intent(this, LoginActivity.class);
-                else
-                    intent = new Intent(this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                }
+                Log.d("Main_MY value :: ", ""+isLoggedIn);
 
                 startActivity(intent);
 
@@ -161,10 +204,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 intent = new Intent(this, TagsActivity.class);
                 startActivity(intent);
                 break;
-//            case R.id.btn_login:
-//                intent = new Intent(this, Login2Activity.class);
-//                startActivity(intent);
-//                break;
+            case R.id.btn_login:
+                intent = new Intent(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
         }
     }
 
