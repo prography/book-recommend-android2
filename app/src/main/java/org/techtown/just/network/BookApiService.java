@@ -1,5 +1,7 @@
 package org.techtown.just.network;
 
+import com.google.gson.JsonObject;
+
 import org.techtown.just.model.BookInfo;
 import org.techtown.just.model.Post;
 import org.techtown.just.model.Tag;
@@ -11,6 +13,7 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -27,13 +30,63 @@ public interface BookApiService {
 //                               @Field("idToken") String idToken,
 //                               @Field("refreshToken") String refreshToken);
 
+    //1
     @GET("tags/")
     Call<List<Tag>> getTags();
 
+    //2
     @GET("books/listwithtag/{tags}/")
-    Call<List<BookInfo>> getListWithTag(@Path("tags") String tags);
+    Call<List<BookInfo>> getListWithTag(@Query("tags") String tags);
 
+    //3
+    @GET("books/listwithsearch/{search}/")
+    Call<List<BookInfo>> getListWithSearch(@Path("search") String search);
+
+    //4
+    @GET("/books/read/{user_id}/")
+    Call<List<BookInfo>> getListUserRead(@Path("user_id") int user_id);
+
+    //5
+    @GET("/books/interest/{user_id}/")
+    Call<List<BookInfo>> getListUserInterested(@Path("user_id") int user_id);
+
+    //6
     @GET("books/listwithtag/{isbn}/")
     Call<List<BookInfo>> getBookInfoWithIsbn(@Path("isbn") String isbn);
+
+    //7
+    @GET("books/{isbn}/status/")
+    Call<JsonObject> getBookFlag(@Path("isbn") String isbn);
+
+    //8
+    @FormUrlEncoded
+    @POST("books/{isbn}/status/")
+    Call<JsonObject> saveStatus(@Path("isbn") int isbn,
+                                @Field("flag_r") int flag_r,
+                                @Field("flag_i") int flag_i);
+
+    //9 로그인
+    @FormUrlEncoded
+    @POST("auth/login/")
+    Call<JsonObject> login(@Field("id") String id,
+                           @Field("pw") String pw);
+
+    //10
+    @FormUrlEncoded
+    @POST("auth2/validate/")
+    Call<JsonObject> validate(@Field("accessToken") String accessToken,
+                               @Field("idToken") String idToken,
+                               @Field("refreshToken") String refreshToken);
+
+
+    //11 회원가입
+    @FormUrlEncoded
+    @POST("auth/register/")
+    Call<JsonObject> register(@Field("id") String id,
+                                @Field("pw") String pw,
+                                @Field("email") String email);
+
+
+    //Path는 {} Query는 ?=
 
 }

@@ -6,24 +6,57 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        >
+
     <TextView
         android:id="@+id/login_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="로그인 방식을 선택해주세요 :)"
         android:textSize="30dp"
-        android:text="로그인 방식을 선택해주세요 :)"/>
+        app:layout_constraintBottom_toTopOf="@+id/id"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:id="@+id/id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:hint="id"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/pw" />
+
+
+    <EditText
+        android:id="@+id/pw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:hint="pw"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/btn_general_login" />
+
+    <Button
+        android:id="@+id/btn_general_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="일반 로그인"
+        app:layout_constraintBottom_toTopOf="@+id/btn_custom_kakao" />
 
     <Button
         android:id="@+id/btn_custom_kakao"
-        android:text="카카오 로그인"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="카카오 로그인"
+        app:layout_constraintBottom_toTopOf="@+id/btn_custom_facebook" />
 
     <com.kakao.usermgmt.LoginButton
         android:id="@+id/btn_kakao_login"
@@ -32,14 +65,15 @@
         android:visibility="gone"
         />
 
-        <Button
-            android:id="@+id/btn_custom_facebook"
-            android:text="페이스북 로그인"
-            android:background="#416BC1"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_custom_facebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#416BC1"
+        android:text="페이스북 로그인"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteY="463dp" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/btn_facebook_login"
@@ -50,7 +84,5 @@
         android:layout_marginBottom="30dp"
         android:visibility="gone"
         />
-
-    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
