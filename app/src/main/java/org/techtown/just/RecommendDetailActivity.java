@@ -5,13 +5,22 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.techtown.just.model.BookInfo;
 import org.techtown.just.model.TagNames;
+import org.techtown.just.network.NetworkManager;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RecommendDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -25,6 +34,8 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
     ImageView btnMy;
 
     String sfName = "myFile";
+    @BindView(R.id.searchStr)
+    EditText searchStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +46,41 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
         Intent intent = getIntent();
         int randomNum = intent.getIntExtra("randomNum", -1);
 
+
+//        String s = "";
+//        if (randomNum == -1) {
+//            for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
+//                s += tagNames.getSelectedTags().get(i).getTag_name() + " ";
+//        } else { //아무거나 선택 시
+//            //s = tagNames.getTags()[randomNum];
+//        }
+
         TagNames tagNames = (TagNames) intent.getSerializableExtra("tagNames");
-        String s = "";
-        if (randomNum == -1) {
-            for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
-                s += tagNames.getSelectedTags().get(i).getTag_name() + " ";
-        } else { //아무거나 선택 시
-            //s = tagNames.getTags()[randomNum];
-        }
-        textView.setText(s);
+        String tagsStr = "";
+        for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
+            tagsStr += tagNames.getSelectedTags().get(i).getTag_id() + ";";
+        textView.setText(tagsStr);
+
+        //tagsStr 보내고 책 리스트 받아오기 1;3;5;
+        Call<List<BookInfo>> list = NetworkManager.getBookApi().getListWithTag(tagsStr);
+        list.enqueue(new Callback<List<BookInfo>>() {
+            @Override
+            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
+                List<BookInfo> books = response.body();
+
+
+//                String s = "";
+//                for (int i = 0 ; i < tags.size(); i++)
+//                    s += tags.get(i).toString() + "\n";
+//
+//                text.setText(s);
+            }
+
+            @Override
+            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+                Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         btnMy.setOnClickListener(this);
         btnBack.setOnClickListener(this);
@@ -76,6 +113,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
 
             case R.id.btn_search:
                 intent = new Intent(this, SearchActivity.class);
+                intent.putExtra("searchStr", searchStr.toString());
                 startActivity(intent);
                 break;
         }

@@ -76,9 +76,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //checkbox의 text <- tagNames의 text 대입
         tagNames = new TagNames();
 
-
-
-
         //tagNames 가져오기
         Call<List<Tag>> list = NetworkManager.getBookApi().getTags();
         list.enqueue(new Callback<List<Tag>>() {
@@ -207,6 +204,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.btn_login:
                 intent = new Intent(this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
+            case R.id.btn_general_login:
+                intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 break;
         }
