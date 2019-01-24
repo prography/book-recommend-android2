@@ -1,9 +1,12 @@
 package org.techtown.just.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.List;
 
-public class BookInfo implements Serializable {
+public class BookInfo implements Serializable, Parcelable {
 
     //book 속성
     public String isbn;
@@ -15,6 +18,28 @@ public class BookInfo implements Serializable {
     public String country;
     public String contents;
     public String thumbnail;
+
+    protected BookInfo(Parcel in) {
+        isbn = in.readString();
+        tags = in.readString();
+        book_name = in.readString();
+        author = in.readString();
+        country = in.readString();
+        contents = in.readString();
+        thumbnail = in.readString();
+    }
+
+    public static final Creator<BookInfo> CREATOR = new Creator<BookInfo>() {
+        @Override
+        public BookInfo createFromParcel(Parcel in) {
+            return new BookInfo(in);
+        }
+
+        @Override
+        public BookInfo[] newArray(int size) {
+            return new BookInfo[size];
+        }
+    };
 
     public String getIsbn() {
         return isbn;
@@ -99,5 +124,19 @@ public class BookInfo implements Serializable {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(isbn);
+        parcel.writeString(tags);
+        parcel.writeString(book_name);
+        parcel.writeString(author);
+        parcel.writeString(country);
+        parcel.writeString(contents);
+        parcel.writeString(thumbnail);
+    }
 }
