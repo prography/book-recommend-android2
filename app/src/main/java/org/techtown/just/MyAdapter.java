@@ -1,5 +1,7 @@
 package org.techtown.just;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //    private LayoutInflater mInflater;
     private MyRecyclerViewClickListener mListener;
     private List<BookInfo> BookInfoList;
+    private Context mContext;
 
     public interface MyRecyclerViewClickListener{
         //item 선택 클릭시
@@ -42,11 +45,12 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    MyAdapter(ArrayList<BookInfo> BookInfoList){
-        this.BookInfoList = BookInfoList;
-    }
+//    MyAdapter(ArrayList<BookInfo> BookInfoList){
+//        this.BookInfoList = BookInfoList;
+//    }
 
-    MyAdapter(List<BookInfo> BookInfoList){
+    MyAdapter(Context mContext, List<BookInfo> BookInfoList){
+        this.mContext = mContext;
         this.BookInfoList = BookInfoList;
     }
 
@@ -69,6 +73,15 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         //TODO::책 img 로 변경 필요.
         myViewHolder.my_book_name.setText(BookInfoList.get(position).book_name);
 
+        final String book_name = BookInfoList.get(position).getBook_name();
+        final String book_author = BookInfoList.get(position).getAuthor();
+        final String book_content = BookInfoList.get(position).getContents();
+        final String book_thumbnail = BookInfoList.get(position).getThumbnail();
+        final String book_country = BookInfoList.get(position).getCountry();
+        final String book_tags = BookInfoList.get(position).getTags();
+        final String isbn = BookInfoList.get(position).getIsbn();
+
+
         //클릭 이벤트
         if(mListener != null){
             final int pos = position;
@@ -76,6 +89,19 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     mListener.onItemClicked(pos);
+                    Context context = view.getContext();
+                    Intent intent = new Intent(view.getContext(),BookDetailActivity.class);
+
+                    intent.putExtra("isbn",isbn);
+                    intent.putExtra("book_thumbnail",book_thumbnail);
+                    intent.putExtra("book_name",book_name);
+                    intent.putExtra("book_author",book_author);
+                    intent.putExtra("book_content",book_content);
+                    intent.putExtra("book_country",book_country);
+                    intent.putExtra("book_tags",book_tags);
+
+                    mContext.startActivity(intent);
+
                 }
             });
 

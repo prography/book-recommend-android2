@@ -45,10 +45,6 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
 
         loadReadBooks();
 
-//        myAdapter2.setOnClickListener(this); //버튼 연결
-//        myAdapter2 .setOnClickListener(ReadBookActivity.this);
-//        mRecyclerView2.setAdapter(myAdapter2);
-
         View.OnClickListener mClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,26 +57,20 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
     private void loadReadBooks(){
 
         //id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListWithSearch("한");
-//      Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListUserRead("1");
+        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListUserRead("1");
 
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books_1 = response.body();
                 if (response.isSuccessful()) {
-                    myAdapter2 = new MyAdapter(books_1);
+                    myAdapter2 = new MyAdapter(getApplicationContext(),books_1);
                     myAdapter2 .setOnClickListener(ReadBookActivity.this);
                     mRecyclerView2.setAdapter(myAdapter2);
-
-//                    mRecyclerView2.setAdapter(myAdapter2);
 
                 } else {
                     Toast.makeText(ReadBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                 }
-
-//                List<BookInfo> books1 = response.body();
-//                tv_response.setText(books1.get(0).getBook_name());
 
             }
             @Override
@@ -96,10 +86,11 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
     public void onItemClicked(int position) {
         Toast.makeText(getApplicationContext(),position+" 번 아이템이 클릭됨",Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(getApplicationContext(),BookDetailActivity.class);
-        intent.putExtra("bookID",position);
-//        intent.putExtra("isbn",BookInfoList.get(position).getIsbn());
-//        intent.putExtra("book_thumbnail",BookInfoList.get(position).getThumbnail());
+        //Intent intent = new Intent(getApplicationContext(),BookDetailActivity.class);
+        //intent.putExtra("book_name",position);
+        //intent.addFlags()
+
+        //intent.putExtra("book_thumbnail",bookinfo.get(position).getThumbnail());
 //        intent.putExtra("book_name",BookInfoList.get(position).getBook_name());
 //        intent.putExtra("book_author",BookInfoList.get(position).getAuthor());
 //        intent.putExtra("book_content",BookInfoList.get(position).getContents());
@@ -107,7 +98,7 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
 //        intent.putExtra("book_tags",BookInfoList.get(position).getTags());
 
 
-        startActivity(intent);
+        //startActivity(intent);
 
     }
 }

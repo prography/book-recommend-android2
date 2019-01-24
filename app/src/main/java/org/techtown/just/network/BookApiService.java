@@ -46,11 +46,11 @@ public interface BookApiService {
     Call<List<BookInfo>> getListWithSearch(@Path("search") String search);
 
     //4
-    @GET("/books/read/{user_id}/")
+    @GET("books/read/{user_id}/")
     Call<List<BookInfo>> getListUserRead(@Path("user_id") String user_id);
 
     //5
-    @GET("/books/interest/{user_id}/")
+    @GET("books/interest/{user_id}/")
     Call<List<BookInfo>> getListUserInterested(@Path("user_id") String user_id);
 
     //6

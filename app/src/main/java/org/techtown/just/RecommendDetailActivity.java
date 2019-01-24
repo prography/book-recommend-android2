@@ -34,6 +34,8 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
     TextView textView;
     @BindView(R.id.btn_back)
     ImageView btnBack;
+    @BindView(R.id.editText)
+    EditText editText;
     @BindView(R.id.btn_search)
     ImageView btnSearch;
     @BindView(R.id.btn_my)
@@ -160,11 +162,17 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
                 break;
 
             case R.id.btn_search:
-                intent = new Intent(this, SearchActivity.class);
-//                intent.putExtra("searchStr", searchStr.toString());
-                startActivity(intent);
+                String search = editText.getText().toString();
+                SearchBook(search);
                 break;
         }
+    }
+
+    private String SearchBook(String name){
+
+//        load_RecommendBooks();
+
+        return name;
     }
 
 
