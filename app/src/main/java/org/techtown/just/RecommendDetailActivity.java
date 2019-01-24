@@ -45,6 +45,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
     RecyclerView.LayoutManager mLayoutManager;
 
     private RecyclerViewAdapter adapter;
+    TagNames tagNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
 
         Intent intent = getIntent();
 
-        TagNames tagNames = (TagNames) intent.getSerializableExtra("tagNames");
+        tagNames = (TagNames) intent.getSerializableExtra("tagNames");
         String tagsStr = "";
         for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
             tagsStr += tagNames.getSelectedTags().get(i).getTag_id() + ";";
@@ -101,7 +102,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
                 setThumbnail(books);
 //                Toast.makeText(RecommendDetailActivity.this, books.get(0).getBook_name(), Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful()) {
-                    adapter = new RecyclerViewAdapter(getApplicationContext(), books);
+                    adapter = new RecyclerViewAdapter(getApplicationContext(), books, tagNames);
                     //adapter .setOnClickListener(RecommendDetailActivity.this);
                     recyclerView.setAdapter(adapter);
 
