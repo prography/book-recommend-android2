@@ -3,6 +3,8 @@ package org.techtown.just.network;
 import com.google.gson.JsonObject;
 
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.LoginResult;
+import org.techtown.just.model.LoginToken;
 import org.techtown.just.model.Post;
 import org.techtown.just.model.Tag;
 
@@ -37,7 +39,7 @@ public interface BookApiService {
 
     //2
     @GET("books/listwithtag/{tags}/")
-    Call<List<BookInfo>> getListWithTag(@Query("tags") String tags);
+    Call<List<BookInfo>> getListWithTag(@Path("tags") String tags);
 
     //3
     @GET("books/listwithsearch/{search}/")
@@ -52,25 +54,27 @@ public interface BookApiService {
     Call<List<BookInfo>> getListUserInterested(@Path("user_id") String user_id);
 
     //6
-    @GET("books/listwithtag/{isbn}/")
+    @GET("books/{isbn}/")
     Call<List<BookInfo>> getBookInfoWithIsbn(@Path("isbn") String isbn);
 
     //7
-    @GET("books/{isbn}/status/")
-    Call<JsonObject> getBookFlag(@Path("isbn") String isbn);
+    @GET("/books/{isbn}/status/{user_id}/")
+    Call<JsonObject> getBookFlag(@Path("isbn") String isbn,
+                                 @Path("user_id") String user_id);
 
     //8
     @FormUrlEncoded
-    @POST("books/{isbn}/status/")
+    @POST("books/{isbn}/status/{user_id}/")
     Call<JsonObject> saveStatus(@Path("isbn") int isbn,
                                 @Field("flag_r") int flag_r,
-                                @Field("flag_i") int flag_i);
+                                @Field("flag_i") int flag_i,
+                                @Path("user_id") String user_id);
 
     //9 로그인
     @FormUrlEncoded
     @POST("auth/login/")
-    Call<JsonObject> login(@Field("id") String id,
-                           @Field("pw") String pw);
+    Call<LoginResult> login(@Field("id") String id,
+                            @Field("pw") String pw);
 
     //10
     @FormUrlEncoded
