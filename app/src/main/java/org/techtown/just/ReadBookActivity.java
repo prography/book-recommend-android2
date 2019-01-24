@@ -10,11 +10,16 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.network.NetworkManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyRecyclerViewClickListener {
 
@@ -25,8 +30,6 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
     RecyclerView.LayoutManager mLayoutManager2;
     MyAdapter myAdapter2;
 
-    ArrayList<BookInfo> BookInfoArrayList = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,23 +38,16 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
 
         ButterKnife.bind(this);
 
-        BookInfoArrayList.add(new BookInfo("가"));
-        BookInfoArrayList.add(new BookInfo("나"));
-        BookInfoArrayList.add(new BookInfo("다"));
-        BookInfoArrayList.add(new BookInfo("라"));
-        BookInfoArrayList.add(new BookInfo("마"));
-        BookInfoArrayList.add(new BookInfo("바"));
-        BookInfoArrayList.add(new BookInfo("사"));
-
         mRecyclerView2 = (RecyclerView)findViewById(R.id.recycler_read);
         mRecyclerView2.setHasFixedSize(true);
-//        mLayoutManager = new GridLayoutManager(this,3);
         mLayoutManager2 = new GridLayoutManager(this,3);
         mRecyclerView2.setLayoutManager(mLayoutManager2);
 
-        myAdapter2 = new MyAdapter(BookInfoArrayList);
-        myAdapter2.setOnClickListener(this); //버튼 연결
-        mRecyclerView2.setAdapter(myAdapter2);
+        loadReadBooks();
+
+//        myAdapter2.setOnClickListener(this); //버튼 연결
+//        myAdapter2 .setOnClickListener(ReadBookActivity.this);
+//        mRecyclerView2.setAdapter(myAdapter2);
 
         View.OnClickListener mClickListener = new View.OnClickListener() {
             @Override
@@ -62,12 +58,55 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
 
     }
 
+    private void loadReadBooks(){
+
+        //id으로 책 정보 가져오기
+        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListWithSearch("한");
+//      Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListUserRead("1");
+
+        bookInfo.enqueue(new Callback<List<BookInfo>>() {
+            @Override
+            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
+                List<BookInfo> books_1 = response.body();
+                if (response.isSuccessful()) {
+                    myAdapter2 = new MyAdapter(books_1);
+                    myAdapter2 .setOnClickListener(ReadBookActivity.this);
+                    mRecyclerView2.setAdapter(myAdapter2);
+
+//                    mRecyclerView2.setAdapter(myAdapter2);
+
+                } else {
+                    Toast.makeText(ReadBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                }
+
+//                List<BookInfo> books1 = response.body();
+//                tv_response.setText(books1.get(0).getBook_name());
+
+            }
+            @Override
+            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+                Toast.makeText(ReadBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+
     @Override
     public void onItemClicked(int position) {
         Toast.makeText(getApplicationContext(),position+" 번 아이템이 클릭됨",Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(getApplicationContext(),BookDetailActivity.class);
         intent.putExtra("bookID",position);
+//        intent.putExtra("isbn",BookInfoList.get(position).getIsbn());
+//        intent.putExtra("book_thumbnail",BookInfoList.get(position).getThumbnail());
+//        intent.putExtra("book_name",BookInfoList.get(position).getBook_name());
+//        intent.putExtra("book_author",BookInfoList.get(position).getAuthor());
+//        intent.putExtra("book_content",BookInfoList.get(position).getContents());
+//        intent.putExtra("book_country",BookInfoList.get(position).getCountry());
+//        intent.putExtra("book_tags",BookInfoList.get(position).getTags());
+
+
         startActivity(intent);
 
     }

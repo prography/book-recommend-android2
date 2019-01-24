@@ -30,6 +30,9 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.kakao.auth.Session.getCurrentSession;
 import static org.techtown.just.LocalStore.my;
 import static org.techtown.just.base.BaseApplication.getLocalStore;

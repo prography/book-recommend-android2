@@ -31,8 +31,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         //XML 가져오는 부분
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item, parent, false);
 
-
-
         return new RowCell(view);
     }
 

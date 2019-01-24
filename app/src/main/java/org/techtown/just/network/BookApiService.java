@@ -6,6 +6,7 @@ import org.techtown.just.model.BookInfo;
 import org.techtown.just.model.Post;
 import org.techtown.just.model.Tag;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -44,11 +45,11 @@ public interface BookApiService {
 
     //4
     @GET("/books/read/{user_id}/")
-    Call<List<BookInfo>> getListUserRead(@Path("user_id") int user_id);
+    Call<List<BookInfo>> getListUserRead(@Path("user_id") String user_id);
 
     //5
     @GET("/books/interest/{user_id}/")
-    Call<List<BookInfo>> getListUserInterested(@Path("user_id") int user_id);
+    Call<List<BookInfo>> getListUserInterested(@Path("user_id") String user_id);
 
     //6
     @GET("books/listwithtag/{isbn}/")

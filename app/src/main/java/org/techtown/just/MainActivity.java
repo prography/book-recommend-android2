@@ -89,11 +89,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 for (int i = 0; i < tagNames.getTags().size(); i++)
                     flowLayout.addTag(tagNames.getTags().get(i));
 
-//                String s = "";
-//                for (int i = 0 ; i < tags.size(); i++)
-//                    s += tags.get(i).toString() + "\n";
-//
-//                text.setText(s);
             }
 
             @Override
@@ -136,9 +131,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         isLoggedIn =  getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
         Log.d("Main_onResume :: ", "isLoggedIn : "+isLoggedIn);
 
-
-
     }
+
     @Override
     protected void onRestart(){
         super.onRestart();
