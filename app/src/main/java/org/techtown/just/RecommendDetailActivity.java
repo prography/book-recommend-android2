@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,15 +53,20 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
         Intent intent = getIntent();
         int randomNum = intent.getIntExtra("randomNum", -1);
 
+
+//        String s = "";
+//        if (randomNum == -1) {
+//            for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
+//                s += tagNames.getSelectedTags().get(i).getTag_name() + " ";
+//        } else { //아무거나 선택 시
+//            //s = tagNames.getTags()[randomNum];
+//        }
+
         TagNames tagNames = (TagNames) intent.getSerializableExtra("tagNames");
-        String s = "";
-        if (randomNum == -1) {
-            for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
-                s += tagNames.getSelectedTags().get(i).getTag_name() + " ";
-        } else { //아무거나 선택 시
-            //s = tagNames.getTags()[randomNum];
-        }
-        textView.setText(s);
+        String tagsStr = "";
+        for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
+            tagsStr += tagNames.getSelectedTags().get(i).getTag_id() + ";";
+        textView.setText(tagsStr);
 
 
         setRecyclerView();
@@ -140,6 +146,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
 
             case R.id.btn_search:
                 intent = new Intent(this, SearchActivity.class);
+                intent.putExtra("searchStr", searchStr.toString());
                 startActivity(intent);
                 break;
         }

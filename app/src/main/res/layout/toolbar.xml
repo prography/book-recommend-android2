@@ -42,13 +42,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/searchStr"
         style="@style/TextTheme"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/side_margin_small"
         android:layout_marginRight="@dimen/side_margin_small"
-        android:hint="책 검색"
+        android:hint="책 또는 저자 검색"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_search"
         app:layout_constraintStart_toEndOf="@+id/btn_back"

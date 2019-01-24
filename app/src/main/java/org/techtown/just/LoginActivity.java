@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethod;
-import android.view.inputmethod.InputMethodSession;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,23 +16,21 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.Login;
 import com.facebook.login.widget.LoginButton;
-import com.kakao.auth.AuthType;
-import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
-import com.kakao.usermgmt.response.model.UserProfile;
 
 import org.json.JSONObject;
+import org.techtown.just.model.LoginResult;
+import org.techtown.just.network.NetworkManager;
 
 import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-import static com.kakao.auth.Session.getCurrentSession;
-import static org.techtown.just.LocalStore.my;
 import static org.techtown.just.base.BaseApplication.getLocalStore;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -45,6 +41,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText id;
     @BindView(R.id.pw)
     EditText pw;
+    @BindView(R.id.btn_register)
+    Button btnRegister;
     private Context mContext;
 
     private LoginButton btn_facebook_login;
@@ -106,6 +104,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //kakaocallback = new KakaoSessionCallback();
         //일반로그인
         btnGeneralLogin.setOnClickListener(this);
+        btnRegister.setOnClickListener(this);
 
         btn_facebook_login = (LoginButton) findViewById(R.id.btn_facebook_login);
         btn_kakao_login = (com.kakao.usermgmt.LoginButton) findViewById(R.id.btn_kakao_login);
@@ -115,6 +114,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btn_customKakao.setOnClickListener(this);
         btn_customFacebook.setOnClickListener(this);
+
+
     }
 
     @Override
@@ -162,6 +163,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.btn_custom_kakao:
 
@@ -192,20 +194,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String id = this.id.toString();
                 String pw = this.pw.toString();
 
-//                Call<JsonObject> login = NetworkManager.getBookApi().getTags();
-//                list.enqueue(new Callback<List<Tag>>() {
-//                    @Override
-//                    public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
-//                        List<Tag> tags = response.body();
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<List<Tag>> call, Throwable t) {
-//                        Toast.makeText(LoginActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+                Call<LoginResult> login = NetworkManager.getBookApi().login(id, pw);
+                login.enqueue(new Callback<LoginResult>() {
+                    @Override
+                    public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                        LoginResult loginResult = response.body();
+                        //user_id, LoginToken이 있다.
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginResult> call, Throwable t) {
+                        Toast.makeText(LoginActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 break;
+
+            case R.id.btn_register:
+                intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                break;
+
         }
 
     }
@@ -215,7 +224,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         //access token 유효성 확인
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        //isLoggedIn = accessToken != null && !accessToken.isExpired();
+//        isLoggedIn = accessToken != null && !accessToken.isExpired();
 
 //        LocalStore.getBooleanValue(LocalStore.my,isLoggedIn);
 //        //로그인 성공시 mypage activity로

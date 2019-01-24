@@ -48,13 +48,13 @@
 
         <Button
             android:id="@+id/button"
-            style="@style/TextTheme"
             android:layout_width="0dp"
             android:layout_height="@dimen/button_height"
             android:background="@drawable/btn_accent"
             android:padding="@dimen/button_side_padding"
             android:text="태그 선택 완료"
             android:textColor="@drawable/color_accent"
+            style="@style/TextTheme"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
