@@ -116,13 +116,6 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onRestart(){
         super.onRestart();
-        //
-//        getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
-//        if (isLoggedIn == false) {
-//            Intent intent = new Intent(this, LoginActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
 
 
     }
@@ -152,11 +145,6 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
     public void readbook_setting(){
 
-        //ArrayList<BookInfo> BookInfoArrayList = new ArrayList<>();
-//        BookInfoArrayList.add(new BookInfo("aa"));
-//        BookInfoArrayList.add(new BookInfo("bb"));
-//        BookInfoArrayList.add(new BookInfo("오"));
-
         loadReadBooks();
 
         rc_Readbook=(RecyclerView)findViewById(R.id.rc_readbook);
@@ -171,10 +159,6 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
     }
     public void intbook_setting(){
-
-//        ArrayList<BookInfo> BookInfoArrayList2 = new ArrayList<>();
-//        BookInfoArrayList2.add(new BookInfo("가"));
-//        BookInfoArrayList2.add(new BookInfo("로"));
 
         loadInterestBook();
 
@@ -222,45 +206,47 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
     private void loadReadBooks(){
 
         //user_id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListWithSearch("한");
-
+        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListUserRead("1");
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books_1 = response.body();
                 if (response.isSuccessful()) {
-                    myAdapter_1 = new MyAdapter(books_1);
+                    myAdapter_1 = new MyAdapter(getApplicationContext(),books_1);
                     rc_Readbook.setAdapter(myAdapter_1);
                 } else {
-                    Toast.makeText(MyPageActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyPageActivity.this, "response 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                    Log.e("response error :: " , ""+response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<BookInfo>> call, Throwable t) {
-                Toast.makeText(MyPageActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyPageActivity.this, "fail 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+
+                Log.e("response onFailure :: " ,t.getMessage());
             }
         });
 
     }
 
     private void loadInterestBook(){
-        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListWithSearch("채");
+        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListUserInterested("1");
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books_2 = response.body();
                 if(response.isSuccessful()) {
-                    myAdapter_2 = new MyAdapter(books_2);
+                    myAdapter_2 = new MyAdapter(getApplicationContext(),books_2);
                     rc_Intbook.setAdapter(myAdapter_2);
                 }else {
-                    Toast.makeText(MyPageActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyPageActivity.this, "a오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<BookInfo>> call, Throwable t) {
-                Toast.makeText(MyPageActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyPageActivity.this, "b오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 

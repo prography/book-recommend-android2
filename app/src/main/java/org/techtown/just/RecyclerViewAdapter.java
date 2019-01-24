@@ -2,6 +2,9 @@ package org.techtown.just;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,11 @@ import android.widget.Toast;
 
 import org.techtown.just.model.BookInfo;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
@@ -51,6 +59,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * @param position
      */
 
+    Bitmap bitmap;
+
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
 
@@ -59,8 +69,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         viewHolder.ITEM_BOOKNAME.setText(BookInfoList.get(position).getBook_name());
 //        viewHolder.ITEM_IMG.setImageBitmap(BookInfoList.get(position).getThumbnail());
         //viewHolder.ITEM_IMG.setImageBitmap();
+//        viewHolder.ITEM_IMG.setImageURI(Uri.parse("https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F521345%3Ftimestamp%3D20190123155507"));
         viewHolder.ITEM_AUTHOR.setText(BookInfoList.get(position).getAuthor());
         viewHolder.ITEM_TAG.setText(BookInfoList.get(position).getTags());
+
+
+        setImageSrc(viewHolder.ITEM_IMG, position);
+//1.25 am 05:18
 
 
         // 값 설정 ( set )
@@ -88,6 +103,40 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Toast.makeText(context, position +"번째 아이템 클릭", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void setImageSrc(ImageView imageView, final int position) {
+        //ImageView url 설정
+        Thread mThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(BookInfoList.get(position).getThumbnail());
+
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+
+                    InputStream is = conn.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(is);
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        mThread.start();
+
+        try {
+            mThread.join();
+            imageView.setImageBitmap(bitmap);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 

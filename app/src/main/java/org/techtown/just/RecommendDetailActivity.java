@@ -34,6 +34,8 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
     TextView textView;
     @BindView(R.id.btn_back)
     ImageView btnBack;
+    @BindView(R.id.searchStr)
+    EditText editText;
     @BindView(R.id.btn_search)
     ImageView btnSearch;
     @BindView(R.id.btn_my)
@@ -51,16 +53,6 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        int randomNum = intent.getIntExtra("randomNum", -1);
-
-
-//        String s = "";
-//        if (randomNum == -1) {
-//            for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
-//                s += tagNames.getSelectedTags().get(i).getTag_name() + " ";
-//        } else { //아무거나 선택 시
-//            //s = tagNames.getTags()[randomNum];
-//        }
 
         TagNames tagNames = (TagNames) intent.getSerializableExtra("tagNames");
         String tagsStr = "";
@@ -70,7 +62,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
 
 
         setRecyclerView();
-        load_RecommendBooks();
+        load_RecommendBooks(tagsStr,1);
 
         btnMy.setOnClickListener(this);
         btnBack.setOnClickListener(this);
@@ -91,18 +83,25 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
     }
 
 
-    private void load_RecommendBooks(){
+    private void load_RecommendBooks(String name, int mode){
 
+        Call<List<BookInfo>> bookInfoCall=null;
         //id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListWithSearch("한");
-
-   //     Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListUserRead("1");
-        bookInfo.enqueue(new Callback<List<BookInfo>>() {
+        if(mode ==1){//tag
+            bookInfoCall = NetworkManager.getBookApi().getListWithTag(name);
+        }
+        else if(mode ==2){//search
+            bookInfoCall = NetworkManager.getBookApi().getListWithSearch(name);
+        }
+        bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books = response.body();
+                //thumbnail 설정
+                setThumbnail(books);
+//                Toast.makeText(RecommendDetailActivity.this, books.get(0).getBook_name(), Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful()) {
-                    adapter = new RecyclerViewAdapter(getApplicationContext(),books);
+                    adapter = new RecyclerViewAdapter(getApplicationContext(), books);
                     //adapter .setOnClickListener(RecommendDetailActivity.this);
                     recyclerView.setAdapter(adapter);
 
@@ -120,6 +119,29 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
             }
         });
 
+    }
+
+    Call<List<BookInfo>> bookInfoWithIsbn;
+    BookInfo bookInfo;
+
+    public void setThumbnail(List<BookInfo> books) {
+        for (int i = 0; i < books.size(); i++) {
+            //isbn으로 책정보 가져와서
+            bookInfo = books.get(i);
+            bookInfoWithIsbn = NetworkManager.getBookApi().getBookInfoWithIsbn(bookInfo.getIsbn());
+            bookInfoWithIsbn.enqueue(new Callback<List<BookInfo>>() {
+                @Override
+                public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
+                    List<BookInfo> books2 = response.body();
+                    //bookInfo에 때려넣기~
+                    bookInfo.setThumbnail(books2.get(0).getThumbnail());
+                }
+                @Override
+                public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+                    Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 
@@ -145,9 +167,8 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
                 break;
 
             case R.id.btn_search:
-                intent = new Intent(this, SearchActivity.class);
-                intent.putExtra("searchStr", searchStr.toString());
-                startActivity(intent);
+                String search = editText.getText().toString();
+                load_RecommendBooks(search,2);
                 break;
         }
     }

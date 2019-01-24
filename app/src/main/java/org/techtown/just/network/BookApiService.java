@@ -39,22 +39,22 @@ public interface BookApiService {
 
     //2
     @GET("books/listwithtag/{tags}/")
-    Call<List<BookInfo>> getListWithTag(@Query("tags") String tags);
+    Call<List<BookInfo>> getListWithTag(@Path("tags") String tags);
 
     //3
     @GET("books/listwithsearch/{search}/")
     Call<List<BookInfo>> getListWithSearch(@Path("search") String search);
 
     //4
-    @GET("/books/read/{user_id}/")
+    @GET("books/read/{user_id}/")
     Call<List<BookInfo>> getListUserRead(@Path("user_id") String user_id);
 
     //5
-    @GET("/books/interest/{user_id}/")
+    @GET("books/interest/{user_id}/")
     Call<List<BookInfo>> getListUserInterested(@Path("user_id") String user_id);
 
     //6
-    @GET("books/listwithtag/{isbn}/")
+    @GET("books/{isbn}/")
     Call<List<BookInfo>> getBookInfoWithIsbn(@Path("isbn") String isbn);
 
     //7

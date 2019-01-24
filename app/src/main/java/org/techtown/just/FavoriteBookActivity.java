@@ -59,23 +59,23 @@ public class FavoriteBookActivity extends AppCompatActivity  implements MyAdapte
     @Override
     public void onItemClicked(int position) {
         Toast.makeText(getApplicationContext(),position+" 번 아이템이 클릭됨",Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(getApplicationContext(),BookDetailActivity.class);
-        intent.putExtra("bookID",position);
-        startActivity(intent);
+//
+//        Intent intent = new Intent(getApplicationContext(),BookDetailActivity.class);
+//        intent.putExtra("bookID",position);
+//        startActivity(intent);
     }
 
     private void loadIntBooks(){
 
         //id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListWithSearch("한");
+        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListUserInterested("1");
 
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books_1 = response.body();
                 if (response.isSuccessful()) {
-                    myAdapter = new MyAdapter(books_1);
+                    myAdapter = new MyAdapter(getApplicationContext(),books_1);
                     myAdapter .setOnClickListener(FavoriteBookActivity.this);
                     mRecyclerView.setAdapter(myAdapter);
 
