@@ -34,7 +34,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
     TextView textView;
     @BindView(R.id.btn_back)
     ImageView btnBack;
-    @BindView(R.id.editText)
+    @BindView(R.id.searchStr)
     EditText editText;
     @BindView(R.id.btn_search)
     ImageView btnSearch;
@@ -62,7 +62,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
 
 
         setRecyclerView();
-        load_RecommendBooks(tagsStr);
+        load_RecommendBooks(tagsStr,1);
 
         btnMy.setOnClickListener(this);
         btnBack.setOnClickListener(this);
@@ -83,11 +83,16 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
     }
 
 
-    private void load_RecommendBooks(String tagsStr){
+    private void load_RecommendBooks(String name, int mode){
 
+        Call<List<BookInfo>> bookInfoCall=null;
         //id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfoCall = NetworkManager.getBookApi().getListWithTag(tagsStr);
-//        Call<List<BookInfo>> bookInfoCall = NetworkManager.getBookApi().getBookInfoWithIsbn("9788972758426");
+        if(mode ==1){//tag
+            bookInfoCall = NetworkManager.getBookApi().getListWithTag(name);
+        }
+        else if(mode ==2){//search
+            bookInfoCall = NetworkManager.getBookApi().getListWithSearch(name);
+        }
         bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
@@ -163,16 +168,9 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
 
             case R.id.btn_search:
                 String search = editText.getText().toString();
-                SearchBook(search);
+                load_RecommendBooks(search,2);
                 break;
         }
-    }
-
-    private String SearchBook(String name){
-
-//        load_RecommendBooks();
-
-        return name;
     }
 
 

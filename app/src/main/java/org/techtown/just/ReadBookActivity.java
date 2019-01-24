@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,6 +26,10 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
 
     @BindView(R.id.btn_back)
     ImageView btnBack;
+    @BindView(R.id.searchStr)
+    EditText editText;
+    @BindView(R.id.btn_search)
+    ImageView search;
     //@BindView(R.id.recycler_read)
     RecyclerView mRecyclerView2;
     RecyclerView.LayoutManager mLayoutManager2;
@@ -43,7 +48,7 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
         mLayoutManager2 = new GridLayoutManager(this,3);
         mRecyclerView2.setLayoutManager(mLayoutManager2);
 
-        loadReadBooks();
+        loadReadBooks(null);
 
         View.OnClickListener mClickListener = new View.OnClickListener() {
             @Override
@@ -51,15 +56,25 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
                 finish();
             }};
         btnBack.setOnClickListener(mClickListener);
+        View.OnClickListener mClickListener2 = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchname = editText.getText().toString();
+                loadReadBooks(searchname);
+            }};
+        search.setOnClickListener(mClickListener2);
 
     }
 
-    private void loadReadBooks(){
+    private void loadReadBooks(String string){
 
         //id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListUserRead("1");
-
-        bookInfo.enqueue(new Callback<List<BookInfo>>() {
+        Call<List<BookInfo>> bookInfo=null;
+        if(string == null) {
+            bookInfo = NetworkManager.getBookApi().getListUserRead("1");
+        }else if(string != null){
+            bookInfo = NetworkManager.getBookApi().getListWithSearch(string);
+        }bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books_1 = response.body();
@@ -86,19 +101,6 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
     public void onItemClicked(int position) {
         Toast.makeText(getApplicationContext(),position+" 번 아이템이 클릭됨",Toast.LENGTH_SHORT).show();
 
-        //Intent intent = new Intent(getApplicationContext(),BookDetailActivity.class);
-        //intent.putExtra("book_name",position);
-        //intent.addFlags()
-
-        //intent.putExtra("book_thumbnail",bookinfo.get(position).getThumbnail());
-//        intent.putExtra("book_name",BookInfoList.get(position).getBook_name());
-//        intent.putExtra("book_author",BookInfoList.get(position).getAuthor());
-//        intent.putExtra("book_content",BookInfoList.get(position).getContents());
-//        intent.putExtra("book_country",BookInfoList.get(position).getCountry());
-//        intent.putExtra("book_tags",BookInfoList.get(position).getTags());
-
-
-        //startActivity(intent);
 
     }
 }
