@@ -75,7 +75,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
         setImageSrc(viewHolder.ITEM_IMG, position);
-
+//1.25 am 05:18
 
 
         // 값 설정 ( set )
