@@ -16,14 +16,14 @@
         <include layout="@layout/toolbar" />
 
         <ImageView
-            android:id="@+id/book"
+            android:id="@+id/book_img"
             android:layout_width="158dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp" />
 
         <ImageView
-            android:id="@+id/like"
+            android:id="@+id/like_btn"
             android:layout_width="61dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -35,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/read"
+            android:id="@+id/read_btn"
             android:layout_width="61dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -58,7 +58,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/book_title"
             android:padding="8dp"
             android:layout_gravity="center"
             android:text="dummy_1_1"
@@ -68,7 +68,7 @@
 
 
         <TextView
-            android:id="@+id/author"
+            android:id="@+id/book_author"
             android:layout_gravity="center"
             android:padding="8dp"
             android:layout_width="wrap_content"
@@ -77,12 +77,12 @@
             android:textSize="20dp" />
 
         <TextView
-            android:id="@+id/publisher"
+            android:id="@+id/book_tags"
             android:layout_gravity="center"
             android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="default"
+            android:text="tags"
             android:textSize="18dp" />
 
 
@@ -97,7 +97,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/summary"
+            android:id="@+id/book_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"/>

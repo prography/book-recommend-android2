@@ -10,11 +10,16 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.network.NetworkManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FavoriteBookActivity extends AppCompatActivity  implements MyAdapter.MyRecyclerViewClickListener{
 
@@ -25,8 +30,6 @@ public class FavoriteBookActivity extends AppCompatActivity  implements MyAdapte
     RecyclerView.LayoutManager mLayoutManager;
     MyAdapter myAdapter;
 
-    ArrayList<BookInfo> BookInfoArrayList = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,23 +37,15 @@ public class FavoriteBookActivity extends AppCompatActivity  implements MyAdapte
 
         ButterKnife.bind(this);
 
-        BookInfoArrayList.add(new BookInfo("A"));
-        BookInfoArrayList.add(new BookInfo("B"));
-        BookInfoArrayList.add(new BookInfo("C"));
-        BookInfoArrayList.add(new BookInfo("D"));
-        BookInfoArrayList.add(new BookInfo("E"));
-        BookInfoArrayList.add(new BookInfo("F"));
-        BookInfoArrayList.add(new BookInfo("G"));
-
         mRecyclerView = (RecyclerView)findViewById(R.id.recycler_int);
         mRecyclerView.setHasFixedSize(true);
-//        mLayoutManager = new GridLayoutManager(this,3);
         mLayoutManager = new GridLayoutManager(this,3);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        myAdapter = new MyAdapter(BookInfoArrayList);
-        myAdapter.setOnClickListener(this); //버튼 연결
-        mRecyclerView.setAdapter(myAdapter);
+        loadIntBooks();
+//        myAdapter = new MyAdapter(BookInfoArrayList);
+//        myAdapter.setOnClickListener(this); //버튼 연결
+//        mRecyclerView.setAdapter(myAdapter);
 
         View.OnClickListener mClickListener = new View.OnClickListener() {
             @Override
@@ -68,6 +63,33 @@ public class FavoriteBookActivity extends AppCompatActivity  implements MyAdapte
         Intent intent = new Intent(getApplicationContext(),BookDetailActivity.class);
         intent.putExtra("bookID",position);
         startActivity(intent);
+    }
+
+    private void loadIntBooks(){
+
+        //id으로 책 정보 가져오기
+        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListWithSearch("한");
+
+        bookInfo.enqueue(new Callback<List<BookInfo>>() {
+            @Override
+            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
+                List<BookInfo> books_1 = response.body();
+                if (response.isSuccessful()) {
+                    myAdapter = new MyAdapter(books_1);
+                    myAdapter .setOnClickListener(FavoriteBookActivity.this);
+                    mRecyclerView.setAdapter(myAdapter);
+
+                } else {
+                    Toast.makeText(FavoriteBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+                Toast.makeText(FavoriteBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
+
 }

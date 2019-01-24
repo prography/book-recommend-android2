@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.Profile;
@@ -22,16 +23,21 @@ import com.facebook.login.widget.ProfilePictureView;
 import com.kakao.kakaotalk.response.KakaoTalkProfile;
 
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.network.NetworkManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.widget.GridLayout.HORIZONTAL;
 import static org.techtown.just.base.BaseApplication.getLocalStore;
 
-public class MyPageActivity extends AppCompatActivity implements View.OnClickListener{
+public class MyPageActivity extends AppCompatActivity implements View.OnClickListener {
 
     @BindView(R.id.btn_back)
     ImageView btn_main;
@@ -135,30 +141,23 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         if(LoggedIn_KK == true){
-            final String link = kakaoTalkProfile.getProfileImageUrl();
             user_name.setText(kakaoTalkProfile.getNickName());
             profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
-            profilePictureView.setProfileId(link);
-
+            profilePictureView.setProfileId(kakaoTalkProfile.getProfileImageUrl());
 
         }
         //if kakao 로그인시
-//        user_name.setText(kakaoTalkProfile.getNickName());
-//        profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
-//        profilePictureView.setProfileId(kakaoTalkProfile.getProfileImageUrl());
+
     }
 
     public void readbook_setting(){
 
-        ArrayList<BookInfo> BookInfoArrayList = new ArrayList<>();
-
-        BookInfoArrayList.add(new BookInfo("aa"));
-        BookInfoArrayList.add(new BookInfo("bb"));
+        //ArrayList<BookInfo> BookInfoArrayList = new ArrayList<>();
+//        BookInfoArrayList.add(new BookInfo("aa"));
+//        BookInfoArrayList.add(new BookInfo("bb"));
 //        BookInfoArrayList.add(new BookInfo("오"));
-//        BookInfoArrayList.add(new BookInfo("프"));
-//        BookInfoArrayList.add(new BookInfo("으"));
-//        BookInfoArrayList.add(new BookInfo("다"));
-//        BookInfoArrayList.add(new BookInfo("아"));
+
+        loadReadBooks();
 
         rc_Readbook=(RecyclerView)findViewById(R.id.rc_readbook);
         rc_Readbook.setHasFixedSize(true);
@@ -167,33 +166,27 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
         ((LinearLayoutManager) mLayoutManager_1).setOrientation(HORIZONTAL);
         rc_Readbook.setLayoutManager(mLayoutManager_1);
 
-        myAdapter_1 = new MyAdapter(BookInfoArrayList);
-        rc_Readbook.setAdapter(myAdapter_1);
+//        myAdapter_1 = new MyAdapter(BookInfoArrayList);
+//        rc_Readbook.setAdapter(myAdapter_1);
 
     }
     public void intbook_setting(){
 
-        ArrayList<BookInfo> BookInfoArrayList2 = new ArrayList<>();
+//        ArrayList<BookInfo> BookInfoArrayList2 = new ArrayList<>();
+//        BookInfoArrayList2.add(new BookInfo("가"));
+//        BookInfoArrayList2.add(new BookInfo("로"));
 
-        BookInfoArrayList2.add(new BookInfo("가"));
-        BookInfoArrayList2.add(new BookInfo("로"));
-        BookInfoArrayList2.add(new BookInfo("로"));
-        BookInfoArrayList2.add(new BookInfo("해"));
-//        BookInfoArrayList2.add(new BookInfo("주"));
-//        BookInfoArrayList2.add(new BookInfo("세"));
-//        BookInfoArrayList2.add(new BookInfo("요"));
+        loadInterestBook();
 
         rc_Intbook=(RecyclerView)findViewById(R.id.rc_intbook);
         rc_Intbook.setHasFixedSize(true);
-
-//        mLayoutManager = new GridLayoutManager(this,3);
 
         mLayoutManager_2 = new LinearLayoutManager(this);
         ((LinearLayoutManager) mLayoutManager_2).setOrientation(HORIZONTAL);
         rc_Intbook.setLayoutManager(mLayoutManager_2);
 
-        myAdapter_2 = new MyAdapter(BookInfoArrayList2);
-        rc_Intbook.setAdapter(myAdapter_2);
+//        myAdapter_2 = new MyAdapter(BookInfoArrayList2);
+//        rc_Intbook.setAdapter(myAdapter_2);
 
     }
 
@@ -226,6 +219,52 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
 
 
 
+    private void loadReadBooks(){
+
+        //user_id으로 책 정보 가져오기
+        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListWithSearch("한");
+
+        bookInfo.enqueue(new Callback<List<BookInfo>>() {
+            @Override
+            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
+                List<BookInfo> books_1 = response.body();
+                if (response.isSuccessful()) {
+                    myAdapter_1 = new MyAdapter(books_1);
+                    rc_Readbook.setAdapter(myAdapter_1);
+                } else {
+                    Toast.makeText(MyPageActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+                Toast.makeText(MyPageActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void loadInterestBook(){
+        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListWithSearch("채");
+        bookInfo.enqueue(new Callback<List<BookInfo>>() {
+            @Override
+            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
+                List<BookInfo> books_2 = response.body();
+                if(response.isSuccessful()) {
+                    myAdapter_2 = new MyAdapter(books_2);
+                    rc_Intbook.setAdapter(myAdapter_2);
+                }else {
+                    Toast.makeText(MyPageActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+                Toast.makeText(MyPageActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
 }
 

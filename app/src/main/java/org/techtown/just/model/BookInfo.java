@@ -8,7 +8,9 @@ public class BookInfo implements Serializable {
     //book 속성
     public String isbn;
     public String tags;
+
     public String book_name;
+
     public String author;
     public String country;
     public String contents;
@@ -93,7 +95,6 @@ public class BookInfo implements Serializable {
     }
 
     public BookInfo(String book_name){
-        //this.id = id;
         this.book_name = book_name;
     }
 
