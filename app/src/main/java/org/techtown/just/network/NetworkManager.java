@@ -26,8 +26,8 @@ public class NetworkManager {
         AuthenticationInterceptor authInterceptor = new AuthenticationInterceptor(localStore);
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
                 .addInterceptor(authInterceptor)
+                .addInterceptor(interceptor)
                 .build();
 
 
