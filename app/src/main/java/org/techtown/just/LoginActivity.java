@@ -84,7 +84,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         btn_customFacebook.setOnClickListener(this);
 
 
-        if (getLocalStore().getStringValue(LocalStore.UserId) != null) {
+        if (getLocalStore().getStringValue(LocalStore.AccessToken) != null) {
             checkTokenIsValid();
         } else {
             //facebook, kakaoTalk login
@@ -220,9 +220,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void checkTokenIsValid() {
-        final Call<JsonObject> login = getNetworkManager().getBookApi().validate(getLocalStore().getStringValue(LocalStore.AccessToken),
-                getLocalStore().getStringValue(LocalStore.IdToken),
-                getLocalStore().getStringValue(LocalStore.RefreshToken));
+        final Call<JsonObject> login = getNetworkManager().getBookApi().validate();
         login.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

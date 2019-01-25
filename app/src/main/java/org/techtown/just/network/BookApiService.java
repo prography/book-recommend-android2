@@ -77,11 +77,8 @@ public interface BookApiService {
                             @Field("pw") String pw);
 
     //10
-    @FormUrlEncoded
     @POST("auth2/validate/")
-    Call<JsonObject> validate(@Field("accessToken") String accessToken,
-                               @Field("idToken") String idToken,
-                               @Field("refreshToken") String refreshToken);
+    Call<JsonObject> validate();
 
 
     //11 회원가입
