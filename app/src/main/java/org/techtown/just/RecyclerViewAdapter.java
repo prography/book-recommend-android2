@@ -96,6 +96,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
   //              intent.putExtra("bookInfo", (Parcelable) bookInfoList.get(position));
 
                 intent.putExtra("isbn", bookInfoList.get(position).getIsbn());
+                intent.putExtra("tagNames", tagNames);
 //                intent.putExtra("book_thumbnail", bookInfoList.get(position).getThumbnail());
 //                intent.putExtra("book_name", bookInfoList.get(position).getBook_name());
 //                intent.putExtra("book_author", bookInfoList.get(position).getAuthor());
