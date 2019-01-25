@@ -2,6 +2,8 @@ package org.techtown.just;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,11 @@ import android.widget.TextView;
 
 import org.techtown.just.model.BookInfo;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +29,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private MyRecyclerViewClickListener mListener;
     private List<BookInfo> BookInfoList;
     private Context mContext;
+    Bitmap bitmap;
 
     public interface MyRecyclerViewClickListener{
         //item 선택 클릭시
@@ -36,12 +44,12 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         ImageView my_book_img;
-        TextView my_book_name;
+        //TextView my_book_name;
 
         MyViewHolder(View v){
             super(v);
-//            my_book_img = v.findViewById(R.id.myBookList);
-            my_book_name = v.findViewById(R.id.myBookList);
+            my_book_img = v.findViewById(R.id.myBookList);
+//            my_book_name = v.findViewById(R.id.myBookList);
         }
     }
 
@@ -71,7 +79,9 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         //myViewHolder.my_book_img.setImageResource(BookInfoArrayList.get(position).id);
 //        myViewHolder.my_book_name.setText(BookInfoArrayList.get(position).id);
         //TODO::책 img 로 변경 필요.
-        myViewHolder.my_book_name.setText(BookInfoList.get(position).book_name);
+        //myViewHolder.my_book_name.setText(BookInfoList.get(position).book_name);
+        setImageSrc(myViewHolder.my_book_img, position);
+
 
         final String book_name = BookInfoList.get(position).getBook_name();
         final String book_author = BookInfoList.get(position).getAuthor();
@@ -117,6 +127,41 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position){
         return super.getItemViewType(position);
+    }
+
+
+    public void setImageSrc(ImageView imageView, final int position) {
+        //ImageView url 설정
+        Thread mThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(BookInfoList.get(position).getThumbnail());
+
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+
+                    InputStream is = conn.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(is);
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        mThread.start();
+
+        try {
+            mThread.join();
+            imageView.setImageBitmap(bitmap);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

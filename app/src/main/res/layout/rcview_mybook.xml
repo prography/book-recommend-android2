@@ -5,6 +5,8 @@
     android:layout_height="150dp"
     android:orientation="horizontal"
     android:gravity="center_horizontal"
+    android:layout_marginLeft="20dp"
+
 
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -16,26 +18,23 @@
         <!--android:layout_gravity="center_horizontal"-->
         <!--android:layout_margin = "5dp"-->
         <!--/>-->
-    <!--<ImageView-->
+    <ImageView
+        android:id="@+id/myBookList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+
+        />
+
+    <!--<TextView-->
         <!--android:id="@+id/myBookList"-->
         <!--android:paddingBottom="15dp"-->
         <!--android:paddingLeft="10dp"-->
-
+        <!--android:text="dd"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent"-->
         <!--android:gravity="center_horizontal"-->
         <!--android:background="#fff64d"-->
         <!--/>-->
-
-    <TextView
-        android:id="@+id/myBookList"
-        android:paddingBottom="15dp"
-        android:paddingLeft="10dp"
-        android:text="dd"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:background="#fff64d"
-        />
 
 </LinearLayout>

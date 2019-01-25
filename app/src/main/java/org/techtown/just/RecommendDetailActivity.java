@@ -14,7 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
 import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.BookFlag;
 import org.techtown.just.model.BookInfo;
 import org.techtown.just.model.TagNames;
 import org.techtown.just.network.NetworkManager;
@@ -117,6 +120,40 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
                     adapter = new RecyclerViewAdapter(getApplicationContext(), books, tagNames);
                     recyclerView.setAdapter(adapter);
 
+                    //
+/*                    adapter.setBookListListener(new RecyclerViewAdapter.BookListListener() {
+                        @Override
+                        public void saveFlag(final int position, final BookInfo bookInfo, final int like, final int read) {
+
+//                            String userId = getLocalStore().getStringValue(LocalStore.UserId);
+                            String userId="1";
+                            getNetworkManager().getBookApi().saveStatus(bookInfo.isbn, read, like, userId).enqueue(new Callback<JsonObject>() {
+                                @Override
+                                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                    if (response.isSuccessful()) {
+                                        BookFlag flag = bookInfo.flag;
+                                        flag.setBe_interested(like);
+                                        flag.setHad_read(read);
+                                        bookInfo.setFlag(flag);
+                                        adapter.updateBookInfo(position, bookInfo);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                                }
+                            });
+
+                        }
+                    });
+
+                    for (BookInfo info : books){
+                        loadBookFlag(info);
+                    }
+
+*/
+
                 } else {
                     Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -131,7 +168,44 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
 
     Call<List<BookInfo>> bookInfoWithIsbn;
     BookInfo bookInfo;
-    
+
+/*
+    private void loadBookFlag(final BookInfo bookInfo){
+
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+//        Call<List<BookFlag>> bookInfo = null;
+        getNetworkManager().getBookApi().getBookFlag(bookInfo.isbn, userId)
+                .enqueue(new Callback<JsonObject>() {
+
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        JsonObject bookFlags = response.body();
+                        int like = 1;
+                        int read = 0;
+                        if (response.isSuccessful() && bookFlags!=null) {
+                            JsonObject jsonObject = bookFlags.getAsJsonArray().get(0).getAsJsonObject();
+                            //TODO json parsing
+//                    int like = jsonObject.get("had_read").getAsInt();
+//                    int read = jsonObject.get("be_interested").getAsInt();
+                            BookFlag flag = new BookFlag(read, like);
+                            bookInfo.setFlag(flag);
+                            adapter.addBookInfo(bookInfo);
+                        }else {
+                            adapter.addBookInfo(bookInfo);
+                        }
+                    }
+
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                    }
+                });
+
+
+
+    }
+*/
 
 
     @Override

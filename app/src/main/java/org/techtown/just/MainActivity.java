@@ -158,6 +158,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 //                getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
                 isLoggedIn = getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
+                
                 //getLocalStore().setBooleanValue(LocalStore.my, id);
                 if (isLoggedIn == true) {
                     //checkTokenIsValid();
