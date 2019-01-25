@@ -72,8 +72,8 @@ public class BookDetailActivity extends BaseActivity {
                 BOOK_TITLE.setText(books.get(0).getBook_name());
                 BOOK_AUTHOR.setText(books.get(0).getAuthor());
                 BOOK_CONTENT.setText(books.get(0).getContents());
-                BOOK_TAGS.setText(splitTags(books.get(0).getTags()));
-
+//                BOOK_TAGS.setText(splitTags(books.get(0).getTags()));
+                BOOK_TAGS.setText(books.get(0).getTags());
             }
 
             @Override
