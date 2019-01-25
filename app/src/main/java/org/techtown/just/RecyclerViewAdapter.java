@@ -121,13 +121,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 if(viewHolder.ITEM_LIKE.isSelected()) {
                     //좋아요 취소
-                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + " 좋아요 취소..", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + " 좋아요까지는...", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_LIKE.setSelected(false);
                     viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_empty);
                     //listener.saveFlag(position, bookInfoList.get(position), 0, bookInfoList.get(position).getFlag().getBe_interested());
                 }else {
                     //좋아요
-                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + " 좋아요!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + " 좋다!", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_LIKE.setSelected(true);
                     viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_full);
                     //listener.saveFlag(position, bookInfoList.get(position), 1, bookInfoList.get(position).getFlag().getBe_interested() );
@@ -141,12 +141,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Context context = view.getContext();
                 if(viewHolder.ITEM_READ.isSelected()) {
                     //읽음 취소
-                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + "은(는) 안읽은 책ㅠㅠ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "아맞다 \"" + bookInfoList.get(position).getBook_name() + "\"" + "안읽었지...ㅎ", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_READ.setSelected(false);
                     viewHolder.ITEM_READ.setImageResource(R.drawable.ic_check);
                     //listener.saveFlag(position, bookInfoList.get(position), bookInfoList.get(position).getFlag().getBe_interested(), 0 );
                 }else{
-                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + "을(를) 읽었어요!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + "을(를) 읽었다!", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_READ.setSelected(true);
                     viewHolder.ITEM_READ.setImageResource(R.drawable.ic_checked);
                 }

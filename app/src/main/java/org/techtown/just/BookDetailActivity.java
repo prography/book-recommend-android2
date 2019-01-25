@@ -219,18 +219,29 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
 //                break;
      
             case R.id.like_btn:
-                Toast.makeText(BookDetailActivity.this, "좋아요 버튼을 눌렀습니다", Toast.LENGTH_SHORT).show();
-                if(BOOK_LIKE.isSelected()==true){
-                    BOOK_LIKE.setImageResource(R.drawable.ic_like_full);}
-                else
+                if(BOOK_LIKE.isSelected()==true) { //좋아요 취소
+                    Toast.makeText(this, "\"" + BOOK_TITLE.toString() + "\"" + " 좋아요까지는...", Toast.LENGTH_SHORT).show();
+                    BOOK_LIKE.setSelected(false);
                     BOOK_LIKE.setImageResource(R.drawable.ic_like_empty);
+                }
+                else { //좋아요
+                    Toast.makeText(this, "\"" + BOOK_TITLE.toString() + "\"" + " 좋다!", Toast.LENGTH_SHORT).show();
+                    BOOK_LIKE.setSelected(true);
+                    BOOK_LIKE.setImageResource(R.drawable.ic_like_full);
+                }
+
                 break;
             case R.id.read_btn:
-                Toast.makeText(BookDetailActivity.this, "읽었어요 버튼을 눌렀습니다", Toast.LENGTH_SHORT).show();
-                if(BOOK_READ.isSelected()==true){
-                    BOOK_READ.setImageResource(R.drawable.ic_checked);}
-                else
+                if(BOOK_READ.isSelected()==true) { //읽었어요 취소
+                    Toast.makeText(this, "아맞다 \"" + BOOK_TITLE.toString() + "\"" + "안읽었지...ㅎ", Toast.LENGTH_SHORT).show();
+                    BOOK_READ.setSelected(false);
                     BOOK_READ.setImageResource(R.drawable.ic_check);
+                }
+                else { //좋아요
+                    Toast.makeText(this, "\"" + BOOK_TITLE.toString() + "\"" + "을(를) 읽었다!", Toast.LENGTH_SHORT).show();
+                    BOOK_READ.setSelected(true);
+                    BOOK_READ.setImageResource(R.drawable.ic_checked);
+                }
                 break;
         }
     }

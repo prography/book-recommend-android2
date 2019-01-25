@@ -141,14 +141,18 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
             profilePictureView.setProfileId(facebookProfile.getId());
         }
 
-        if(LoggedIn_KK == true){
+        else if(LoggedIn_KK == true){
             user_name.setText(kakaoTalkProfile.getNickName());
             profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
             profilePictureView.setProfileId(kakaoTalkProfile.getProfileImageUrl());
 
         }
-        //if kakao 로그인시
 
+        else { //일반로그인
+            //user_name <- user_id
+            userId = getLocalStore().getStringValue(LocalStore.UserId);
+            user_name.setText(userId);
+        }
     }
 
     public void readbook_setting(){
