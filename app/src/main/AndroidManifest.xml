@@ -57,7 +57,7 @@
         <activity android:name=".PostDetailActivity" />
         <activity android:name=".PostsActivity" />
         <activity android:name=".TagsActivity" />
-        <activity android:name=".Login2Activity" />
+        <!--<activity android:name=".Login2Activity" />-->
         <activity android:name=".RegisterActivity" />
         <activity android:name=".Register2Activity"></activity>
     </application>
