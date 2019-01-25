@@ -6,9 +6,9 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 public class BookFlag implements Serializable, Parcelable {
-    int had_read;
-    int be_interested;
 
+    int had_read = 0;
+    int be_interested =0 ;
 
     public BookFlag(int had_read, int be_interested) {
         this.had_read = had_read;

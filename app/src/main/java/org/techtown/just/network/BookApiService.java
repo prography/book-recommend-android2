@@ -58,13 +58,13 @@ public interface BookApiService {
     Call<List<BookInfo>> getBookInfoWithIsbn(@Path("isbn") String isbn);
 
     //7
-    @GET("/books/status/{isbn}/{user_id}/")
+    @GET("user/status/{isbn}/{user_id}/")
     Call<JsonObject> getBookFlag(@Path("isbn") String isbn,
                                  @Path("user_id") String user_id);
 
     //8
     @FormUrlEncoded
-    @POST("books/{isbn}/status/{user_id}/")
+    @POST("user/{isbn}/status/{user_id}/")
     Call<JsonObject> saveStatus(@Path("isbn") String isbn,
                                 @Field("flag_r") int flag_r,
                                 @Field("flag_i") int flag_i,

@@ -21,6 +21,8 @@ public class BookInfo implements Serializable, Parcelable {
 
     //서버에서 주지 않지만, list화면에서 편하게 구현하기 위해 넣음.
     public BookFlag flag;
+//    public int like_flag;
+//    public int read_flag;
 
     protected BookInfo(Parcel in) {
         isbn = in.readString();
