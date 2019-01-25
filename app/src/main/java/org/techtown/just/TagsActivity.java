@@ -10,6 +10,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
 import org.techtown.just.model.Post;
 import org.techtown.just.model.Tag;
@@ -26,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TagsActivity extends AppCompatActivity {
+public class TagsActivity extends BaseActivity {
 
     @BindView(R.id.text)
     TextView text;
@@ -74,7 +75,7 @@ public class TagsActivity extends AppCompatActivity {
 //        });
 
         //isbn으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getBookInfoWithIsbn("9788937460753");
+        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getBookInfoWithIsbn("9788937460753");
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {

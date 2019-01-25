@@ -6,9 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.Post;
 
-public class PostsActivity extends AppCompatActivity implements OnClickListener {
+public class PostsActivity extends BaseActivity implements OnClickListener {
 
     MyRecyclerViewAdapter myRecyclerViewAdapter;
 

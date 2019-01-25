@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
 import org.techtown.just.network.NetworkManager;
 
@@ -21,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FavoriteBookActivity extends AppCompatActivity  implements MyAdapter.MyRecyclerViewClickListener{
+public class FavoriteBookActivity extends BaseActivity implements MyAdapter.MyRecyclerViewClickListener {
 
     @BindView(R.id.btn_back)
     ImageView btnBack;
@@ -37,9 +38,9 @@ public class FavoriteBookActivity extends AppCompatActivity  implements MyAdapte
 
         ButterKnife.bind(this);
 
-        mRecyclerView = (RecyclerView)findViewById(R.id.recycler_int);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_int);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new GridLayoutManager(this,3);
+        mLayoutManager = new GridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         loadIntBooks();
@@ -51,32 +52,33 @@ public class FavoriteBookActivity extends AppCompatActivity  implements MyAdapte
             @Override
             public void onClick(View v) {
                 finish();
-            }};
+            }
+        };
         btnBack.setOnClickListener(mClickListener);
 
     }
 
     @Override
     public void onItemClicked(int position) {
-        Toast.makeText(getApplicationContext(),position+" 번 아이템이 클릭됨",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), position + " 번 아이템이 클릭됨", Toast.LENGTH_SHORT).show();
 //
 //        Intent intent = new Intent(getApplicationContext(),BookDetailActivity.class);
 //        intent.putExtra("bookID",position);
 //        startActivity(intent);
     }
 
-    private void loadIntBooks(){
+    private void loadIntBooks() {
 
         //id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListUserInterested("1");
+        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserInterested("1");
 
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books_1 = response.body();
                 if (response.isSuccessful()) {
-                    myAdapter = new MyAdapter(getApplicationContext(),books_1);
-                    myAdapter .setOnClickListener(FavoriteBookActivity.this);
+                    myAdapter = new MyAdapter(getApplicationContext(), books_1);
+                    myAdapter.setOnClickListener(FavoriteBookActivity.this);
                     mRecyclerView.setAdapter(myAdapter);
 
                 } else {

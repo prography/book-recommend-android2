@@ -1,6 +1,5 @@
 package org.techtown.just;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -14,43 +13,53 @@ public class LocalStore {
 
     public static String nickname = "nickname";
     public static String login = "login";
+    public static String AccessToken = "accessToken";
+    public static String IdToken = "idToken";
+    public static String RefreshToken = "refreshToken";
 
 
-    private static SharedPreferences sf;
+    private SharedPreferences sf;
 
     public LocalStore(Context context) {
         sf = context.getSharedPreferences(sfName, Context.MODE_PRIVATE);
     }
 
 
-    public static void setIntValue(String key, int value) {
+    public void setIntValue(String key, int value) {
         SharedPreferences.Editor editor = sf.edit();//저장하려면 editor가 필요
         editor.putInt(key, value); // 입력
         editor.commit(); // 파일에 최종 반영함]
     }
 
-    public static int getIntValue(String key, int defaultValue) {
+    public int getIntValue(String key, int defaultValue) {
         return sf.getInt(key, defaultValue);
     }
 
-    public static void setStringValue(String key, String value) {
+    public void setStringValue(String key, String value) {
         SharedPreferences.Editor editor = sf.edit();//저장하려면 editor가 필요
         editor.putString(key, value); // 입력
         editor.commit(); // 파일에 최종 반영함]
     }
 
-    public static String getStringValue(String key) {
+    public String getStringValue(String key) {
         return sf.getString(key, null);
     }
 
-    public static void setBooleanValue(String key, Boolean value) {
+    public void setBooleanValue(String key, Boolean value) {
         SharedPreferences.Editor editor = sf.edit();//저장하려면 editor가 필요
         editor.putBoolean(key, value); // 입력
         editor.commit(); // 파일에 최종 반영함]
     }
 
-    public static Boolean getBooleanValue(String key, Boolean defaultValue) {
+    public Boolean getBooleanValue(String key, Boolean defaultValue) {
         return sf.getBoolean(key, defaultValue);
+    }
+
+    public void clearTokenValues() {
+        setStringValue(AccessToken, null);
+        setStringValue(IdToken, null);
+        setStringValue(RefreshToken, null);
+
     }
 
 

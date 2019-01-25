@@ -8,11 +8,13 @@ import com.kakao.auth.KakaoSDK;
 
 import org.techtown.just.KakaoSDKAdapter;
 import org.techtown.just.LocalStore;
+import org.techtown.just.network.NetworkManager;
 
 public class BaseApplication extends Application {
 
     private static  volatile BaseApplication instance;
     private static LocalStore localStore;
+    private static NetworkManager networkManager;
 
    // private static volatile BaseApplication obj = null;
     private static volatile Activity currentActivity = null;
@@ -25,6 +27,7 @@ public class BaseApplication extends Application {
         //kakao sdk초기화
         KakaoSDK.init(new KakaoSDKAdapter());
         localStore = new LocalStore(this);
+        networkManager = new NetworkManager(localStore);
     }
 
 
@@ -37,6 +40,10 @@ public class BaseApplication extends Application {
 
     public static LocalStore getLocalStore(){
         return localStore;
+    }
+
+    public static NetworkManager getNetworkManager() {
+        return networkManager;
     }
 
     public static Activity getCurrentActivity(){ return currentActivity;   }

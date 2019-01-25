@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
 import org.techtown.just.network.NetworkManager;
 
@@ -22,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyRecyclerViewClickListener {
+public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecyclerViewClickListener {
 
     @BindView(R.id.btn_back)
     ImageView btnBack;
@@ -71,9 +72,9 @@ public class ReadBookActivity extends AppCompatActivity implements MyAdapter.MyR
         //id으로 책 정보 가져오기
         Call<List<BookInfo>> bookInfo=null;
         if(string == null) {
-            bookInfo = NetworkManager.getBookApi().getListUserRead("1");
+            bookInfo = getNetworkManager().getBookApi().getListUserRead("1");
         }else if(string != null){
-            bookInfo = NetworkManager.getBookApi().getListWithSearch(string);
+            bookInfo = getNetworkManager().getBookApi().getListWithSearch(string);
         }bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
