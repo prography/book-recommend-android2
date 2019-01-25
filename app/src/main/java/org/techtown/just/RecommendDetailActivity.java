@@ -57,9 +57,8 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
         Intent intent = getIntent();
 
         tagNames = (TagNames) intent.getSerializableExtra("tagNames");
-        String tagsStr = "";
-        for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
-            tagsStr += tagNames.getSelectedTags().get(i).getTag_id() + ";";
+        String tagsStr = getTagNames();
+
         textView.setText(tagsStr);
 
 
@@ -70,6 +69,14 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
         btnBack.setOnClickListener(this);
         btnSearch.setOnClickListener(this);
 
+    }
+
+    private String getTagNames() {
+        String s = "";
+        //tagsStr += tagNames.getSelectedTags().get(0).getTag_id();
+        for (int i = 1; i < tagNames.getSelectedTags().size(); i++)
+            s +=  ";" +  tagNames.getSelectedTags().get(i).getTag_id();
+        return s;
     }
 
     private void setRecyclerView(){
@@ -100,7 +107,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books = response.body();
                 //thumbnail 설정
-                setThumbnail(books);
+                //setThumbnail(books);
 //                Toast.makeText(RecommendDetailActivity.this, books.get(0).getBook_name(), Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful()) {
                     adapter = new RecyclerViewAdapter(getApplicationContext(), books, tagNames);
@@ -125,27 +132,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
 
     Call<List<BookInfo>> bookInfoWithIsbn;
     BookInfo bookInfo;
-
-    public void setThumbnail(List<BookInfo> books) {
-        for (int i = 0; i < books.size(); i++) {
-            //isbn으로 책정보 가져와서
-            bookInfo = books.get(i);
-            bookInfoWithIsbn = getNetworkManager().getBookApi().getBookInfoWithIsbn(bookInfo.getIsbn());
-            bookInfoWithIsbn.enqueue(new Callback<List<BookInfo>>() {
-                @Override
-                public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
-                    List<BookInfo> books2 = response.body();
-                    //bookInfo에 때려넣기~
-                    bookInfo.setThumbnail(books2.get(0).getThumbnail());
-                }
-                @Override
-                public void onFailure(Call<List<BookInfo>> call, Throwable t) {
-                    Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
+    
 
 
     @Override

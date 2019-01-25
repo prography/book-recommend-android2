@@ -10,7 +10,7 @@
         android:layout_width="100dp"
         android:layout_height="150dp"
         android:id="@+id/item_img"
-        android:background="#e26183"
+        android:background="#ffffff"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"

@@ -50,12 +50,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     TextView text;
     @BindView(R.id.button)
     Button button;
-    @BindView(R.id.btn_posts)
-    Button btnPosts;
-    @BindView(R.id.btn_tags)
-    Button btnTags;
-    @BindView(R.id.btn_login)
-    Button btnLogin;
+
     @BindView(R.id.flowLayout)
     FlowLayout flowLayout;
 
@@ -72,9 +67,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //btnMy
         btnMy.setOnClickListener(this);
         button.setOnClickListener(this);
-        btnPosts.setOnClickListener(this);
-        btnTags.setOnClickListener(this);
-        btnLogin.setOnClickListener(this);
 
         //checkbox의 text <- tagNames의 text 대입
         tagNames = new TagNames();
@@ -168,7 +160,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 isLoggedIn = getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
                 //getLocalStore().setBooleanValue(LocalStore.my, id);
                 if (isLoggedIn == true) {
-                    checkTokenIsValid();
+                    //checkTokenIsValid();
                 } else {
                     intent = new Intent(this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -184,19 +176,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 tagNames.updateSelectedTags(flowLayout.getCheckedTagValues());
 
                 intent.putExtra("tagNames", tagNames);
-                startActivity(intent);
-                break;
-            case R.id.btn_posts:
-                intent = new Intent(this, PostsActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.btn_tags:
-                intent = new Intent(this, TagsActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.btn_login:
-                intent = new Intent(this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
             case R.id.btn_general_login:
