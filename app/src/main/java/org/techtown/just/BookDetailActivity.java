@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.Tag;
+import org.techtown.just.model.TagNames;
 import org.techtown.just.network.NetworkManager;
 
 import java.io.IOException;
@@ -40,6 +42,8 @@ public class BookDetailActivity extends AppCompatActivity {
     @BindView(R.id.book_content)
     TextView BOOK_CONTENT;
 
+    TagNames tagNames;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,8 @@ public class BookDetailActivity extends AppCompatActivity {
         //BookInfo bookInfo = intent.getParcelableExtra("bookInfoList");
 
         String isbn = intent.getStringExtra("isbn");
+        tagNames = (TagNames) intent.getSerializableExtra("tagNames");
+
         Call<List<BookInfo>> bookInfoCall = NetworkManager.getBookApi().getBookInfoWithIsbn(isbn);
         bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
             @Override
@@ -89,8 +95,11 @@ public class BookDetailActivity extends AppCompatActivity {
     public String splitTags(String fullTags) {
         String tags[] = fullTags.split(";");
         String s = "";
-        for (int i = 0; i < tags.length; i++)
-            s += tags[i] + " ";
+        for (int i = 0; i < tags.length; i++) {
+            int key = 0;
+            key = Integer.parseInt(tags[i]);
+            s += tagNames.getTags().get(key).getTag_name() + " ";
+        }
         return s;
     }
 
