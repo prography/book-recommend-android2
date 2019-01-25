@@ -24,6 +24,7 @@ import com.kakao.kakaotalk.response.KakaoTalkProfile;
 
 import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.TagNames;
 import org.techtown.just.network.NetworkManager;
 
 import java.util.ArrayList;
@@ -76,6 +77,8 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
     RecyclerView.LayoutManager mLayoutManager_1, mLayoutManager_2;
     MyAdapter myAdapter_1, myAdapter_2;
 
+    TagNames tagNames;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,9 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.activity_my_page);
 
         ButterKnife.bind(this);
+
+        Intent intent = getIntent();
+        tagNames = (TagNames) intent.getSerializableExtra("tagNames");
 
         profilePictureView = (ProfilePictureView) findViewById(R.id.profile_img);
         //round facebookProfile image
@@ -193,11 +199,13 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
 
                     case R.id.more_read:
                         Intent intent2 = new Intent(getApplicationContext(),ReadBookActivity.class);
+                        intent2.putExtra("tagNames", tagNames);
                         startActivity(intent2);
                         break;
 
                     case R.id.more_interest:
                         Intent intent3 = new Intent(getApplicationContext(),FavoriteBookActivity.class);
+                        intent3.putExtra("tagNames", tagNames);
                         startActivity(intent3);
                         break;
                 }
@@ -215,7 +223,7 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books_1 = response.body();
                 if (response.isSuccessful()) {
-                    myAdapter_1 = new MyAdapter(getApplicationContext(),books_1);
+                    myAdapter_1 = new MyAdapter(getApplicationContext(), books_1, tagNames);
                     rc_Readbook.setAdapter(myAdapter_1);
                 } else {
                     Toast.makeText(MyPageActivity.this, "response 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
@@ -242,7 +250,7 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books_2 = response.body();
                 if(response.isSuccessful()) {
-                    myAdapter_2 = new MyAdapter(getApplicationContext(),books_2);
+                    myAdapter_2 = new MyAdapter(getApplicationContext(),books_2, tagNames);
                     rc_Intbook.setAdapter(myAdapter_2);
                 }else {
                     Toast.makeText(MyPageActivity.this, "a오류가 발생했습니다.", Toast.LENGTH_SHORT).show();

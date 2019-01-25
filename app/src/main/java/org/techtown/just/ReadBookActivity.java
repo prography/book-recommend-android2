@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.TagNames;
 import org.techtown.just.network.NetworkManager;
 
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
     RecyclerView.LayoutManager mLayoutManager2;
     MyAdapter myAdapter2;
 
+    TagNames tagNames;
+
     String userId ="1";
 
     @Override
@@ -44,6 +47,9 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
         setContentView(R.layout.activity_read_book);
 
         ButterKnife.bind(this);
+
+        Intent intent = getIntent();
+        tagNames = (TagNames) intent.getSerializableExtra("tagNames");
 
         mRecyclerView2 = (RecyclerView)findViewById(R.id.recycler_read);
         mRecyclerView2.setHasFixedSize(true);
@@ -82,7 +88,7 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books_1 = response.body();
                 if (response.isSuccessful()) {
-                    myAdapter2 = new MyAdapter(getApplicationContext(),books_1);
+                    myAdapter2 = new MyAdapter(getApplicationContext(),books_1, tagNames);
                     myAdapter2 .setOnClickListener(ReadBookActivity.this);
                     mRecyclerView2.setAdapter(myAdapter2);
 

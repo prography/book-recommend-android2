@@ -165,6 +165,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 else
                     intent = new Intent(this,LoginActivity.class);
 
+                intent.putExtra("tagNames", tagNames);
+
                 startActivity(intent);
                 break;
 
