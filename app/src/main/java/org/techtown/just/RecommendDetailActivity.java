@@ -55,12 +55,11 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-
         tagNames = (TagNames) intent.getSerializableExtra("tagNames");
-        String tagsStr = getTagNames();
 
-        textView.setText(tagsStr);
 
+        textView.setText(getTagNames());
+        String tagsStr = getTagId();
 
         setRecyclerView();
         load_RecommendBooks(tagsStr,1);
@@ -75,6 +74,14 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
         String s = "";
         for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
             s += tagNames.getSelectedTags().get(i).getTag_name();
+        return s;
+    }
+
+    private String getTagId() {
+        String s = "";
+        s += tagNames.getSelectedTags().get(0).getTag_id();
+        for (int i = 1; i < tagNames.getSelectedTags().size(); i++)
+            s += ";" + tagNames.getSelectedTags().get(i).getTag_id();
         return s;
     }
 
@@ -99,27 +106,20 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
             bookInfoCall = getNetworkManager().getBookApi().getListWithTag(name);
         }
         else if(mode ==2){//search
+            textView.setText(" ");
             bookInfoCall = getNetworkManager().getBookApi().getListWithSearch(name);
         }
         bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books = response.body();
-                //thumbnail 설정
-                //setThumbnail(books);
-//                Toast.makeText(RecommendDetailActivity.this, books.get(0).getBook_name(), Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful()) {
                     adapter = new RecyclerViewAdapter(getApplicationContext(), books, tagNames);
-                    //adapter .setOnClickListener(RecommendDetailActivity.this);
                     recyclerView.setAdapter(adapter);
 
                 } else {
                     Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                 }
-
-//                List<BookInfo> books1 = response.body();
-//                tv_response.setText(books1.get(0).getBook_name());
-
             }
             @Override
             public void onFailure(Call<List<BookInfo>> call, Throwable t) {
@@ -141,8 +141,8 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
             case R.id.btn_my:
                 //login 되어있으면 my, 안되어있으면 login
                 // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
-                Boolean isLoggedIn =  getLocalStore().getBooleanValue(LocalStore.my, false);
-                if(isLoggedIn == true)
+                String userId =  getLocalStore().getStringValue(LocalStore.UserId);
+                if(userId != null)
                     intent = new Intent(this,MyPageActivity.class);
                 else
                     intent = new Intent(this,LoginActivity.class);
