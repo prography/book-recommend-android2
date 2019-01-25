@@ -233,6 +233,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
                 else
                     intent = new Intent(this,LoginActivity.class);
 
+                intent.putExtra("tagNames", tagNames);
                 startActivity(intent);
                 break;
 

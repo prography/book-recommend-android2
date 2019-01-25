@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.TagNames;
 import org.techtown.just.network.NetworkManager;
 
 import java.util.ArrayList;
@@ -31,10 +32,16 @@ public class FavoriteBookActivity extends BaseActivity implements MyAdapter.MyRe
     RecyclerView.LayoutManager mLayoutManager;
     MyAdapter myAdapter;
 
+    TagNames tagNames;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_book);
+
+        Intent intent = getIntent();
+        tagNames = (TagNames) intent.getSerializableExtra("tagNames");
+
 
         ButterKnife.bind(this);
 
@@ -77,7 +84,7 @@ public class FavoriteBookActivity extends BaseActivity implements MyAdapter.MyRe
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                 List<BookInfo> books_1 = response.body();
                 if (response.isSuccessful()) {
-                    myAdapter = new MyAdapter(getApplicationContext(), books_1);
+                    myAdapter = new MyAdapter(getApplicationContext(), books_1, tagNames);
                     myAdapter.setOnClickListener(FavoriteBookActivity.this);
                     mRecyclerView.setAdapter(myAdapter);
 

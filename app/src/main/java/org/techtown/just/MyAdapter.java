@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.TagNames;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +32,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<BookInfo> BookInfoList;
     private Context mContext;
     Bitmap bitmap;
+    TagNames tagNames;
 
     public interface MyRecyclerViewClickListener{
         //item 선택 클릭시
@@ -43,11 +46,13 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //각각의 아이템 레퍼런스를 저장할 뷰 홀더 클래스 *리사이클러뷰홀더를 반드시 상속!
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
+        public final View mView;
         ImageView my_book_img;
         //TextView my_book_name;
 
         MyViewHolder(View v){
             super(v);
+            mView = v;
             my_book_img = v.findViewById(R.id.myBookList);
 //            my_book_name = v.findViewById(R.id.myBookList);
         }
@@ -57,9 +62,10 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //        this.BookInfoList = BookInfoList;
 //    }
 
-    MyAdapter(Context mContext, List<BookInfo> BookInfoList){
+    MyAdapter(Context mContext, List<BookInfo> BookInfoList, TagNames tagNames){
         this.mContext = mContext;
         this.BookInfoList = BookInfoList;
+        this.tagNames = tagNames;
     }
 
     @Override
@@ -71,7 +77,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
         MyViewHolder myViewHolder = (MyViewHolder) holder;
 
@@ -91,31 +97,43 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         final String book_tags = BookInfoList.get(position).getTags();
         final String isbn = BookInfoList.get(position).getIsbn();
 
+        myViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                Intent intent = new Intent(v.getContext(), BookDetailActivity.class);
+                intent.putExtra("tagNames", tagNames);
+
+                mContext.startActivity(intent);
+
+                Toast.makeText(context, position + "번째 아이템 클릭", Toast.LENGTH_LONG).show();
+            }
+        });
 
         //클릭 이벤트
-        if(mListener != null){
-            final int pos = position;
-            holder.itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    mListener.onItemClicked(pos);
-                    Context context = view.getContext();
-                    Intent intent = new Intent(view.getContext(),BookDetailActivity.class);
-
-                    intent.putExtra("isbn",isbn);
-                    intent.putExtra("book_thumbnail",book_thumbnail);
-                    intent.putExtra("book_name",book_name);
-                    intent.putExtra("book_author",book_author);
-                    intent.putExtra("book_content",book_content);
-                    intent.putExtra("book_country",book_country);
-                    intent.putExtra("book_tags",book_tags);
-
-                    mContext.startActivity(intent);
-
-                }
-            });
-
-        }
+//        if(mListener != null){
+//            final int pos = position;
+//            holder.itemView.setOnClickListener(new View.OnClickListener(){
+//                @Override
+//                public void onClick(View view) {
+//                    mListener.onItemClicked(pos);
+//                    Context context = view.getContext();
+//                    Intent intent = new Intent(view.getContext(),BookDetailActivity.class);
+//
+//                    intent.putExtra("isbn",isbn);
+//                    intent.putExtra("book_thumbnail",book_thumbnail);
+//                    intent.putExtra("book_name",book_name);
+//                    intent.putExtra("book_author",book_author);
+//                    intent.putExtra("book_content",book_content);
+//                    intent.putExtra("book_country",book_country);
+//                    intent.putExtra("book_tags",book_tags);
+//
+//                    mContext.startActivity(intent);
+//
+//                }
+//            });
+//
+//        }
 
     }
 
