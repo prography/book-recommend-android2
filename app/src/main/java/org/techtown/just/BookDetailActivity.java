@@ -70,8 +70,8 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
     private void get_BOOKINFO(){
         Intent intent = getIntent();
         //BookInfo bookInfo = intent.getParcelableExtra("bookInfoList");
-        like = intent.getIntExtra("booklike",0);
-        read = intent.getIntExtra("bookread",0);
+//        like = intent.getIntExtra("booklike",0);
+//        read = intent.getIntExtra("bookread",0);
 
         String isbn = intent.getStringExtra("isbn");
         tagNames = (TagNames) intent.getSerializableExtra("tagNames");

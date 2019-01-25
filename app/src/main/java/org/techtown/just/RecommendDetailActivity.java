@@ -121,7 +121,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
                     recyclerView.setAdapter(adapter);
 
                     //
-                    adapter.setBookListListener(new RecyclerViewAdapter.BookListListener() {
+/*                    adapter.setBookListListener(new RecyclerViewAdapter.BookListListener() {
                         @Override
                         public void saveFlag(final int position, final BookInfo bookInfo, final int like, final int read) {
 
@@ -152,7 +152,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
                         loadBookFlag(info);
                     }
 
-
+*/
 
                 } else {
                     Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
@@ -169,7 +169,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
     Call<List<BookInfo>> bookInfoWithIsbn;
     BookInfo bookInfo;
 
-
+/*
     private void loadBookFlag(final BookInfo bookInfo){
 
         String userId = getLocalStore().getStringValue(LocalStore.UserId);
@@ -205,7 +205,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
 
 
     }
-
+*/
 
 
     @Override

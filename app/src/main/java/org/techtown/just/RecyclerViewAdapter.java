@@ -100,8 +100,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //1.25 am 05:18
 
         // 값 설정 ( set )
-        final int like= 0;//bookInfoList.get(position).getFlag().getBe_interested();
-        final int read= 0;//bookInfoList.get(position).getFlag().getHad_read();
+        int like= 0;//bookInfoList.get(position).getFlag().getBe_interested();
+        int read= 0;//bookInfoList.get(position).getFlag().getHad_read();
 
         if(like==1)
             viewHolder.ITEM_LIKE.setSelected(true);
