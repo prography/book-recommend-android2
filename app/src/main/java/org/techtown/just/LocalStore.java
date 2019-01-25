@@ -10,7 +10,7 @@ public class LocalStore {
     Key
     */
     public static String my = "my";
-
+    public static String UserId = "userId";
     public static String nickname = "nickname";
     public static String login = "login";
     public static String AccessToken = "accessToken";

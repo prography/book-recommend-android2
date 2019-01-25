@@ -195,6 +195,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 String id = this.id.getText().toString();
                 String pw = this.pw.getText().toString();
 
+                if (id.length() == 0 || pw.length() == 0) {
+                    Toast.makeText(LoginActivity.this, "아이디, 패스워드를 입력해주세요", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 final Call<LoginResult> login = getNetworkManager().getBookApi().login(id, pw);
                 login.enqueue(new Callback<LoginResult>() {
                     @Override
@@ -206,6 +210,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             getLocalStore().setStringValue(LocalStore.IdToken, loginResult.getTokens().getIdToken());
                             getLocalStore().setStringValue(LocalStore.RefreshToken, loginResult.getTokens().getRefreshToken());
                             Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        } else if (response.code() == 401) {
+                            Toast.makeText(LoginActivity.this, "이메일 인증이 필요합니다", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
                         }
@@ -228,24 +237,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
-
-    public void checkLogin() {
-
-        //access token 유효성 확인
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-//        isLoggedIn = accessToken != null && !accessToken.isExpired();
-
-//        LocalStore.getBooleanValue(LocalStore.my,isLoggedIn);
-//        //로그인 성공시 mypage activity로
-//        if(isLoggedIn==true) {
-//            Intent intent = new Intent(this, MyPageActivity.class);
-//            //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(intent);
-//            finish();
-//        }
-
-
-    }
 
     private void fetchProfile() {
         GraphRequest request = GraphRequest.newMeRequest(
