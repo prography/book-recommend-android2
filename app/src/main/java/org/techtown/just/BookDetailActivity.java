@@ -3,8 +3,9 @@ package org.techtown.just;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BookDetailActivity extends BaseActivity {
+public class BookDetailActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.booknumber)
     TextView txt; //책정보 txt
@@ -38,12 +39,21 @@ public class BookDetailActivity extends BaseActivity {
     TextView BOOK_TITLE;
     @BindView(R.id.book_author)
     TextView BOOK_AUTHOR;
-    @BindView(R.id.book_tags)
-    TextView BOOK_TAGS;
     @BindView(R.id.book_content)
     TextView BOOK_CONTENT;
 
+    @BindView(R.id.flowLayout)
+    FlowLayout flowLayout;
+
     TagNames tagNames;
+    @BindView(R.id.btn_back)
+    ImageView btnBack;
+    @BindView(R.id.btn_my)
+    ImageView btnMy;
+    @BindView(R.id.btn_search)
+    ImageView btnSearch;
+    @BindView(R.id.searchStr)
+    EditText searchStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +62,24 @@ public class BookDetailActivity extends BaseActivity {
 
         ButterKnife.bind(this);
 
+        btnSearch.setVisibility(View.INVISIBLE);
+        searchStr.setVisibility(View.INVISIBLE);
+
+        btnMy.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
+
+
+
         get_BOOKINFO();
     }//oncreate
 
-    private void get_BOOKINFO(){
+    private void get_BOOKINFO() {
         Intent intent = getIntent();
         //BookInfo bookInfo = intent.getParcelableExtra("bookInfoList");
 
         String isbn = intent.getStringExtra("isbn");
         tagNames = (TagNames) intent.getSerializableExtra("tagNames");
+
 
         Call<List<BookInfo>> bookInfoCall = NetworkManager.getBookApi().getBookInfoWithIsbn(isbn);
         bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
@@ -72,8 +91,11 @@ public class BookDetailActivity extends BaseActivity {
                 BOOK_TITLE.setText(books.get(0).getBook_name());
                 BOOK_AUTHOR.setText(books.get(0).getAuthor());
                 BOOK_CONTENT.setText(books.get(0).getContents());
-//                BOOK_TAGS.setText(splitTags(books.get(0).getTags()));
-                BOOK_TAGS.setText(books.get(0).getTags());
+//                String tagIdtoName = getTagNames(books.get(0).getTags(), tagNames);
+//                BOOK_TAGS.setText(tagIdtoName);
+                //flowlayout에 tag 적용하기
+                setFlowLayoutWithTag(books.get(0).getTags());
+
             }
 
             @Override
@@ -81,28 +103,29 @@ public class BookDetailActivity extends BaseActivity {
                 Toast.makeText(BookDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
-
-//        String book_thumbnail = intent.getStringExtra("book_thumbnail");
-//        String book_name = intent.getStringExtra("book_name");
-//        String book_author = intent.getStringExtra("book_author");
-//        String book_content = intent.getStringExtra("book_content");
-//        String book_country = intent.getStringExtra("book_country");
-//        String book_tags = intent.getStringExtra("book_tags");
-
         //txt.setText(isbn+" 책 정보");
 
     }
 
-    public String splitTags(String fullTags) {
-        String tags[] = fullTags.split(";");
-        String s = "";
-        for (int i = 0; i < tags.length; i++) {
-            int key = 0;
-            key = Integer.parseInt(tags[i]);
-            s += tagNames.getTags().get(key).getTag_name() + " ";
+    public void setFlowLayoutWithTag(String s) {
+        //tagNames이용
+        List<Tag> allTags = tagNames.getAllTags();
+        String booksTags[] = s.split(";");
+
+        for (int i = 0; i < booksTags.length; i++) {
+            try {
+                int toInt = Integer.parseInt(booksTags[i]);
+                flowLayout.addTag(allTags.get(toInt - 1));
+            } catch (NumberFormatException e) {
+
+            }
         }
-        return s;
+
+        flowLayout.relayoutToAlign();
+        flowLayout.setChecked(true);
+        flowLayout.setCheckable(false);
     }
+
 
     URL url;
     Bitmap bitmap;
@@ -138,6 +161,36 @@ public class BookDetailActivity extends BaseActivity {
 
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent;
+        switch (view.getId()) {
+            case R.id.btn_my:
+                //login 되어있으면 my, 안되어있으면 login
+                // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
+                String userId =  getLocalStore().getStringValue(LocalStore.UserId);
+                if(userId != null)
+                    intent = new Intent(this,MyPageActivity.class);
+                else
+                    intent = new Intent(this,LoginActivity.class);
+
+                startActivity(intent);
+                break;
+
+            case R.id.btn_back:
+                finish();
+                break;
+
+            case R.id.btn_search:
+//                String search = searchStr.getText().toString();
+//                intent = new Intent(BookDetailActivity.this, RecommendDetailActivity.class);
+//                intent.putExtra("mode", 2);
+//                intent.putExtra("search", search);
+//                startActivity(intent);
+//                break;
         }
     }
 }

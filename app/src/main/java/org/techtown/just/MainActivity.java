@@ -1,34 +1,23 @@
 package org.techtown.just;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
-import com.google.gson.JsonObject;
-import com.kakao.auth.AuthType;
-import com.kakao.auth.Session;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.just.base.BaseActivity;
-import org.techtown.just.model.LoginResult;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
-import org.techtown.just.network.NetworkManager;
 
 import java.util.List;
 import java.util.Random;
@@ -77,9 +66,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
                 List<Tag> tags = response.body();
-                tagNames.setTags(tags);
-                for (int i = 0; i < tagNames.getTags().size(); i++)
-                    flowLayout.addTag(tagNames.getTags().get(i));
+                tagNames.setAllTags(tags);
+                for (int i = 0; i < tagNames.getAllTags().size(); i++)
+                    flowLayout.addTag(tagNames.getAllTags().get(i));
 
             }
 
@@ -153,19 +142,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Intent intent;
         Random random = new Random();
         switch (view.getId()) {
+//            case R.id.btn_my:
+//                // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
+//
+////                getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
+//                isLoggedIn = getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
+//                //getLocalStore().setBooleanValue(LocalStore.my, id);
+//                if (isLoggedIn == true) {
+//                    //checkTokenIsValid();
+//                } else {
+//                    intent = new Intent(this, LoginActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+//                }
+//                break;
             case R.id.btn_my:
+                //login 되어있으면 my, 안되어있으면 login
                 // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
+                String userId =  getLocalStore().getStringValue(LocalStore.UserId);
+                if(userId != null)
+                    intent = new Intent(this,MyPageActivity.class);
+                else
+                    intent = new Intent(this,LoginActivity.class);
 
-//                getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
-                isLoggedIn = getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
-                //getLocalStore().setBooleanValue(LocalStore.my, id);
-                if (isLoggedIn == true) {
-                    //checkTokenIsValid();
-                } else {
-                    intent = new Intent(this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
+                startActivity(intent);
                 break;
 
             case R.id.button:
@@ -185,9 +185,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-
-
-
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 //        if (checkBox_anything.isChecked())
@@ -199,34 +196,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //            for (int i = 0; i < cb.length; i++)
 //                cb[i].setClickable(true);
     }
-
-    void doJSONParser() {
-        StringBuffer sb = new StringBuffer();
-
-        String str =
-                "[{'name':'배트맨','age':43,'address':'고담'}," +
-                        "{'name':'슈퍼맨','age':36,'address':'뉴욕'}," +
-                        "{'name':'앤트맨','age':25,'address':'LA'}]";
-
-        try {
-            JSONArray jarray = new JSONArray(str);   // JSONArray 생성
-            for (int i = 0; i < jarray.length(); i++) {
-                JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
-                String address = jObject.getString("address");
-                String name = jObject.getString("name");
-                int age = jObject.getInt("age");
-
-                sb.append(
-                        "주소:" + address +
-                                "이름:" + name +
-                                "나이:" + age + "\n"
-                );
-            }
-            //tv.setText(sb.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    } // end doJSONParser()
 }
 
 

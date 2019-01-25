@@ -31,8 +31,6 @@ import static org.techtown.just.base.BaseApplication.getLocalStore;
 
 public class RecommendDetailActivity extends BaseActivity implements View.OnClickListener {
 
-    @BindView(R.id.textView)
-    TextView textView;
     @BindView(R.id.btn_back)
     ImageView btnBack;
     @BindView(R.id.searchStr)
@@ -44,6 +42,8 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
     @BindView(R.id.rc_recommend)
     RecyclerView recyclerView;
     RecyclerView.LayoutManager mLayoutManager;
+    @BindView(R.id.flowLayout)
+    FlowLayout flowLayout;
 
     private RecyclerViewAdapter adapter;
     TagNames tagNames;
@@ -55,14 +55,32 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        tagNames = (TagNames) intent.getSerializableExtra("tagNames");
-
-
-        textView.setText(getTagNames());
-        String tagsStr = getTagId();
 
         setRecyclerView();
-        load_RecommendBooks(tagsStr,1);
+        tagNames = (TagNames) intent.getSerializableExtra("tagNames");
+
+        //BookDetail에서 왔다면
+        int mode = intent.getIntExtra("mode", 0);
+        if (mode != 0) { //BookDetail에서 왔다면
+            String search = intent.getStringExtra("search");
+            load_RecommendBooks(search, 2);
+        }
+        else {
+
+            //flowlayout
+            for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
+                flowLayout.addTag(tagNames.getSelectedTags().get(i));
+            flowLayout.relayoutToAlign();
+            flowLayout.setChecked(true);
+            flowLayout.setCheckable(false);
+
+//        textView.setText(getTagNames());
+            String tagsStr = getTagId();
+            load_RecommendBooks(tagsStr,1);
+        }
+
+
+
 
         btnMy.setOnClickListener(this);
         btnBack.setOnClickListener(this);
@@ -86,15 +104,9 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
     }
 
     private void setRecyclerView(){
-
-//        recyclerView = (RecyclerView)findViewById(R.id.recycler_read);
         recyclerView.setHasFixedSize(true);
-
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
-
-//        adapter = new RecyclerViewAdapter();
-//        recyclerView.setAdapter(adapter);
     }
 
 
@@ -106,7 +118,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
             bookInfoCall = getNetworkManager().getBookApi().getListWithTag(name);
         }
         else if(mode ==2){//search
-            textView.setText(" ");
+//            textView.setText(" ");
             bookInfoCall = getNetworkManager().getBookApi().getListWithSearch(name);
         }
         bookInfoCall.enqueue(new Callback<List<BookInfo>>() {

@@ -41,7 +41,7 @@ public class TagsActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         //tag 가져오기
-//        Call<List<Tag>> list = NetworkManager.getBookApi().getTags();
+//        Call<List<Tag>> list = NetworkManager.getBookApi().getAllTags();
 //        list.enqueue(new Callback<List<Tag>>() {
 //            @Override
 //            public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {

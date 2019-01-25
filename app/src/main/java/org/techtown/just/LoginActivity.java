@@ -156,41 +156,43 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 break;
             case R.id.btn_general_login:
-                final String id = this.id.getText().toString();
-                String pw = this.pw.getText().toString();
-                if (id.length() == 0 || pw.length() == 0) {
-                    Toast.makeText(LoginActivity.this, "아이디, 패스워드를 입력해주세요", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                final Call<LoginResult> login = getNetworkManager().getBookApi().login(id, pw);
-                login.enqueue(new Callback<LoginResult>() {
-                    @Override
-                    public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
-                        LoginResult loginResult = response.body();
-                        //user_id, LoginToken이 있다.
-                        if (loginResult != null && loginResult.getTokens() != null) {
-                            getLocalStore().setStringValue(LocalStore.AccessToken, loginResult.getTokens().getAccessToken());
-                            getLocalStore().setStringValue(LocalStore.IdToken, loginResult.getTokens().getIdToken());
-                            getLocalStore().setStringValue(LocalStore.RefreshToken, loginResult.getTokens().getRefreshToken());
-                            getLocalStore().setStringValue(LocalStore.UserId, id);
-
-                            Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        } else if (response.code() == 401) {
-                            Toast.makeText(LoginActivity.this, "이메일 인증이 필요합니다", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<LoginResult> call, Throwable t) {
-                        Toast.makeText(LoginActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-                        t.printStackTrace();
-                    }
-                });
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+//                final String id = this.id.getText().toString();
+//                String pw = this.pw.getText().toString();
+//                if (id.length() == 0 || pw.length() == 0) {
+//                    Toast.makeText(LoginActivity.this, "아이디, 패스워드를 입력해주세요", Toast.LENGTH_SHORT).show();
+//                    break;
+//                }
+//                final Call<LoginResult> login = getNetworkManager().getBookApi().login(id, pw);
+//                login.enqueue(new Callback<LoginResult>() {
+//                    @Override
+//                    public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+//                        LoginResult loginResult = response.body();
+//                        //user_id, LoginToken이 있다.
+//                        if (loginResult != null && loginResult.getTokens() != null) {
+//                            getLocalStore().setStringValue(LocalStore.AccessToken, loginResult.getTokens().getAccessToken());
+//                            getLocalStore().setStringValue(LocalStore.IdToken, loginResult.getTokens().getIdToken());
+//                            getLocalStore().setStringValue(LocalStore.RefreshToken, loginResult.getTokens().getRefreshToken());
+//                            getLocalStore().setStringValue(LocalStore.UserId, id);
+//
+//                            Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+//
+//                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                            startActivity(intent);
+//                        } else if (response.code() == 401) {
+//                            Toast.makeText(LoginActivity.this, "이메일 인증이 필요합니다", Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<LoginResult> call, Throwable t) {
+//                        Toast.makeText(LoginActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+//                        t.printStackTrace();
+//                    }
+//                });
                 break;
 
             case R.id.btn_register:
