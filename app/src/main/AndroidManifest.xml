@@ -20,15 +20,18 @@
             android:value="@string/kakao_app_key" />
 
         <activity android:name=".MainActivity">
+
+        </activity>
+        <activity android:name=".RecommendDetailActivity" />
+        <activity android:name=".BookDetailActivity" />
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity android:name=".RecommendDetailActivity" />
-        <activity android:name=".BookDetailActivity" />
-        <activity android:name=".LoginActivity" />
         <activity android:name=".MyPageActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".ReadBookActivity" />
