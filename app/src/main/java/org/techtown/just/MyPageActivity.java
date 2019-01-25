@@ -22,6 +22,7 @@ import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
 import com.kakao.kakaotalk.response.KakaoTalkProfile;
 
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
 import org.techtown.just.network.NetworkManager;
 
@@ -37,7 +38,7 @@ import retrofit2.Response;
 import static android.widget.GridLayout.HORIZONTAL;
 import static org.techtown.just.base.BaseApplication.getLocalStore;
 
-public class MyPageActivity extends AppCompatActivity implements View.OnClickListener {
+public class MyPageActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.btn_back)
     ImageView btn_main;
@@ -206,7 +207,7 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
     private void loadReadBooks(){
 
         //user_id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListUserRead("1");
+        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserRead("1");
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
@@ -231,7 +232,7 @@ public class MyPageActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loadInterestBook(){
-        Call<List<BookInfo>> bookInfo = NetworkManager.getBookApi().getListUserInterested("1");
+        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserInterested("1");
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {

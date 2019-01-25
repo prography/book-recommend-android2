@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
 import org.techtown.just.model.TagNames;
 import org.techtown.just.network.NetworkManager;
@@ -28,7 +29,7 @@ import retrofit2.Response;
 
 import static org.techtown.just.base.BaseApplication.getLocalStore;
 
-public class RecommendDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class RecommendDetailActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.textView)
     TextView textView;
@@ -89,10 +90,10 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
         Call<List<BookInfo>> bookInfoCall=null;
         //id으로 책 정보 가져오기
         if(mode ==1){//tag
-            bookInfoCall = NetworkManager.getBookApi().getListWithTag(name);
+            bookInfoCall = getNetworkManager().getBookApi().getListWithTag(name);
         }
         else if(mode ==2){//search
-            bookInfoCall = NetworkManager.getBookApi().getListWithSearch(name);
+            bookInfoCall = getNetworkManager().getBookApi().getListWithSearch(name);
         }
         bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
             @Override
@@ -129,7 +130,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
         for (int i = 0; i < books.size(); i++) {
             //isbn으로 책정보 가져와서
             bookInfo = books.get(i);
-            bookInfoWithIsbn = NetworkManager.getBookApi().getBookInfoWithIsbn(bookInfo.getIsbn());
+            bookInfoWithIsbn = getNetworkManager().getBookApi().getBookInfoWithIsbn(bookInfo.getIsbn());
             bookInfoWithIsbn.enqueue(new Callback<List<BookInfo>>() {
                 @Override
                 public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {

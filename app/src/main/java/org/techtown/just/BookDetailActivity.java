@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
 import org.techtown.just.network.NetworkManager;
 
@@ -25,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BookDetailActivity extends AppCompatActivity {
+public class BookDetailActivity extends BaseActivity {
 
     @BindView(R.id.booknumber)
     TextView txt; //책정보 txt
@@ -55,7 +56,7 @@ public class BookDetailActivity extends AppCompatActivity {
         //BookInfo bookInfo = intent.getParcelableExtra("bookInfoList");
 
         String isbn = intent.getStringExtra("isbn");
-        Call<List<BookInfo>> bookInfoCall = NetworkManager.getBookApi().getBookInfoWithIsbn(isbn);
+        Call<List<BookInfo>> bookInfoCall = getNetworkManager().getBookApi().getBookInfoWithIsbn(isbn);
         bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {

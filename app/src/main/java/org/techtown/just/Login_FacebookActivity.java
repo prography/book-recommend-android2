@@ -32,6 +32,7 @@ import java.util.Arrays;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static org.techtown.just.base.BaseApplication.getLocalStore;
 
+//FIXME : class명을 FacebookLoginCallback으로 변경해주세요
 public class Login_FacebookActivity implements FacebookCallback<LoginResult> {
 
     Context mContext;

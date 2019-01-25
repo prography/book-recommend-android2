@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.Post;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PostDetailActivity extends AppCompatActivity {
+public class PostDetailActivity extends BaseActivity {
 
     @BindView(R.id.str)
     TextView str;

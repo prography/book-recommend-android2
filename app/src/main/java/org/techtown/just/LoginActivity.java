@@ -20,6 +20,7 @@ import com.facebook.login.widget.LoginButton;
 import com.kakao.auth.Session;
 
 import org.json.JSONObject;
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.LoginResult;
 import org.techtown.just.network.NetworkManager;
 
@@ -33,7 +34,7 @@ import retrofit2.Response;
 
 import static org.techtown.just.base.BaseApplication.getLocalStore;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.btn_general_login)
     Button btnGeneralLogin;
@@ -191,21 +192,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.btn_general_login:
-                String id = this.id.toString();
-                String pw = this.pw.toString();
+                String id = this.id.getText().toString();
+                String pw = this.pw.getText().toString();
 
-                Call<LoginResult> login = NetworkManager.getBookApi().login(id, pw);
+                final Call<LoginResult> login = getNetworkManager().getBookApi().login(id, pw);
                 login.enqueue(new Callback<LoginResult>() {
                     @Override
                     public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
                         LoginResult loginResult = response.body();
                         //user_id, LoginToken이 있다.
-
+                        if (loginResult != null && loginResult.getTokens() != null) {
+                            getLocalStore().setStringValue(LocalStore.AccessToken, loginResult.getTokens().getAccessToken());
+                            getLocalStore().setStringValue(LocalStore.IdToken, loginResult.getTokens().getIdToken());
+                            getLocalStore().setStringValue(LocalStore.RefreshToken, loginResult.getTokens().getRefreshToken());
+                            Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<LoginResult> call, Throwable t) {
                         Toast.makeText(LoginActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                        t.printStackTrace();
                     }
                 });
                 break;
