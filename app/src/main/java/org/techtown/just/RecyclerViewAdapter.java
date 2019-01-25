@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
 
 import java.io.IOException;
@@ -180,7 +180,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //                intent.putExtra("book_author", bookInfoList.get(position).getAuthor());
 //                intent.putExtra("book_content", bookInfoList.get(position).getContents());
 //                intent.putExtra("book_country", bookInfoList.get(position).getCountry());
-//                intent.putExtra("book_tags", bookInfoList.get(position).getTags());
+//                intent.putExtra("book_tags", bookInfoList.get(position).getAllTags());
 
                 mContext.startActivity(intent);
 
@@ -190,26 +190,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public String getTagNames(String s, TagNames tagNames) {
-        String tags[] = s.split(";");
+        String booksTags[] = s.split(";");
         String str = "";
-        for (int i = 0; i < tags.length; i++) {
-            try {
-                int toInt = Integer.parseInt(tags[i]);
+        String s1 = "", s2 = "";
+        List<Tag> selectedTags = tagNames.getSelectedTags();
 
-                //toint =2, 6, 29,16
-                str += tagNames.getTags().get(toInt - 1).getTag_name() + " ";
-                //getTags-> [tag( 1,흥미진진), tag(2,사랑), tag(3,취미)]
+        for (int i = 0; i < booksTags.length; i++) {
+            try {
+                int toInt = Integer.parseInt(booksTags[i]);
+                int flag = 0; //selectedTag와 일치한다(1) 안한다(0), default : 0
+                //selectedTag와 일치하면 s1에, 아니면 s2에 넣기
+                for (int j = 0; j < selectedTags.size(); j++)
+                    if (toInt == selectedTags.get(j).getTag_id()) { //선택된 태그가 책정보 태그에 있으면
+                        flag = 1;
+                        break;
+                    }
+
+                if (flag == 1) //toInt가 selectedTag에 있으면
+                    s1 += tagNames.getAllTags().get(toInt - 1).getTag_name() + " · ";
+                else
+                    s2 += tagNames.getAllTags().get(toInt - 1).getTag_name() + " · ";
+
             } catch (NumberFormatException e) {
 
             }
         }
-
-//        for (int i = 0; i < tags.length; i++) {
-//            String ss = tagNames.getTags().get(Integer.parseInt(tags[i]) - 1).getTag_name();
-//            Toast.makeText(mContext, ss, Toast.LENGTH_SHORT).show();
-//            str +=  ss + " ";
-//        }
-        return str;
+        return s1 + s2;
     }
 
     public void setImageSrc(ImageView imageView, final int position) {

@@ -440,6 +440,7 @@ public class FlowLayout extends ViewGroup {
         return new MarginLayoutParams(super.generateDefaultLayoutParams());
     }
 
+
     class BlankView extends View {
 
         public BlankView(Context context) {
@@ -458,6 +459,22 @@ public class FlowLayout extends ViewGroup {
         checkbox.setText(tag.getTag_name());
         checkbox.setTag(tag);
         return view;
+    }
+
+    public void setChecked(Boolean bl) {
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = this.getChildAt(i);
+            CheckBox checkbox = child.findViewById(R.id.checkbox);
+            checkbox.setChecked(bl);
+        }
+    }
+
+    public void setCheckable(Boolean bl) {
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = this.getChildAt(i);
+            CheckBox checkbox = child.findViewById(R.id.checkbox);
+            checkbox.setClickable(bl);
+        }
     }
 
     public List<Tag> getCheckedTagValues() {

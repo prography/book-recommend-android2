@@ -23,11 +23,11 @@ public class BookInfoLittle implements Serializable {
         this.isbn = isbn;
     }
 
-    //    public List<Integer> getTags() {
+    //    public List<Integer> getAllTags() {
 //        return tags;
 //    }
 //
-//    public void setTags(List<Integer> tags) {
+//    public void setAllTags(List<Integer> tags) {
 //        this.tags = tags;
 //    }
 
