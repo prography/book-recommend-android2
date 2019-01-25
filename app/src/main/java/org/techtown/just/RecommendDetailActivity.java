@@ -73,9 +73,8 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
 
     private String getTagNames() {
         String s = "";
-        //tagsStr += tagNames.getSelectedTags().get(0).getTag_id();
-        for (int i = 1; i < tagNames.getSelectedTags().size(); i++)
-            s +=  ";" +  tagNames.getSelectedTags().get(i).getTag_id();
+        for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
+            s += tagNames.getSelectedTags().get(i).getTag_name();
         return s;
     }
 
