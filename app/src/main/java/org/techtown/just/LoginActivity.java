@@ -17,6 +17,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.JsonObject;
 import com.kakao.auth.Session;
 
 import org.json.JSONObject;
@@ -70,40 +71,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         ButterKnife.bind(this);
         mContext = getApplicationContext();
         FacebookSdk.sdkInitialize(mContext);
-
-        if (AccessToken.getCurrentAccessToken() != null) {
-            mAccessTokenTracker = new AccessTokenTracker() {
-                @Override
-                protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                    mAccessTokenTracker.stopTracking();
-                    if (currentAccessToken == null) {
-                        //(the user has revoked your permissions -
-                        //by going to his settings and deleted your app)
-                        //do the simple login to FaceBook
-                        //case 1
-                    } else {
-                        //you've got the new access token now.
-                        //AccessToken.getToken() could be same for both
-                        //parameters but you should only use "currentAccessToken"
-                        //case 2
-                        fetchProfile();
-                    }
-                }
-            };
-            mAccessTokenTracker.startTracking();
-            AccessToken.refreshCurrentAccessTokenAsync();
-        }
-        //access token 유효성 확인 - 최초 1번
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        checkLogin = accessToken != null && !accessToken.isExpired();
-
-        callback_kakao = new KakaoSessionCallback();
-
-        Session.getCurrentSession().addCallback(callback_kakao);
-
-//        getCurrentSession().addCallback(callback);
-        //kakaocallback = new KakaoSessionCallback();
-        //일반로그인
         btnGeneralLogin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
 
@@ -117,32 +84,42 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         btn_customFacebook.setOnClickListener(this);
 
 
-    }
+        if (getLocalStore().getStringValue(LocalStore.UserId) != null) {
+            checkTokenIsValid();
+        } else {
+            //facebook, kakaoTalk login
+            if (AccessToken.getCurrentAccessToken() != null) {
+                mAccessTokenTracker = new AccessTokenTracker() {
+                    @Override
+                    protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                        mAccessTokenTracker.stopTracking();
+                        if (currentAccessToken == null) {
+                            //(the user has revoked your permissions -
+                            //by going to his settings and deleted your app)
+                            //do the simple login to FaceBook
+                            //case 1
+                        } else {
+                            //you've got the new access token now.
+                            //AccessToken.getToken() could be same for both
+                            //parameters but you should only use "currentAccessToken"
+                            //case 2
+                            fetchProfile();
+                        }
+                    }
+                };
+                mAccessTokenTracker.startTracking();
+                AccessToken.refreshCurrentAccessTokenAsync();
+            }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.e("Login_onRestart", ": e");
+            //access token 유효성 확인 - 최초 1번
+            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+            checkLogin = accessToken != null && !accessToken.isExpired();
 
-        //checkLogin();
+            callback_kakao = new KakaoSessionCallback();
 
-    }
+            Session.getCurrentSession().addCallback(callback_kakao);
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        checkLogin = getLocalStore().getBooleanValue(LocalStore.my, checkLogin);
-
-        Log.d("Login_onResume :: ", "checkLogin : " + checkLogin);
-        if (checkLogin == true) {
-            Intent intent = new Intent(this, MyPageActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-//            //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            //intent.setFlags(Intent.)
-            startActivity(intent);
         }
-        //checkLogin();
 
     }
 
@@ -155,9 +132,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         super.onActivityResult(requestCode, resultCode, data);
 
-        //if(accessToken != null && !accessToken.isExpired()){
         callbackManager.onActivityResult(requestCode, resultCode, data);
-        //}
 
     }
 
@@ -167,21 +142,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         Intent intent;
         switch (view.getId()) {
             case R.id.btn_custom_kakao:
-
-//                callbackManager = CallbackManager.Factory.create();
-//                Session session = Session.getCurrentSession();
-//                session.addCallback(new KakaoSessionCallback());
-//                session.open(AuthType.KAKAO_LOGIN_ALL,LoginActivity.this);
-                //callback_kakao = new KakaoSessionCallback();
-
-//                btn_kakao_login.openSession(AuthType.KAKAO_LOGIN_ALL);
-
                 btn_kakao_login.performClick();
-
                 break;
 
             case R.id.btn_custom_facebook:
-
                 //facebook login
                 callbackManager = CallbackManager.Factory.create();
                 mLoginCallback = new Login_FacebookActivity();
@@ -192,43 +156,41 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 break;
             case R.id.btn_general_login:
-                String id = this.id.getText().toString();
+                final String id = this.id.getText().toString();
                 String pw = this.pw.getText().toString();
+                if (id.length() == 0 || pw.length() == 0) {
+                    Toast.makeText(LoginActivity.this, "아이디, 패스워드를 입력해주세요", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                final Call<LoginResult> login = getNetworkManager().getBookApi().login(id, pw);
+                login.enqueue(new Callback<LoginResult>() {
+                    @Override
+                    public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                        LoginResult loginResult = response.body();
+                        //user_id, LoginToken이 있다.
+                        if (loginResult != null && loginResult.getTokens() != null) {
+                            getLocalStore().setStringValue(LocalStore.AccessToken, loginResult.getTokens().getAccessToken());
+                            getLocalStore().setStringValue(LocalStore.IdToken, loginResult.getTokens().getIdToken());
+                            getLocalStore().setStringValue(LocalStore.RefreshToken, loginResult.getTokens().getRefreshToken());
+                            getLocalStore().setStringValue(LocalStore.UserId, id);
 
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+                            Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
 
-//                if (id.length() == 0 || pw.length() == 0) {
-//                    Toast.makeText(LoginActivity.this, "아이디, 패스워드를 입력해주세요", Toast.LENGTH_SHORT).show();
-//                    break;
-//                }
-//                final Call<LoginResult> login = getNetworkManager().getBookApi().login(id, pw);
-//                login.enqueue(new Callback<LoginResult>() {
-//                    @Override
-//                    public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
-//                        LoginResult loginResult = response.body();
-//                        //user_id, LoginToken이 있다.
-//                        if (loginResult != null && loginResult.getTokens() != null) {
-//                            getLocalStore().setStringValue(LocalStore.AccessToken, loginResult.getTokens().getAccessToken());
-//                            getLocalStore().setStringValue(LocalStore.IdToken, loginResult.getTokens().getIdToken());
-//                            getLocalStore().setStringValue(LocalStore.RefreshToken, loginResult.getTokens().getRefreshToken());
-//                            Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
-//
-//                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                            startActivity(intent);
-//                        } else if (response.code() == 401) {
-//                            Toast.makeText(LoginActivity.this, "이메일 인증이 필요합니다", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<LoginResult> call, Throwable t) {
-//                        Toast.makeText(LoginActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-//                        t.printStackTrace();
-//                    }
-//                });
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        } else if (response.code() == 401) {
+                            Toast.makeText(LoginActivity.this, "이메일 인증이 필요합니다", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginResult> call, Throwable t) {
+                        Toast.makeText(LoginActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                        t.printStackTrace();
+                    }
+                });
                 break;
 
             case R.id.btn_register:
@@ -256,4 +218,27 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         request.setParameters(parameters);
         request.executeAsync();
     }
+
+    private void checkTokenIsValid() {
+        final Call<JsonObject> login = getNetworkManager().getBookApi().validate(getLocalStore().getStringValue(LocalStore.AccessToken),
+                getLocalStore().getStringValue(LocalStore.IdToken),
+                getLocalStore().getStringValue(LocalStore.RefreshToken));
+        login.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Intent intent = new Intent(LoginActivity.this, MyPageActivity.class);
+                    startActivity(intent);
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
 }
