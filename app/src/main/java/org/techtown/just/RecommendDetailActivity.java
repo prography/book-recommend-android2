@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
 import org.techtown.just.model.TagNames;
 import org.techtown.just.network.NetworkManager;
@@ -28,12 +29,14 @@ import retrofit2.Response;
 
 import static org.techtown.just.base.BaseApplication.getLocalStore;
 
-public class RecommendDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class RecommendDetailActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.textView)
     TextView textView;
     @BindView(R.id.btn_back)
     ImageView btnBack;
+    @BindView(R.id.searchStr)
+    EditText editText;
     @BindView(R.id.btn_search)
     ImageView btnSearch;
     @BindView(R.id.btn_my)
@@ -61,7 +64,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
 
 
         setRecyclerView();
-        load_RecommendBooks(tagsStr);
+        load_RecommendBooks(tagsStr,1);
 
         btnMy.setOnClickListener(this);
         btnBack.setOnClickListener(this);
@@ -82,11 +85,16 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
     }
 
 
-    private void load_RecommendBooks(String tagsStr){
+    private void load_RecommendBooks(String name, int mode){
 
+        Call<List<BookInfo>> bookInfoCall=null;
         //id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfoCall = NetworkManager.getBookApi().getListWithTag(tagsStr);
-//        Call<List<BookInfo>> bookInfoCall = NetworkManager.getBookApi().getBookInfoWithIsbn("9788934971627");
+        if(mode ==1){//tag
+            bookInfoCall = getNetworkManager().getBookApi().getListWithTag(name);
+        }
+        else if(mode ==2){//search
+            bookInfoCall = getNetworkManager().getBookApi().getListWithSearch(name);
+        }
         bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
@@ -122,7 +130,7 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
         for (int i = 0; i < books.size(); i++) {
             //isbn으로 책정보 가져와서
             bookInfo = books.get(i);
-            bookInfoWithIsbn = NetworkManager.getBookApi().getBookInfoWithIsbn(bookInfo.getIsbn());
+            bookInfoWithIsbn = getNetworkManager().getBookApi().getBookInfoWithIsbn(bookInfo.getIsbn());
             bookInfoWithIsbn.enqueue(new Callback<List<BookInfo>>() {
                 @Override
                 public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
@@ -161,9 +169,8 @@ public class RecommendDetailActivity extends AppCompatActivity implements View.O
                 break;
 
             case R.id.btn_search:
-                intent = new Intent(this, SearchActivity.class);
-//                intent.putExtra("searchStr", searchStr.toString());
-                startActivity(intent);
+                String search = editText.getText().toString();
+                load_RecommendBooks(search,2);
                 break;
         }
     }

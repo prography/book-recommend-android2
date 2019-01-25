@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.facebook.login.LoginResult;
 import com.google.gson.JsonObject;
 
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.network.NetworkManager;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class Register2Activity extends AppCompatActivity implements View.OnClickListener {
+public class Register2Activity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.text)
     TextView text;
@@ -60,7 +61,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
 
 
 
-        Call<JsonObject> jsonObjectCall = NetworkManager.getBookApi().register(id, pw, email);
+        Call<JsonObject> jsonObjectCall = getNetworkManager().getBookApi().register(id, pw, email);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

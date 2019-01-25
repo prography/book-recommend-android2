@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
 import org.techtown.just.network.NetworkManager;
 
@@ -24,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
+public class SearchActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.btn_back)
     ImageView btnBack;
@@ -55,7 +56,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         String searchStr = intent.getStringExtra("searchStr");
 
         //책 가져오기 (test)
-        Call<List<BookInfo>> list = NetworkManager.getBookApi().getListWithSearch("한"); //searchStr을 넣으면 안됨
+        Call<List<BookInfo>> list = getNetworkManager().getBookApi().getListWithSearch("한"); //searchStr을 넣으면 안됨
         list.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {

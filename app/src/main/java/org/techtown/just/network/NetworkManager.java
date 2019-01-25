@@ -1,5 +1,7 @@
 package org.techtown.just.network;
 
+import org.techtown.just.LocalStore;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -11,12 +13,22 @@ public class NetworkManager {
     private static Retrofit retrofit;
     private static LoginApiService apiServiceLogin;
     private static BookApiService bookApiService;
+    private static LocalStore localStore;
 
+    public NetworkManager(LocalStore localStore) {
+        this.localStore = localStore;
+    }
 
-    private static Retrofit buildRetrofit() {
+    private Retrofit buildRetrofit() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        AuthenticationInterceptor authInterceptor = new AuthenticationInterceptor(localStore);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .addInterceptor(authInterceptor)
+                .build();
 
 
         return new Retrofit.Builder()
@@ -25,7 +37,7 @@ public class NetworkManager {
                 .baseUrl(API_URL).build();
     }
 
-    private static Retrofit getRetrofit() {
+    private Retrofit getRetrofit() {
         if (retrofit == null) {
             retrofit = buildRetrofit();
         }
@@ -33,14 +45,14 @@ public class NetworkManager {
     }
 
 
-    public static LoginApiService getLoginApi() {
+    public LoginApiService getLoginApi() {
         if (apiServiceLogin == null) {
             apiServiceLogin = getRetrofit().create(LoginApiService.class);
         }
         return apiServiceLogin;
     }
 
-    public static BookApiService getBookApi() {
+    public BookApiService getBookApi() {
         if (bookApiService == null) {
             bookApiService = getRetrofit().create(BookApiService.class);
         }

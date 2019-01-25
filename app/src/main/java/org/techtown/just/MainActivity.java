@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.google.gson.JsonObject;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.Session;
 
@@ -24,12 +25,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.LoginResult;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
 import org.techtown.just.network.NetworkManager;
 
 import java.util.List;
 import java.util.Random;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -77,7 +80,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         tagNames = new TagNames();
 
         //tagNames 가져오기
-        Call<List<Tag>> list = NetworkManager.getBookApi().getTags();
+        Call<List<Tag>> list = getNetworkManager().getBookApi().getTags();
         list.enqueue(new Callback<List<Tag>>() {
             @Override
             public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
@@ -122,24 +125,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     } // end of onCreate
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
 
-        isLoggedIn =  getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
-        Log.d("Main_onResume :: ", "isLoggedIn : "+isLoggedIn);
+        isLoggedIn = getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
+        Log.d("Main_onResume :: ", "isLoggedIn : " + isLoggedIn);
 
     }
 
     @Override
-    protected void onRestart(){
+    protected void onRestart() {
         super.onRestart();
 
         //token재확인
 //        AccessToken accessToken = AccessToken.getCurrentAccessToken();
 //        isLoggedIn = accessToken != null && !accessToken.isExpired();
 
-        isLoggedIn =  getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
-        Log.d("Main_onRestart :: ", "isLoggedIn : "+isLoggedIn);
+        isLoggedIn = getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
+        Log.d("Main_onRestart :: ", "isLoggedIn : " + isLoggedIn);
         //세션 재확인
 //        Session session = Session.getCurrentSession();
 //        session.open(AuthType.KAKAO_LOGIN_ALL,MainActivity.this);
@@ -162,19 +165,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
 
 //                getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
-                isLoggedIn = getLocalStore().getBooleanValue(LocalStore.my,isLoggedIn);
+                isLoggedIn = getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
                 //getLocalStore().setBooleanValue(LocalStore.my, id);
-                if (isLoggedIn == true ) {
-                    intent = new Intent(this, MyPageActivity.class);
-                }
-                else {
+                if (isLoggedIn == true) {
+                    checkTokenIsValid();
+                } else {
                     intent = new Intent(this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
-                Log.d("Main_MY value :: ", ""+isLoggedIn);
-
-                startActivity(intent);
-
                 break;
 
             case R.id.button:
@@ -205,6 +204,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 startActivity(intent);
                 break;
         }
+    }
+
+
+    private void checkTokenIsValid() {
+        final Call<JsonObject> login = getNetworkManager().getBookApi().validate(getLocalStore().getStringValue(LocalStore.AccessToken),
+                getLocalStore().getStringValue(LocalStore.IdToken),
+                getLocalStore().getStringValue(LocalStore.RefreshToken));
+        login.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Intent intent = new Intent(MainActivity.this, MyPageActivity.class);
+                    startActivity(intent);
+                } else {
+                    //토큰값이 유효하지 않을시, 로그인 토큰을 삭제 후 로그인 페이지로 이동합니다.
+                    getLocalStore().clearTokenValues();
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+            }
+        });
     }
 
     @Override

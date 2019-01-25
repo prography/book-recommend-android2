@@ -34,6 +34,8 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.kakao.auth.Session;
 
+import org.techtown.just.base.BaseActivity;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -45,7 +47,7 @@ import butterknife.ButterKnife;
 import static com.kakao.usermgmt.api.UserApi.requestLogout;
 
 
-public class Mod_ProfileActivity extends AppCompatActivity implements View.OnClickListener{
+public class Mod_ProfileActivity extends BaseActivity implements View.OnClickListener{
 
     @BindView(R.id.btn_back)
     ImageView bt_back;
