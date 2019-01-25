@@ -186,31 +186,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-    private void checkTokenIsValid() {
-        final Call<JsonObject> login = getNetworkManager().getBookApi().validate(getLocalStore().getStringValue(LocalStore.AccessToken),
-                getLocalStore().getStringValue(LocalStore.IdToken),
-                getLocalStore().getStringValue(LocalStore.RefreshToken));
-        login.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful()) {
-                    Intent intent = new Intent(MainActivity.this, MyPageActivity.class);
-                    startActivity(intent);
-                } else {
-                    //토큰값이 유효하지 않을시, 로그인 토큰을 삭제 후 로그인 페이지로 이동합니다.
-                    getLocalStore().clearTokenValues();
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
-            }
-        });
-    }
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

@@ -92,9 +92,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 register.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-//              List<JsonObject> tags = response.body();
-                        if (response.isSuccessful()) {
-                            login(id.getText().toString(), pw.getText().toString());
+                        if (response.isSuccessful() && response.body().get("statusCode") != null) {
+                            String statusCode = response.body().get("statusCode").getAsString();
+                            if (statusCode != "200") {
+                                String message = response.body().get("message").getAsString();
+                                Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
+                            } else {
+                                login(id.getText().toString(), pw.getText().toString());
+                            }
                         } else {
                             Toast.makeText(RegisterActivity.this, "회원가입 과정에 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                         }

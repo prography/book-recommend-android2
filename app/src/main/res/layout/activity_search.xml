@@ -6,33 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
 
-    <include
-        android:id="@+id/include2"
-        layout="@layout/toolbar" />
+    <include layout="@layout/toolbar" />
+
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="text"
-        app:layout_constraintTop_toBottomOf="@+id/include2" />
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="good"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.031"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/text" />
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rc_recommend"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/btn_back">
-
-        <!--<fragment-->
-            <!--android:id="@+id/search_result_fragment"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent" />-->
-
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@id/textView" />
 
 </android.support.constraint.ConstraintLayout>

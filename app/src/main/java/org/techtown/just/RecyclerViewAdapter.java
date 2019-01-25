@@ -24,7 +24,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<BookInfo> bookInfoList;
     private Context mContext;
@@ -74,7 +74,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         //View view = LayoutInflater.from(viewGroup.getContext()).inflate(itemLayout,viewGroup,false);
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rcview_recommenditem , parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rcview_recommenditem, parent, false);
 
         return new ViewHolder(v);
     }
@@ -83,6 +83,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * 넘겨 받은 데이터를 화면에 출력하는 역할
      * 재활용 되는 뷰가 호출하여 실행되는 메소드
      * 뷰 홀더를 전달하고 어댑터는 position 의 데이터를 결합
+     *
      * @param viewHolder
      * @param position
      */
@@ -95,15 +96,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
        final BookInfo bookInfo = bookInfoList.get(position);
 //        ListViewItemData item = listViewItems.get(position);
 
-        viewHolder.ITEM_BOOKNAME.setText(bookInfo.getBook_name());
-//        viewHolder.ITEM_IMG.setImageBitmap(bookInfoList.get(position).getThumbnail());
-        //viewHolder.ITEM_IMG.setImageBitmap();
-//        viewHolder.ITEM_IMG.setImageURI(Uri.parse("https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F521345%3Ftimestamp%3D20190123155507"));
-        viewHolder.ITEM_AUTHOR.setText(bookInfo.getAuthor());
-        String s = getTagNames(bookInfo.getTags(), tagNames);
+
+        viewHolder.ITEM_BOOKNAME.setText(bookInfoList.get(position).getBook_name());
+        viewHolder.ITEM_AUTHOR.setText(bookInfoList.get(position).getAuthor());
+
+        String s = getTagNames(bookInfoList.get(position).getTags(), tagNames);
         viewHolder.ITEM_TAG.setText(s);
-
-
         setImageSrc(viewHolder.ITEM_IMG, position);
 //1.25 am 05:18
 
@@ -186,7 +184,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 mContext.startActivity(intent);
 
-                Toast.makeText(context, position +"번째 아이템 클릭", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, position + "번째 아이템 클릭", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -194,8 +192,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public String getTagNames(String s, TagNames tagNames) {
         String tags[] = s.split(";");
         String str = "";
-        for(int i = 0; i < tags.length; i++)
-            str += tags[i] + " ";
+        for (int i = 0; i < tags.length; i++) {
+            try {
+                int toInt = Integer.parseInt(tags[i]);
+
+                //toint =2, 6, 29,16
+                str += tagNames.getTags().get(toInt - 1).getTag_name() + " ";
+                //getTags-> [tag( 1,흥미진진), tag(2,사랑), tag(3,취미)]
+            } catch (NumberFormatException e) {
+
+            }
+        }
 
 //        for (int i = 0; i < tags.length; i++) {
 //            String ss = tagNames.getTags().get(Integer.parseInt(tags[i]) - 1).getTag_name();
