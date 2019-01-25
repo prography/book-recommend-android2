@@ -103,12 +103,25 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_img" />
 
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_bookmark"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintLeft_toRightOf="@+id/readbook"
+            app:layout_constraintBottom_toBottomOf="@+id/readbook" />
+
         <Button
             android:id="@+id/more_read"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00ff0000"
-            android:text=""
+            android:layout_marginTop="5dp"
+            android:text="더보기"
+            android:textSize="7dp"
+            android:textColor="#bebebe"
             app:layout_constraintBottom_toBottomOf="@+id/readbook"
             app:layout_constraintRight_toRightOf="parent" />
 
@@ -134,12 +147,24 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rc_readbook" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_booklike"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintLeft_toRightOf="@+id/interest_book"
+            app:layout_constraintBottom_toBottomOf="@+id/interest_book" />
+
         <Button
             android:id="@+id/more_interest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00ff0000"
-            android:text="…"
+            android:text="더보기"
+            android:textSize="7dp"
+            android:textColor="#bebebe"
+            android:layout_marginTop="5dp"
             app:layout_constraintBottom_toBottomOf="@+id/interest_book"
             app:layout_constraintRight_toRightOf="parent" />
 

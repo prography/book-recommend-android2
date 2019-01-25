@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,9 +40,15 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
     TextView BOOK_AUTHOR;
     @BindView(R.id.book_content)
     TextView BOOK_CONTENT;
+    @BindView(R.id.like_btn)
+    ImageView BOOK_LIKE;
+    @BindView(R.id.read_btn)
+    ImageView BOOK_READ;
 
     @BindView(R.id.flowLayout)
     FlowLayout flowLayout;
+
+    int like , read;
 
     TagNames tagNames;
     @BindView(R.id.btn_back)
@@ -71,11 +76,18 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
 
 
         get_BOOKINFO();
+
+        BOOK_LIKE.setOnClickListener(this);
+        BOOK_READ.setOnClickListener(this);
+
+
     }//oncreate
 
     private void get_BOOKINFO() {
         Intent intent = getIntent();
         //BookInfo bookInfo = intent.getParcelableExtra("bookInfoList");
+//        like = intent.getIntExtra("booklike",0);
+//        read = intent.getIntExtra("bookread",0);
 
         String isbn = intent.getStringExtra("isbn");
         tagNames = (TagNames) intent.getSerializableExtra("tagNames");
@@ -88,6 +100,18 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
                 List<BookInfo> books = response.body();
                 //thumbnail 설정
                 setThumbnail(BOOK_IMG, books.get(0).getThumbnail());
+                if(like==1){
+                    BOOK_LIKE.setSelected(true);
+                }else{
+                    BOOK_LIKE.setSelected(false);
+                }
+
+                if(read ==1){
+                    BOOK_READ.setSelected(true);
+                } else {
+                    BOOK_READ.setSelected(false);
+                }
+
                 BOOK_TITLE.setText(books.get(0).getBook_name());
                 BOOK_AUTHOR.setText(books.get(0).getAuthor());
                 BOOK_CONTENT.setText(books.get(0).getContents());
@@ -191,6 +215,21 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
 //                intent.putExtra("search", search);
 //                startActivity(intent);
 //                break;
+     
+            case R.id.like_btn:
+                Toast.makeText(BookDetailActivity.this, "좋아요 버튼을 눌렀습니다", Toast.LENGTH_SHORT).show();
+                if(BOOK_LIKE.isSelected()==true){
+                    BOOK_LIKE.setImageResource(R.drawable.ic_like_full);}
+                else
+                    BOOK_LIKE.setImageResource(R.drawable.ic_like_empty);
+                break;
+            case R.id.read_btn:
+                Toast.makeText(BookDetailActivity.this, "읽었어요 버튼을 눌렀습니다", Toast.LENGTH_SHORT).show();
+                if(BOOK_READ.isSelected()==true){
+                    BOOK_READ.setImageResource(R.drawable.ic_checked);}
+                else
+                    BOOK_READ.setImageResource(R.drawable.ic_check);
+                break;
         }
     }
 }

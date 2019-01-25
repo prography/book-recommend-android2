@@ -36,6 +36,7 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
     RecyclerView.LayoutManager mLayoutManager2;
     MyAdapter myAdapter2;
 
+    String userId ="1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +70,11 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
 
     private void loadReadBooks(String string){
 
+        //userId = getLocalStore().getStringValue(LocalStore.UserId);
         //id으로 책 정보 가져오기
         Call<List<BookInfo>> bookInfo=null;
         if(string == null) {
-            bookInfo = getNetworkManager().getBookApi().getListUserRead("1");
+            bookInfo = getNetworkManager().getBookApi().getListUserRead(userId);
         }else if(string != null){
             bookInfo = getNetworkManager().getBookApi().getListWithSearch(string);
         }bookInfo.enqueue(new Callback<List<BookInfo>>() {

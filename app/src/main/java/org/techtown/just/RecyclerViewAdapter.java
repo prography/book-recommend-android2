@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
@@ -28,12 +29,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<BookInfo> bookInfoList;
     private Context mContext;
     private TagNames tagNames;
+    private BookListListener listener;
+
+    public interface BookListListener{
+        void saveFlag(int position, BookInfo bookInfo, int like, int read);
+    }
+    public void updateBookInfo(int position, BookInfo bookInfo){
+        bookInfoList.set(position, bookInfo);
+        notifyItemChanged(position);
+    }
+    public void setBookListListener(BookListListener listener){
+        this.listener = listener;
+    }
+
 
     public RecyclerViewAdapter(Context mContext, List<BookInfo> BookInfoList, TagNames tagNames) {
         this.mContext = mContext;
-        this.bookInfoList = BookInfoList;
+        //this.bookInfoList = BookInfoList;
+
+        this.bookInfoList = new ArrayList<>();
+        this.bookInfoList.addAll(BookInfoList);
         this.tagNames = tagNames;
         //this.itemLayout = itemLayout;
+    }
+    //책 정보가 추가되면 (flag)
+    public void addBookInfo(BookInfo bookInfo){
+        bookInfoList.add(bookInfo);
+        notifyDataSetChanged();
     }
 //
 //    /**
@@ -69,7 +91,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 //        ListViewItemData item = listViewItems.get(position);
 
-
         viewHolder.ITEM_BOOKNAME.setText(bookInfoList.get(position).getBook_name());
         viewHolder.ITEM_AUTHOR.setText(bookInfoList.get(position).getAuthor());
 
@@ -78,9 +99,62 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         setImageSrc(viewHolder.ITEM_IMG, position);
 //1.25 am 05:18
 
-
         // 값 설정 ( set )
+        int like= 0;//bookInfoList.get(position).getFlag().getBe_interested();
+        int read= 0;//bookInfoList.get(position).getFlag().getHad_read();
+
+        if(like==1)
+            viewHolder.ITEM_LIKE.setSelected(true);
+        else
+            viewHolder.ITEM_LIKE.setSelected(false);
+
+        if(read==1)
+            viewHolder.ITEM_LIKE.setSelected(true);
+        else
+            viewHolder.ITEM_LIKE.setSelected(false);
+
         //Here it is simply write onItemClick listener here
+        viewHolder.ITEM_LIKE.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+
+                if(viewHolder.ITEM_LIKE.isSelected()) {
+                    //좋아요 취소
+                    Toast.makeText(context, position + "좋아요 취소..", Toast.LENGTH_LONG).show();
+                    viewHolder.ITEM_LIKE.setSelected(false);
+                    viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_empty);
+                    //listener.saveFlag(position, bookInfoList.get(position), 0, bookInfoList.get(position).getFlag().getBe_interested());
+                }else {
+                    //좋아요
+                    Toast.makeText(context, position + "좋아요!", Toast.LENGTH_LONG).show();
+                    viewHolder.ITEM_LIKE.setSelected(true);
+                    viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_full);
+                    //listener.saveFlag(position, bookInfoList.get(position), 1, bookInfoList.get(position).getFlag().getBe_interested() );
+                }
+
+            }
+        });
+        viewHolder.ITEM_READ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                if(viewHolder.ITEM_READ.isSelected()) {
+                    //읽음 취소
+                    Toast.makeText(context, position + "안읽은 책ㅠㅠ", Toast.LENGTH_LONG).show();
+                    viewHolder.ITEM_READ.setSelected(false);
+                    viewHolder.ITEM_READ.setImageResource(R.drawable.ic_check);
+                    //listener.saveFlag(position, bookInfoList.get(position), bookInfoList.get(position).getFlag().getBe_interested(), 0 );
+                }else{
+                    Toast.makeText(context, position + "읽었어요!", Toast.LENGTH_LONG).show();
+                    viewHolder.ITEM_READ.setSelected(true);
+                    viewHolder.ITEM_READ.setImageResource(R.drawable.ic_checked);
+                }
+                    //listener.saveFlag(position, bookInfoList.get(position), bookInfoList.get(position).getFlag().getBe_interested(),1);
+            }
+        });
+
+                //Here it is simply write onItemClick listener here
         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +168,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 intent.putExtra("isbn", bookInfoList.get(position).getIsbn());
                 intent.putExtra("tagNames", tagNames);
+
+//                intent.putExtra("booklike",like);
+//                intent.putExtra("bookread",read);
+
+//                intent.putExtra("booklike",bookInfoList.get(position).getFlag().getBe_interested());
+//                intent.putExtra("bookread",bookInfoList.get(position).getFlag().getHad_read());
+
 //                intent.putExtra("book_thumbnail", bookInfoList.get(position).getThumbnail());
 //                intent.putExtra("book_name", bookInfoList.get(position).getBook_name());
 //                intent.putExtra("book_author", bookInfoList.get(position).getAuthor());
