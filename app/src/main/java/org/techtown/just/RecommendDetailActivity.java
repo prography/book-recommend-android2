@@ -84,12 +84,12 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
 //        recyclerView.setAdapter(adapter);
     }
 
+    Call<List<BookInfo>> bookInfoCall=null;
 
     private void load_RecommendBooks(String name, int mode){
 
-        Call<List<BookInfo>> bookInfoCall=null;
         //id으로 책 정보 가져오기
-        if(mode ==1){//tag
+        if(mode ==1){//listwithtag
             bookInfoCall = getNetworkManager().getBookApi().getListWithTag(name);
         }
         else if(mode ==2){//search
@@ -175,5 +175,9 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
         }
     }
 
+    private void checkLogin(String isbn, String user_id){
+
+
+    }
 
 }

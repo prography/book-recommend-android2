@@ -28,6 +28,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<BookInfo> bookInfoList;
     private Context mContext;
     private TagNames tagNames;
+//    ImageView ITEM_LIKE, ITEM_READ;
+
+
 
     public RecyclerViewAdapter(Context mContext, List<BookInfo> BookInfoList, TagNames tagNames)
     {
@@ -83,6 +86,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
         // 값 설정 ( set )
+
+        viewHolder.ITEM_LIKE.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //TODO::읽은책, 관심책 플래그 서버에서 받아서 초기화할 것.
+                int like = 0 ;
+
+                Intent intent = new Intent(view.getContext(),BookDetailActivity.class);
+                if(like==0) {
+                    viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_full);
+                    intent.putExtra("like", 1);
+                }else if(like ==1)   //이미 좋아요 되어있으면
+                    viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_empty);
+                    intent.putExtra("like",0);
+            }
+        });
+
+        viewHolder.ITEM_READ.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+
+                int read =0;
+        //        Context context = view.getContext();
+                Intent intent = new Intent(view.getContext(),BookDetailActivity.class);
+                if(read==0) {
+                    viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_checked);
+                    intent.putExtra("read", 1);
+                }else if(read==1){
+                    viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_check);
+                    intent.putExtra("read", 0);
+                }
+            }
+        });
+
+
         //Here it is simply write onItemClick listener here
         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,10 +129,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 //like, read버튼 클릭시 이벤트 처리 here
 
-
                 Intent intent = new Intent(v.getContext(), BookDetailActivity.class);
-  //              intent.putExtra("bookInfo", (Parcelable) bookInfoList.get(position));
-
                 intent.putExtra("isbn", bookInfoList.get(position).getIsbn());
                 intent.putExtra("tagNames", tagNames);
 //                intent.putExtra("book_thumbnail", bookInfoList.get(position).getThumbnail());

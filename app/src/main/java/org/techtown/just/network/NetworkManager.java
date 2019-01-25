@@ -19,7 +19,7 @@ public class NetworkManager {
         this.localStore = localStore;
     }
 
-    private Retrofit buildRetrofit() {
+    private static Retrofit buildRetrofit() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -37,7 +37,7 @@ public class NetworkManager {
                 .baseUrl(API_URL).build();
     }
 
-    private Retrofit getRetrofit() {
+    private static Retrofit getRetrofit() {
         if (retrofit == null) {
             retrofit = buildRetrofit();
         }
@@ -52,7 +52,7 @@ public class NetworkManager {
         return apiServiceLogin;
     }
 
-    public BookApiService getBookApi() {
+    public static BookApiService getBookApi() {
         if (bookApiService == null) {
             bookApiService = getRetrofit().create(BookApiService.class);
         }

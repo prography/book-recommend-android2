@@ -58,7 +58,7 @@ public interface BookApiService {
     Call<List<BookInfo>> getBookInfoWithIsbn(@Path("isbn") String isbn);
 
     //7
-    @GET("/books/{isbn}/status/{user_id}/")
+    @GET("/books/status/{isbn}/{user_id}/")
     Call<JsonObject> getBookFlag(@Path("isbn") String isbn,
                                  @Path("user_id") String user_id);
 
