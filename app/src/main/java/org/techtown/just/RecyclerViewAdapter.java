@@ -21,23 +21,45 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
-    private List<BookInfo> bookInfoList;
+    private ArrayList<BookInfo> bookInfoList;
     private Context mContext;
     private TagNames tagNames;
 //    ImageView ITEM_LIKE, ITEM_READ;
+    private BookListListener listener;
 
+    public interface  BookListListener{
+        void saveFlag(int position, BookInfo bookInfo, int like, int read);
+    }
+
+    public void updateBookInfo(int position, BookInfo bookInfo){
+        bookInfoList.set(position, bookInfo);
+        notifyItemChanged(position);
+    }
+
+
+    public void setBookListListener(BookListListener listener){
+        this.listener = listener;
+    }
 
 
     public RecyclerViewAdapter(Context mContext, List<BookInfo> BookInfoList, TagNames tagNames)
     {
         this.mContext = mContext;
-        this.bookInfoList = BookInfoList;
+        this.bookInfoList = new ArrayList<>();
+        this.bookInfoList.addAll(bookInfoList);
         this.tagNames = tagNames;
         //this.itemLayout = itemLayout;
+    }
+
+
+    public void addBookInfo(BookInfo bookInfo){
+        bookInfoList.add(bookInfo);
+        notifyDataSetChanged();
     }
 //
 //    /**
@@ -70,19 +92,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
 
+       final BookInfo bookInfo = bookInfoList.get(position);
 //        ListViewItemData item = listViewItems.get(position);
 
-        viewHolder.ITEM_BOOKNAME.setText(bookInfoList.get(position).getBook_name());
+        viewHolder.ITEM_BOOKNAME.setText(bookInfo.getBook_name());
 //        viewHolder.ITEM_IMG.setImageBitmap(bookInfoList.get(position).getThumbnail());
         //viewHolder.ITEM_IMG.setImageBitmap();
 //        viewHolder.ITEM_IMG.setImageURI(Uri.parse("https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F521345%3Ftimestamp%3D20190123155507"));
-        viewHolder.ITEM_AUTHOR.setText(bookInfoList.get(position).getAuthor());
-        String s = getTagNames(bookInfoList.get(position).getTags(), tagNames);
+        viewHolder.ITEM_AUTHOR.setText(bookInfo.getAuthor());
+        String s = getTagNames(bookInfo.getTags(), tagNames);
         viewHolder.ITEM_TAG.setText(s);
 
 
         setImageSrc(viewHolder.ITEM_IMG, position);
 //1.25 am 05:18
+
+       int like =  bookInfo.getFlag().getBe_interested();
+        if(like==1){//좋아요상태
+            viewHolder.ITEM_LIKE.setSelected(true);
+            //setImageREsource
+
+        }else {
+            viewHolder.ITEM_LIKE.setSelected(false);
+
+        }
+
+        int read = bookInfo.getFlag().getHad_read();
 
 
         // 값 설정 ( set )
@@ -90,16 +125,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         viewHolder.ITEM_LIKE.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                //TODO::읽은책, 관심책 플래그 서버에서 받아서 초기화할 것.
-                int like = 0 ;
-
-                Intent intent = new Intent(view.getContext(),BookDetailActivity.class);
-                if(like==0) {
-                    viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_full);
-                    intent.putExtra("like", 1);
-                }else if(like ==1)   //이미 좋아요 되어있으면
-                    viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_empty);
-                    intent.putExtra("like",0);
+                if(viewHolder.ITEM_LIKE.isSelected()){
+                    //좋아요 취소
+                    listener.saveFlag(position, bookInfoList.get(position), 0, bookInfo.getFlag().getHad_read() );
+                }else {
+                    listener.saveFlag(position, bookInfoList.get(position), 1, bookInfo.getFlag().getHad_read() );
+                }
+//
+//                //TODO::읽은책, 관심책 플래그 서버에서 받아서 초기화할 것.
+//                int like = 0 ;
+//
+//
+//                Intent intent = new Intent(view.getContext(),BookDetailActivity.class);
+//                if(like==0) {
+//                    viewHolder.ITEM_LIKE.setSelected(false);
+//                    viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_full);
+//                    intent.putExtra("like", 1);
+//                }else if(like ==1)   //이미 좋아요 되어있으면
+//                    viewHolder.ITEM_LIKE.setSelected(true);
+//                    viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_empty);
+//                    intent.putExtra("like",0);
             }
         });
 

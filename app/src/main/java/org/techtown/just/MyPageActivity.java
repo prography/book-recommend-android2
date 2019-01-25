@@ -65,6 +65,7 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
 
     Profile facebookProfile;
     String link;
+    String userId;
     //Profile facebookProfile = Profile.getCurrentProfile();
     //String link = facebookProfile.getProfilePictureUri(200,200).toString();
 
@@ -206,8 +207,9 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
 
     private void loadReadBooks(){
 
+        userId = getLocalStore().getStringValue(LocalStore.UserId);
         //user_id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserRead("1");
+        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserRead(userId);
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
@@ -232,7 +234,7 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void loadInterestBook(){
-        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserInterested("1");
+        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserInterested(userId);
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {

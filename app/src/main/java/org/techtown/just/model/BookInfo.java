@@ -19,6 +19,9 @@ public class BookInfo implements Serializable, Parcelable {
     public String contents;
     public String thumbnail;
 
+    //서버에서 주지 않지만, list화면에서 편하게 구현하기 위해 넣음.
+    public BookFlag flag;
+
     protected BookInfo(Parcel in) {
         isbn = in.readString();
         tags = in.readString();
@@ -27,6 +30,7 @@ public class BookInfo implements Serializable, Parcelable {
         country = in.readString();
         contents = in.readString();
         thumbnail = in.readString();
+        flag = in.readParcelable(BookFlag.class.getClassLoader());
     }
 
     public static final Creator<BookInfo> CREATOR = new Creator<BookInfo>() {
@@ -48,14 +52,6 @@ public class BookInfo implements Serializable, Parcelable {
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
-
-    //    public List<Integer> getTags() {
-//        return tags;
-//    }
-//
-//    public void setTags(List<Integer> tags) {
-//        this.tags = tags;
-//    }
 
 
     public String getTags() {
@@ -124,6 +120,14 @@ public class BookInfo implements Serializable, Parcelable {
     }
 
 
+    public BookFlag getFlag() {
+        return flag;
+    }
+
+    public void setFlag(BookFlag flag) {
+        this.flag = flag;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -138,5 +142,6 @@ public class BookInfo implements Serializable, Parcelable {
         parcel.writeString(country);
         parcel.writeString(contents);
         parcel.writeString(thumbnail);
+        parcel.writeParcelable(flag, i);
     }
 }

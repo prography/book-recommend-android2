@@ -65,7 +65,7 @@ public interface BookApiService {
     //8
     @FormUrlEncoded
     @POST("books/{isbn}/status/{user_id}/")
-    Call<JsonObject> saveStatus(@Path("isbn") int isbn,
+    Call<JsonObject> saveStatus(@Path("isbn") String isbn,
                                 @Field("flag_r") int flag_r,
                                 @Field("flag_i") int flag_i,
                                 @Path("user_id") String user_id);
