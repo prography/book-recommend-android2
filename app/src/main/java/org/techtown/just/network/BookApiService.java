@@ -89,6 +89,11 @@ public interface BookApiService {
                                 @Field("email") String email);
 
 
+    @GET("path") //TODO::path
+    Call<JsonObject> Readbase(@Field("user_id") String id,
+                              @Field("readbook") String readbook
+                              );
+
     //Path는 {} Query는 ?=
 
 }

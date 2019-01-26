@@ -83,6 +83,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         btn_customKakao.setOnClickListener(this);
         btn_customFacebook.setOnClickListener(this);
 
+        //idtoken있으면 main으로 넘겨버림
+        if(getLocalStore().getStringValue(LocalStore.IdToken) !=null &&getLocalStore().getStringValue(LocalStore.UserId)!=null){
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            startActivity(intent);
+        }
+
 
         if (getLocalStore().getStringValue(LocalStore.AccessToken) != null) {
             checkTokenIsValid();
@@ -156,6 +162,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 break;
             case R.id.btn_general_login:
+
                 final String id = this.id.getText().toString();
                 String pw = this.pw.getText().toString();
                 if (id.length() == 0 || pw.length() == 0) {

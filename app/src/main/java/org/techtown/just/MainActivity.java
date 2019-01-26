@@ -158,14 +158,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 //                getLocalStore().setBooleanValue(LocalStore.my, isLoggedIn);
                 isLoggedIn = getLocalStore().getBooleanValue(LocalStore.my, isLoggedIn);
-                
+                String isLoggedIn = getLocalStore().getStringValue(LocalStore.IdToken);
                 //getLocalStore().setBooleanValue(LocalStore.my, id);
-                if (isLoggedIn == true) {
+                if (!isLoggedIn.isEmpty()) {
                     //checkTokenIsValid();
-                } else {
-                    intent = new Intent(this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent = new Intent(this, MyPageActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
+                } else {
+//                    intent = new Intent(this, LoginActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
                 }
                 break;
 

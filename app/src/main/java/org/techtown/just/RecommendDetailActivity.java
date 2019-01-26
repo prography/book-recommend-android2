@@ -1,8 +1,11 @@
 package org.techtown.just;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,6 +54,9 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
     private RecyclerViewAdapter adapter;
     TagNames tagNames;
 
+    private Handler mHandler;
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +73,36 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
         setRecyclerView();
         load_RecommendBooks(tagsStr,1);
 
+        mHandler = new Handler();
+        mProgressDialog = new ProgressDialog(RecommendDetailActivity.this);
+
         btnMy.setOnClickListener(this);
         btnBack.setOnClickListener(this);
         btnSearch.setOnClickListener(this);
 
     }
+    private class checkInternet extends AsyncTask<Void,Void,Void>{
 
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            mProgressDialog.setMessage("잠시만 기다려주세요");
+            mProgressDialog.show();
+        }
+        @Override
+
+        protected void onPostExecute(Void result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            mProgressDialog.dismiss();
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
+    }
     private String getTagNames() {
         String s = "";
         for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
@@ -121,7 +151,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
                     recyclerView.setAdapter(adapter);
 
                     //
-/*                    adapter.setBookListListener(new RecyclerViewAdapter.BookListListener() {
+        /*            adapter.setBookListListener(new RecyclerViewAdapter.BookListListener() {
                         @Override
                         public void saveFlag(final int position, final BookInfo bookInfo, final int like, final int read) {
 
@@ -149,11 +179,11 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
                     });
 
                     for (BookInfo info : books){
-                        loadBookFlag(info);
+                        //loadBookFlag(info);
                     }
 
-*/
 
+*/
                 } else {
                     Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -169,7 +199,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
     Call<List<BookInfo>> bookInfoWithIsbn;
     BookInfo bookInfo;
 
-/*
+///*
     private void loadBookFlag(final BookInfo bookInfo){
 
         String userId = getLocalStore().getStringValue(LocalStore.UserId);
@@ -205,7 +235,8 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
 
 
     }
-*/
+//*/
+
 
 
     @Override
