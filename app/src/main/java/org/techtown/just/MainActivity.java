@@ -1,5 +1,6 @@
 package org.techtown.just;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,9 +13,6 @@ import android.widget.Toast;
 
 import com.facebook.AccessToken;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
@@ -35,6 +33,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @BindView(R.id.btn_my)
     ImageView btnMy;
+    @BindView(R.id.user_id)
+    TextView tv_userId;
     @BindView(R.id.text)
     TextView text;
     @BindView(R.id.button)
@@ -44,6 +44,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     FlowLayout flowLayout;
 
     TagNames tagNames;
+    @BindView(R.id.imageView)
+    ImageView imageView;
 
 
     @Override
@@ -56,6 +58,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //btnMy
         btnMy.setOnClickListener(this);
         button.setOnClickListener(this);
+        tv_userId.setOnClickListener(this);
+        imageView.setOnClickListener(this);
+
+
+        //userId 설정
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+        if (userId != null)
+            tv_userId.setText(userId + "님");
 
         //checkbox의 text <- tagNames의 text 대입
         tagNames = new TagNames();
@@ -156,14 +166,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                    startActivity(intent);
 //                }
 //                break;
+            case R.id.user_id:
             case R.id.btn_my:
                 //login 되어있으면 my, 안되어있으면 login
                 // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
-                String userId =  getLocalStore().getStringValue(LocalStore.UserId);
-                if(userId != null)
-                    intent = new Intent(this,MyPageActivity.class);
+                String userId = getLocalStore().getStringValue(LocalStore.UserId);
+                if (userId != null)
+                    intent = new Intent(this, MyPageActivity.class);
                 else
-                    intent = new Intent(this,LoginActivity.class);
+                    intent = new Intent(this, LoginActivity.class);
 
                 intent.putExtra("tagNames", tagNames);
 
@@ -184,6 +195,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.imageView:
+                intent = new Intent(this, TeamIntroduceActivity.class);
+                startActivity(intent);
+                break;
+
         }
     }
 

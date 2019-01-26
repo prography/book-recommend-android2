@@ -19,10 +19,9 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <activity android:name=".MainActivity"
-            android:windowSoftInputMode="stateAlwaysHidden">
-
-        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity android:name=".RecommendDetailActivity" />
         <activity android:name=".BookDetailActivity" />
         <activity android:name=".LoginActivity">
@@ -31,7 +30,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".MyPageActivity" />
         <activity android:name=".SearchActivity" />
@@ -58,9 +56,10 @@
         <activity android:name=".PostDetailActivity" />
         <activity android:name=".PostsActivity" />
         <activity android:name=".TagsActivity" />
-        <!--<activity android:name=".Login2Activity" />-->
+        <!-- <activity android:name=".Login2Activity" /> -->
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".Register2Activity"></activity>
+        <activity android:name=".Register2Activity" />
+        <activity android:name=".TeamIntroduceActivity"></activity>
     </application>
 
 </manifest>

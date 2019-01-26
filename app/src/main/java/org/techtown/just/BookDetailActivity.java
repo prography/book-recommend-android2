@@ -46,6 +46,8 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
     @BindView(R.id.read_btn)
     ImageView BOOK_READ;
 
+    List<BookInfo> books;
+
     @BindView(R.id.flowLayout)
     FlowLayout flowLayout;
 
@@ -98,7 +100,7 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
         bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
-                List<BookInfo> books = response.body();
+                books = response.body();
                 //thumbnail 설정
                 setThumbnail(BOOK_IMG, books.get(0).getThumbnail());
                 if(like==1){
@@ -220,12 +222,12 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
      
             case R.id.like_btn:
                 if(BOOK_LIKE.isSelected()==true) { //좋아요 취소
-                    Toast.makeText(this, "\"" + BOOK_TITLE.toString() + "\"" + " 좋아요까지는...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "\"" + books.get(0).getBook_name() + "\"" + " 좋아요까지는...", Toast.LENGTH_SHORT).show();
                     BOOK_LIKE.setSelected(false);
                     BOOK_LIKE.setImageResource(R.drawable.ic_like_empty);
                 }
                 else { //좋아요
-                    Toast.makeText(this, "\"" + BOOK_TITLE.toString() + "\"" + " 좋다!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "\"" + books.get(0).getBook_name().toString() + "\"" + " 좋다!", Toast.LENGTH_SHORT).show();
                     BOOK_LIKE.setSelected(true);
                     BOOK_LIKE.setImageResource(R.drawable.ic_like_full);
                 }
@@ -233,12 +235,12 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.read_btn:
                 if(BOOK_READ.isSelected()==true) { //읽었어요 취소
-                    Toast.makeText(this, "아맞다 \"" + BOOK_TITLE.toString() + "\"" + "안읽었지...ㅎ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "아맞다 \"" + books.get(0).getBook_name() + "\"" + "안읽었지...ㅎ", Toast.LENGTH_SHORT).show();
                     BOOK_READ.setSelected(false);
                     BOOK_READ.setImageResource(R.drawable.ic_check);
                 }
                 else { //좋아요
-                    Toast.makeText(this, "\"" + BOOK_TITLE.toString() + "\"" + "을(를) 읽었다!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "\"" + books.get(0).getBook_name() + "\"" + "을(를) 읽었다!", Toast.LENGTH_SHORT).show();
                     BOOK_READ.setSelected(true);
                     BOOK_READ.setImageResource(R.drawable.ic_checked);
                 }
