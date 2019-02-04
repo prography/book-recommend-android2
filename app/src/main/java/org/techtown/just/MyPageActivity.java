@@ -82,6 +82,7 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
 
     TagNames tagNames;
 
+    String mySelectedTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,14 +292,24 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
         call.enqueue(new Callback<List<UserSelectedTags>>() {
             @Override
             public void onResponse(Call<List<UserSelectedTags>> call, Response<List<UserSelectedTags>> response) {
-                List<UserSelectedTags> userSelectedTags = response.body();
-                String s = userSelectedTags.get(0).getTags();
-                if (response.isSuccessful()) {
-                    setFlowLayoutWithTag(s);
-                    Toast.makeText(MyPageActivity.this, s, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MyPageActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+
+                try {
+                    if (response.body() != null && response.isSuccessful() == true) {
+                        List<UserSelectedTags> userSelectedTags = response.body();
+                        String s = userSelectedTags.get(0).getTags();
+
+                        setFlowLayoutWithTag(s);
+                        Toast.makeText(MyPageActivity.this, s, Toast.LENGTH_SHORT).show();
+
+                    }
+                    else {
+                        Toast.makeText(MyPageActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (IndexOutOfBoundsException e) {
+
                 }
+
+
             }
 
             @Override

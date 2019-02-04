@@ -111,24 +111,23 @@ public interface BookApiService {
 //    나. /status/tag/:tag/:user_id : 유저가 고른 태그 저장
 //    post
     @FormUrlEncoded
-    @POST("status/tag/{tags}/{user_id}/")
+    @POST("user/status/tag/{tags}/{user_id}/")
     Call<ResponseBody> setUserSelectedTags(@Path("tags") String tags,
-                                           @Path("user_id") String user_id,
-                                           @Field("accessToken") String accessToken,
-                                           @Field("idToken") String idToken,
-                                           @Field("refreshToken") String refreshToken);
+                                           @Field("user_id") String user_id,
+                                           @Header("accessToken") String accessToken,
+                                           @Header("idToken") String idToken,
+                                           @Header("refreshToken") String refreshToken);
 
 //    다. /status/tag/:tag/:user_id : 유저가 고른 태그 추가
 //    put
 
 //    라. /delete/tag/:user_id : 유저가 고른 태그 삭제
 //    delete
-    @FormUrlEncoded
-    @DELETE("delete/tag/{user_id}/")
+    @DELETE("user/delete/tag/{user_id}/")
     Call<ResponseBody> deleteUserSelectedTags(@Path("user_id") String user_id,
-                                           @Field("accessToken") String accessToken,
-                                           @Field("idToken") String idToken,
-                                           @Field("refreshToken") String refreshToken);
+                                           @Header("accessToken") String accessToken,
+                                           @Header("idToken") String idToken,
+                                           @Header("refreshToken") String refreshToken);
 
 //    마. /status/book/:isbn/:user_id : 유저가 ISBN값의 책과 관련된 flag값들(읽었어요/좋아요) 출력
 //    get
