@@ -195,11 +195,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.imageView:
-                intent = new Intent(this, TeamIntroduceActivity.class);
-                startActivity(intent);
-                break;
-
         }
     }
 
