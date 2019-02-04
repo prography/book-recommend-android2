@@ -183,9 +183,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
             case R.id.button:
                 //true인 애들만 추가,,, check1 check3만일 경우 0, 2
-                String s = "";
                 intent = new Intent(this, RecommendDetailActivity.class);
-
                 tagNames.updateSelectedTags(flowLayout.getCheckedTagValues());
 
                 intent.putExtra("tagNames", tagNames);

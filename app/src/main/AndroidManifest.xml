@@ -21,7 +21,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".RecommendDetailActivity" />
         <activity android:name=".BookDetailActivity" />
         <activity android:name=".LoginActivity">
@@ -59,6 +59,7 @@
         <!-- <activity android:name=".Login2Activity" /> -->
         <activity android:name=".RegisterActivity" />
         <activity android:name=".Register2Activity" />
+        <activity android:name=".SetMyTagsActivity"></activity>
     </application>
 
 </manifest>
