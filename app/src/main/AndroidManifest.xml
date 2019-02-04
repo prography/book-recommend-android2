@@ -59,7 +59,6 @@
         <!-- <activity android:name=".Login2Activity" /> -->
         <activity android:name=".RegisterActivity" />
         <activity android:name=".Register2Activity" />
-        <activity android:name=".TeamIntroduceActivity"></activity>
     </application>
 
 </manifest>
