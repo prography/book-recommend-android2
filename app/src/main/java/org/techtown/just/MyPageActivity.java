@@ -229,9 +229,13 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
 
     private void loadReadBooks() {
 
-        //userId = getLocalStore().getStringValue(LocalStore.UserId);
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
+
         //user_id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserRead(userId);
+        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserRead(userId, accessToken, idToken, refreshToken);
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
@@ -257,9 +261,12 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
 
     private void loadInterestBook() {
 
-        userId = getLocalStore().getStringValue(LocalStore.UserId);
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
 
-        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserInterested(userId);
+        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserInterested(userId, accessToken, idToken, refreshToken);
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override
             public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {

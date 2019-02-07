@@ -64,7 +64,11 @@ public class SetMyTagsActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void setAllTagsToFlowLayout() {
-        Call<List<Tag>> list = getNetworkManager().getBookApi().getTags();
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
+
+        Call<List<Tag>> list = getNetworkManager().getBookApi().getTags(accessToken, idToken, refreshToken);
         list.enqueue(new Callback<List<Tag>>() {
             @Override
             public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {

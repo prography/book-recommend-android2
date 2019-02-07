@@ -55,6 +55,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
         //btnMy
         btnMy.setOnClickListener(this);
         button.setOnClickListener(this);
@@ -70,8 +71,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //checkbox의 text <- tagNames의 text 대입
         tagNames = new TagNames();
 
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
+
         //tagNames 가져오기
-        Call<List<Tag>> list = getNetworkManager().getBookApi().getTags();
+        Call<List<Tag>> list = getNetworkManager().getBookApi().getTags(accessToken, idToken, refreshToken);
         list.enqueue(new Callback<List<Tag>>() {
             @Override
             public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
@@ -94,8 +99,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //         session.open(AuthType.KAKAO_LOGIN_ALL,MainActivity.this);
 
         //access token 유효성 확인 - 최초 1번
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        isLoggedIn = accessToken != null && !accessToken.isExpired();
+        AccessToken at = AccessToken.getCurrentAccessToken();
+        isLoggedIn = at != null && !at.isExpired();
 /*
         //직접 코드에서 해시키 생성.
         try {

@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.techtown.just.base.BaseApplication;
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.Status;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
 
@@ -23,6 +25,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static org.techtown.just.base.BaseApplication.getLocalStore;
+import static org.techtown.just.base.BaseApplication.getNetworkManager;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
@@ -86,6 +96,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     Bitmap bitmap;
 
+    //서버에 올리기 위한 like, read flag 초기 설정
+    int like = 0, read = 0;
+
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
 
@@ -97,23 +110,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         String s = getTagNames(bookInfoList.get(position).getTags(), tagNames);
         viewHolder.ITEM_TAG.setText(s);
         setImageSrc(viewHolder.ITEM_IMG, position);
-//1.25 am 05:18
 
-        // 값 설정 ( set )
-        int like= 0;//bookInfoList.get(position).getFlag().getBe_interested();
-        int read= 0;//bookInfoList.get(position).getFlag().getHad_read();
+        setBookFlags(viewHolder, position);
 
-        if(like==1)
-            viewHolder.ITEM_LIKE.setSelected(true);
-        else
-            viewHolder.ITEM_LIKE.setSelected(false);
-
-        if(read==1)
-            viewHolder.ITEM_LIKE.setSelected(true);
-        else
-            viewHolder.ITEM_LIKE.setSelected(false);
-
-        //Here it is simply write onItemClick listener here
+        // like clicklistener
         viewHolder.ITEM_LIKE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,20 +121,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 if(viewHolder.ITEM_LIKE.isSelected()) {
                     //좋아요 취소
-                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + " 좋아요까지는...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + " 좋아요 취소", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_LIKE.setSelected(false);
                     viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_empty);
-                    //listener.saveFlag(position, bookInfoList.get(position), 0, bookInfoList.get(position).getFlag().getBe_interested());
+                    like = 0;
+
                 }else {
                     //좋아요
                     Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + " 좋다!", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_LIKE.setSelected(true);
                     viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_full);
-                    //listener.saveFlag(position, bookInfoList.get(position), 1, bookInfoList.get(position).getFlag().getBe_interested() );
+                    like = 1;
                 }
 
+                //read 가져오고 서버에 저장
+                if (viewHolder.ITEM_READ.isSelected() == true)
+                    read = 1;
+                else
+                    read = 0;
+
+                //서버에 저장
+                saveBookStatus(viewHolder, position, like, read);
             }
         });
+
+        // read clicklistener
         viewHolder.ITEM_READ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,17 +155,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Toast.makeText(context, "아맞다 \"" + bookInfoList.get(position).getBook_name() + "\"" + "안읽었지...ㅎ", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_READ.setSelected(false);
                     viewHolder.ITEM_READ.setImageResource(R.drawable.ic_check);
-                    //listener.saveFlag(position, bookInfoList.get(position), bookInfoList.get(position).getFlag().getBe_interested(), 0 );
+                    read = 0;
                 }else{
                     Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + "을(를) 읽었다!", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_READ.setSelected(true);
                     viewHolder.ITEM_READ.setImageResource(R.drawable.ic_checked);
+                    read = 1;
                 }
-                    //listener.saveFlag(position, bookInfoList.get(position), bookInfoList.get(position).getFlag().getBe_interested(),1);
+
+                //like 가져오고 서버에 저장
+                if (viewHolder.ITEM_LIKE.isSelected() == true)
+                    like = 1;
+                else
+                    like = 0;
+
+                //서버에 저장
+                saveBookStatus(viewHolder, position, like, read);
+
+
             }
         });
 
-                //Here it is simply write onItemClick listener here
+
+
+        //recyclerview item clicklistener
         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,29 +186,115 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 //like, read버튼 클릭시 이벤트 처리 here
 
-
                 Intent intent = new Intent(v.getContext(), BookDetailActivity.class);
                 //              intent.putExtra("bookInfo", (Parcelable) bookInfoList.get(position));
 
                 intent.putExtra("isbn", bookInfoList.get(position).getIsbn());
                 intent.putExtra("tagNames", tagNames);
 
-//                intent.putExtra("booklike",like);
-//                intent.putExtra("bookread",read);
-
-//                intent.putExtra("booklike",bookInfoList.get(position).getFlag().getBe_interested());
-//                intent.putExtra("bookread",bookInfoList.get(position).getFlag().getHad_read());
-
-//                intent.putExtra("book_thumbnail", bookInfoList.get(position).getThumbnail());
-//                intent.putExtra("book_name", bookInfoList.get(position).getBook_name());
-//                intent.putExtra("book_author", bookInfoList.get(position).getAuthor());
-//                intent.putExtra("book_content", bookInfoList.get(position).getContents());
-//                intent.putExtra("book_country", bookInfoList.get(position).getCountry());
-//                intent.putExtra("book_tags", bookInfoList.get(position).getAllTags());
-
                 mContext.startActivity(intent);
 
-                Toast.makeText(context, position + "번째 아이템 클릭", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, bookInfoList.get(position).getBook_name() + " 클릭", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void saveBookStatus(final ViewHolder viewHolder, final int position, int like, int read) {
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+
+        String isbn = bookInfoList.get(position).getIsbn();
+
+        Call<ResponseBody> call = getNetworkManager().getBookApi().putBookFlags(isbn, userId, like, read, accessToken, idToken, refreshToken);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    Toast.makeText(mContext, "put success", Toast.LENGTH_SHORT).show();
+                } catch (IndexOutOfBoundsException e) {
+                    Toast.makeText(mContext, "catch", Toast.LENGTH_SHORT).show();
+                }
+//                List<Status> status = response.body();
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setBookFlags(final ViewHolder viewHolder, final int position) {
+        //bookFlag 가져오기
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
+
+        final String isbn = bookInfoList.get(position).getIsbn();
+
+        Call<List<Status>> call = getNetworkManager().getBookApi().getBookFlags(isbn, userId, accessToken, idToken, refreshToken);
+        call.enqueue(new Callback<List<Status>>() {
+            @Override
+            public void onResponse(Call<List<Status>> call, Response<List<Status>> response) {
+                try {
+                    List<Status> status = response.body();
+
+                    int like = status.get(0).getBe_interested();
+                    if (like == 1) {
+                        viewHolder.ITEM_LIKE.setSelected(true);
+                        viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_full);
+                    }
+                    else {
+                        viewHolder.ITEM_LIKE.setSelected(false);
+                        viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_empty);
+                    }
+
+                    int read = status.get(0).getHad_read();
+                    if (read == 1) {
+                        viewHolder.ITEM_READ.setSelected(true);
+                        viewHolder.ITEM_READ.setImageResource(R.drawable.ic_checked);
+                    }
+                    else {
+                        viewHolder.ITEM_READ.setSelected(false);
+                        viewHolder.ITEM_READ.setImageResource(R.drawable.ic_check);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    //post안된경우 post로 0 0 설정해주면 됨~
+                    postBookFlags(isbn);
+                    setBookFlags(viewHolder, position);
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Status>> call, Throwable t) {
+                //Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void postBookFlags(String isbn) {
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
+
+        Call<ResponseBody> call = getNetworkManager().getBookApi().postBookFlags(isbn, userId, 0, 0, accessToken, idToken, refreshToken);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
             }
         });
     }

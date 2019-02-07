@@ -39,8 +39,6 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
 
     TagNames tagNames;
 
-    String userId ="1";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +73,15 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
     }
 
     private void loadReadBooks(String string){
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
 
-        //userId = getLocalStore().getStringValue(LocalStore.UserId);
         //id으로 책 정보 가져오기
         Call<List<BookInfo>> bookInfo=null;
         if(string == null) {
-            bookInfo = getNetworkManager().getBookApi().getListUserRead(userId);
+            bookInfo = getNetworkManager().getBookApi().getListUserRead(userId, accessToken, idToken, refreshToken);
         }else if(string != null){
             bookInfo = getNetworkManager().getBookApi().getListWithSearch(string);
         }bookInfo.enqueue(new Callback<List<BookInfo>>() {
