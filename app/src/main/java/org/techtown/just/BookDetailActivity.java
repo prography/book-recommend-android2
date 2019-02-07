@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.Status;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
 import org.techtown.just.network.NetworkManager;
@@ -25,9 +26,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static org.techtown.just.base.BaseApplication.getLocalStore;
+import static org.techtown.just.base.BaseApplication.getNetworkManager;
 
 public class BookDetailActivity extends BaseActivity implements View.OnClickListener {
 
@@ -51,7 +56,9 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
     @BindView(R.id.flowLayout)
     FlowLayout flowLayout;
 
-    int like , read;
+    int like, read;
+
+    String isbn;
 
     TagNames tagNames;
     @BindView(R.id.btn_back)
@@ -67,24 +74,92 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
-
         ButterKnife.bind(this);
 
+        //검색창 보이지 않도록
         btnSearch.setVisibility(View.INVISIBLE);
         searchStr.setVisibility(View.INVISIBLE);
 
         btnMy.setOnClickListener(this);
         btnBack.setOnClickListener(this);
 
-
-
         get_BOOKINFO();
+        setBookFlags();
 
         BOOK_LIKE.setOnClickListener(this);
         BOOK_READ.setOnClickListener(this);
 
 
-    }//oncreate
+    }//end of oncreate
+
+    private void postBookFlags(String isbn) {
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
+
+        Call<ResponseBody> call = getNetworkManager().getBookApi().postBookFlags(isbn, userId, 0, 0, accessToken, idToken, refreshToken);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void setBookFlags() {
+        //bookFlag 가져오기
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
+
+        Call<List<Status>> call = getNetworkManager().getBookApi().getBookFlags(isbn, userId, accessToken, idToken, refreshToken);
+        call.enqueue(new Callback<List<Status>>() {
+            @Override
+            public void onResponse(Call<List<Status>> call, Response<List<Status>> response) {
+                try {
+                    List<Status> status = response.body();
+
+                    int like = status.get(0).getBe_interested();
+                    if (like == 1) {
+                        BOOK_LIKE.setSelected(true);
+                        BOOK_LIKE.setImageResource(R.drawable.ic_like_full);
+                    }
+                    else {
+                        BOOK_LIKE.setSelected(false);
+                        BOOK_LIKE.setImageResource(R.drawable.ic_like_empty);
+                    }
+
+                    int read = status.get(0).getHad_read();
+                    if (read == 1) {
+                        BOOK_READ.setSelected(true);
+                        BOOK_READ.setImageResource(R.drawable.ic_checked);
+                    }
+                    else {
+                        BOOK_READ.setSelected(false);
+                        BOOK_READ.setImageResource(R.drawable.ic_check);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    //post안된경우 post로 0 0 설정해주면 됨~
+                    postBookFlags(isbn);
+                    setBookFlags();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Status>> call, Throwable t) {
+                //Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void get_BOOKINFO() {
         Intent intent = getIntent();
@@ -92,7 +167,7 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
 //        like = intent.getIntExtra("booklike",0);
 //        read = intent.getIntExtra("bookread",0);
 
-        String isbn = intent.getStringExtra("isbn");
+        isbn = intent.getStringExtra("isbn");
         tagNames = (TagNames) intent.getSerializableExtra("tagNames");
 
 
@@ -221,30 +296,81 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
 //                break;
      
             case R.id.like_btn:
-                if(BOOK_LIKE.isSelected()==true) { //좋아요 취소
-                    Toast.makeText(this, "\"" + books.get(0).getBook_name() + "\"" + " 좋아요까지는...", Toast.LENGTH_SHORT).show();
+                if(BOOK_LIKE.isSelected()) {
+                    //좋아요 취소
+                    Toast.makeText(this, "\"" + BOOK_TITLE + "\"" + " 좋아요 취소", Toast.LENGTH_SHORT).show();
                     BOOK_LIKE.setSelected(false);
                     BOOK_LIKE.setImageResource(R.drawable.ic_like_empty);
-                }
-                else { //좋아요
-                    Toast.makeText(this, "\"" + books.get(0).getBook_name().toString() + "\"" + " 좋다!", Toast.LENGTH_SHORT).show();
+                    like = 0;
+
+                }else {
+                    //좋아요
+                    Toast.makeText(this, "\"" + BOOK_TITLE + "\"" + " 좋다!", Toast.LENGTH_SHORT).show();
                     BOOK_LIKE.setSelected(true);
                     BOOK_LIKE.setImageResource(R.drawable.ic_like_full);
+                    like = 1;
                 }
+
+                //read 가져오고 서버에 저장
+                if (BOOK_READ.isSelected() == true)
+                    read = 1;
+                else
+                    read = 0;
+
+                //서버에 저장
+                saveBookStatus();
 
                 break;
             case R.id.read_btn:
-                if(BOOK_READ.isSelected()==true) { //읽었어요 취소
-                    Toast.makeText(this, "아맞다 \"" + books.get(0).getBook_name() + "\"" + "안읽었지...ㅎ", Toast.LENGTH_SHORT).show();
+                if(BOOK_READ.isSelected()) {
+                    //좋아요 취소
+                    Toast.makeText(this, "\"" + BOOK_TITLE + "\"" + "  안읽었음", Toast.LENGTH_SHORT).show();
                     BOOK_READ.setSelected(false);
                     BOOK_READ.setImageResource(R.drawable.ic_check);
-                }
-                else { //좋아요
-                    Toast.makeText(this, "\"" + books.get(0).getBook_name() + "\"" + "을(를) 읽었다!", Toast.LENGTH_SHORT).show();
+                    read = 0;
+
+                }else {
+                    //좋아요
+                    Toast.makeText(this, "\"" + BOOK_TITLE + "\"" + " 읽었다!", Toast.LENGTH_SHORT).show();
                     BOOK_READ.setSelected(true);
                     BOOK_READ.setImageResource(R.drawable.ic_checked);
+                    read = 1;
                 }
+
+                //read 가져오고 서버에 저장
+                if (BOOK_LIKE.isSelected() == true)
+                    like = 1;
+                else
+                    like = 0;
+
+                //서버에 저장
+                saveBookStatus();
+
                 break;
         }
+    }
+
+    private void saveBookStatus() {
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+
+        Call<ResponseBody> call = getNetworkManager().getBookApi().putBookFlags(isbn, userId, like, read, accessToken, idToken, refreshToken);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+
+                } catch (IndexOutOfBoundsException e) {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

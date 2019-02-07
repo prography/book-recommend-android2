@@ -74,11 +74,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         btnGeneralLogin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
 
-        String userId =  getLocalStore().getStringValue(LocalStore.UserId);
-        if(userId != null) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
+//        String userId =  getLocalStore().getStringValue(LocalStore.UserId);
+//        if(userId != null) {
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            startActivity(intent);
+//        }
 
             btn_facebook_login = (LoginButton) findViewById(R.id.btn_facebook_login);
         btn_kakao_login = (com.kakao.usermgmt.LoginButton) findViewById(R.id.btn_kakao_login);

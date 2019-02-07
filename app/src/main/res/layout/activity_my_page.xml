@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,19 +7,19 @@
     tools:context=".MyPageActivity">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/btn_back"
             android:layout_width="@dimen/icon_size_with_padding"
             android:layout_height="@dimen/icon_size_with_padding"
-            android:layout_marginLeft="@dimen/side_margin"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             android:padding="@dimen/icon_padding"
             android:src="@drawable/ic_back"
             android:tint="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,23 +27,15 @@
         <TextView
             android:id="@+id/textview"
             style="@style/TextTheme"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginLeft="@dimen/side_margin_small"
-            android:layout_marginRight="@dimen/side_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             android:gravity="center_vertical"
             android:text="MY PAGE"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_back"
             app:layout_constraintTop_toTopOf="parent" />
-
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
 
         <com.facebook.login.widget.ProfilePictureView
@@ -51,26 +43,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+
             android:padding="0dp"
             android:src="@drawable/ic_launcher_background"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-
-            />
+            app:layout_constraintTop_toBottomOf="@+id/btn_back" />
 
         <TextView
             android:id="@+id/profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20sp"
-            android:layout_marginTop="60sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"
             android:text="facebook_name"
             android:textSize="30sp"
-            app:layout_constraintLeft_toRightOf="@id/profile_img"
-            app:layout_constraintTop_toBottomOf="@id/textView" />
+            app:layout_constraintStart_toEndOf="@+id/profile_img"
+            app:layout_constraintTop_toBottomOf="@+id/textview"
+            tools:ignore="MissingConstraints" />
 
         <Button
             android:id="@+id/mod_profile"
@@ -84,53 +77,99 @@
             app:layout_constraintLeft_toRightOf="@id/profile_img"
             app:layout_constraintTop_toBottomOf="@+id/profile_name" />
 
-        <View
+        <TextView
+            android:id="@+id/boundary"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="16dp"
             android:background="#dadada"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_img" />
+
+
+        <TextView
+            android:id="@+id/mytags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="나의 태그!"
+            android:textSize="25dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/boundary" />
+
+        <Button
+            android:id="@+id/btn_setMyTags"
+            android:layout_width="58dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="12dp"
+            android:background="#45e2e2e2"
+            android:text="설정"
+            app:layout_constraintStart_toEndOf="@+id/mytags"
+            app:layout_constraintTop_toBottomOf="@+id/boundary" />
+
+
+        <org.techtown.just.FlowLayout
+            android:id="@+id/flowLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mytags">
+
+        </org.techtown.just.FlowLayout>
 
         <TextView
             android:id="@+id/readbook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             android:text="읽은 책"
             android:textSize="25dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_img" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flowLayout" />
 
 
         <ImageView
+            android:id="@+id/imageView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_bookmark"
             android:layout_marginLeft="15dp"
             android:layout_marginBottom="5dp"
-            app:layout_constraintLeft_toRightOf="@+id/readbook"
-            app:layout_constraintBottom_toBottomOf="@+id/readbook" />
+            android:src="@drawable/ic_bookmark"
+            app:layout_constraintBottom_toBottomOf="@+id/readbook"
+            app:layout_constraintLeft_toRightOf="@+id/readbook" />
 
         <Button
             android:id="@+id/more_read"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="148dp"
+            android:layout_marginLeft="148dp"
             android:background="#00ff0000"
-            android:layout_marginTop="5dp"
             android:text="더보기"
-            android:textSize="7dp"
             android:textColor="#bebebe"
-            app:layout_constraintBottom_toBottomOf="@+id/readbook"
-            app:layout_constraintRight_toRightOf="parent" />
+            android:textSize="7dp"
+            app:layout_constraintStart_toEndOf="@+id/imageView4"
+            app:layout_constraintTop_toBottomOf="@+id/flowLayout" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rc_readbook"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_height="141dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             android:paddingTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/readbook">
 
         </android.support.v7.widget.RecyclerView>
@@ -140,43 +179,52 @@
             android:id="@+id/interest_book"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="40dp"
             android:text="관심 책"
             android:textSize="25dp"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rc_readbook" />
 
         <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_booklike"
             android:layout_marginLeft="15dp"
             android:layout_marginBottom="5dp"
-            app:layout_constraintLeft_toRightOf="@+id/interest_book"
-            app:layout_constraintBottom_toBottomOf="@+id/interest_book" />
+            android:src="@drawable/ic_booklike"
+            app:layout_constraintBottom_toBottomOf="@+id/interest_book"
+            app:layout_constraintLeft_toRightOf="@+id/interest_book" />
 
         <Button
             android:id="@+id/more_interest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="148dp"
+            android:layout_marginLeft="148dp"
+            android:layout_marginTop="32dp"
             android:background="#00ff0000"
             android:text="더보기"
-            android:textSize="7dp"
             android:textColor="#bebebe"
-            android:layout_marginTop="5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/interest_book"
-            app:layout_constraintRight_toRightOf="parent" />
+            android:textSize="7dp"
+            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/rc_readbook" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rc_intbook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/interest_book">
 
         </android.support.v7.widget.RecyclerView>
 
+
     </android.support.constraint.ConstraintLayout>
-</android.support.constraint.ConstraintLayout>
+
+
+</ScrollView>

@@ -75,9 +75,13 @@ public class FavoriteBookActivity extends BaseActivity implements MyAdapter.MyRe
     }
 
     private void loadIntBooks() {
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
 
         //id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserInterested("1");
+        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserInterested(userId, accessToken, idToken, refreshToken);
 
         bookInfo.enqueue(new Callback<List<BookInfo>>() {
             @Override

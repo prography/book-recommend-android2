@@ -469,6 +469,12 @@ public class FlowLayout extends ViewGroup {
         }
     }
 
+    public void setCheckedOnlyOne(Boolean bl, int i) {
+        View child = this.getChildAt(i);
+        CheckBox checkbox = child.findViewById(R.id.checkbox);
+        checkbox.setChecked(bl);
+    }
+
     public void setCheckable(Boolean bl) {
         for (int i = 0; i < getChildCount(); i++) {
             View child = this.getChildAt(i);
@@ -488,7 +494,18 @@ public class FlowLayout extends ViewGroup {
             }
         }
         return values;
+    }
 
+    public String getCheckedValuesInString() {
+        String values = "";
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = this.getChildAt(i);
+            CheckBox checkbox = child.findViewById(R.id.checkbox);
+            if (checkbox != null && checkbox.isChecked()) {
+                values += ((Tag) checkbox.getTag()).getTag_id() + ";";
+            }
+        }
+        return values;
     }
 
 }
