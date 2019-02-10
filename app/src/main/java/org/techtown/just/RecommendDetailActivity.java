@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,16 +17,22 @@ import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.BookFlag;
 import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.BookInfoWithBool;
 import org.techtown.just.model.TagNames;
 import org.techtown.just.network.NetworkManager;
 
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -114,111 +121,87 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
 
 
     private void load_RecommendBooks(String name, int mode){
-
-        Call<List<BookInfo>> bookInfoCall=null;
-        //id으로 책 정보 가져오기
         if(mode ==1){//tag
-            bookInfoCall = getNetworkManager().getBookApi().getListWithTag(name);
+            Call<List<BookInfo>> call = getNetworkManager().getBookApi().getListWithTag(name);
+            call.enqueue(new Callback<List<BookInfo>>() {
+                @Override
+                public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
+                    List<BookInfo> books = response.body();
+                    if (response.isSuccessful()) {
+                        adapter = new RecyclerViewAdapter(getApplicationContext(), books, tagNames);
+                        recyclerView.setAdapter(adapter);
+
+                    } else {
+                        Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+                    Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         else if(mode ==2){//search
 //            textView.setText(" ");
-            bookInfoCall = getNetworkManager().getBookApi().getListWithSearch(name);
-        }
-        bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
-            @Override
-            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
-                List<BookInfo> books = response.body();
-                if (response.isSuccessful()) {
-                    adapter = new RecyclerViewAdapter(getApplicationContext(), books, tagNames);
-                    recyclerView.setAdapter(adapter);
+            Toast.makeText(RecommendDetailActivity.this, "진입", Toast.LENGTH_SHORT).show();
 
-                    //
-/*                    adapter.setBookListListener(new RecyclerViewAdapter.BookListListener() {
-                        @Override
-                        public void saveFlag(final int position, final BookInfo bookInfo, final int like, final int read) {
+            Call<ResponseBody> call = getNetworkManager().getBookApi().getListWithSearch(name);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Toast.makeText(RecommendDetailActivity.this, "response는 받음", Toast.LENGTH_SHORT).show();
 
-//                            String userId = getLocalStore().getStringValue(LocalStore.UserId);
-                            String userId="1";
-                            getNetworkManager().getBookApi().saveStatus(bookInfo.isbn, read, like, userId).enqueue(new Callback<JsonObject>() {
-                                @Override
-                                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                    if (response.isSuccessful()) {
-                                        BookFlag flag = bookInfo.flag;
-                                        flag.setBe_interested(like);
-                                        flag.setHad_read(read);
-                                        bookInfo.setFlag(flag);
-                                        adapter.updateBookInfo(position, bookInfo);
-                                    }
-                                }
+                    try {
+                        String result = response.body().string();
+                        Log.v("Test", result); //받아온 데이터
+                        Toast.makeText(RecommendDetailActivity.this, "첫 try 진입", Toast.LENGTH_SHORT).show();
+                        try {
+                            JSONArray jsonArray = new JSONArray(result);
+//                            JSONObject jsonObject = jsonArray.getJSONObject(0);
+                            Toast.makeText(RecommendDetailActivity.this, "두번째 try 진입", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(RecommendDetailActivity.this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
+//                            data.setPostId(jsonObject.getInt("postId"));
+//                            data.setId(jsonObject.getInt("id"));
+//                            data.setName(jsonObject.getString("name"));
+//                            data.setEmail(jsonObject.getString("email"));
+//                            data.setBody(jsonObject.getString("body"));
+//                            //dataArrayList.add(data);
+//                            text.setText(data.toString());
+//                            Log.v("Test", jsonObject.toString());
 
-                                @Override
-                                public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                                }
-                            });
-
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(RecommendDetailActivity.this, "안쪽 catch :(", Toast.LENGTH_SHORT).show();
                         }
-                    });
-
-                    for (BookInfo info : books){
-                        loadBookFlag(info);
+                    } catch (IOException e) {
+                        Toast.makeText(RecommendDetailActivity.this, "첫 catch :(", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
                     }
-
-*/
-
-                } else {
-                    Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+//                    List<BookInfoWithBool> bookInfoWithBool = response.body();
+//
+//                    Boolean bl = bookInfoWithBool.get(0).getBl();
+//                    List<BookInfo> bookInfoList = bookInfoWithBool.get(1).getBookInfoList();
+//
+//                    String s = "" + bl;
+//                    Toast.makeText(RecommendDetailActivity.this, s, Toast.LENGTH_SHORT).show();
+//
+//                    if (response.isSuccessful()) {
+//                        adapter = new RecyclerViewAdapter(getApplicationContext(), bookInfoList, tagNames);
+//                        recyclerView.setAdapter(adapter);
+//
+//                    } else {
+//                        Toast.makeText(RecommendDetailActivity.this, "a오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+//                    }
                 }
-            }
-            @Override
-            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
-                Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    Call<List<BookInfo>> bookInfoWithIsbn;
-    BookInfo bookInfo;
-
-/*
-    private void loadBookFlag(final BookInfo bookInfo){
-
-        String userId = getLocalStore().getStringValue(LocalStore.UserId);
-//        Call<List<BookFlag>> bookInfo = null;
-        getNetworkManager().getBookApi().getBookFlag(bookInfo.isbn, userId)
-                .enqueue(new Callback<JsonObject>() {
-
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        JsonObject bookFlags = response.body();
-                        int like = 1;
-                        int read = 0;
-                        if (response.isSuccessful() && bookFlags!=null) {
-                            JsonObject jsonObject = bookFlags.getAsJsonArray().get(0).getAsJsonObject();
-                            //TODO json parsing
-//                    int like = jsonObject.get("had_read").getAsInt();
-//                    int read = jsonObject.get("be_interested").getAsInt();
-                            BookFlag flag = new BookFlag(read, like);
-                            bookInfo.setFlag(flag);
-                            adapter.addBookInfo(bookInfo);
-                        }else {
-                            adapter.addBookInfo(bookInfo);
-                        }
-                    }
-
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                    }
-                });
-
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(RecommendDetailActivity.this, "b오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
 
     }
-*/
-
 
     @Override
     public void onClick(View view) {

@@ -73,36 +73,36 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
     }
 
     private void loadReadBooks(String string){
-        String userId = getLocalStore().getStringValue(LocalStore.UserId);
-        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
-        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
-        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
-
-        //id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo=null;
-        if(string == null) {
-            bookInfo = getNetworkManager().getBookApi().getListUserRead(userId, accessToken, idToken, refreshToken);
-        }else if(string != null){
-            bookInfo = getNetworkManager().getBookApi().getListWithSearch(string);
-        }bookInfo.enqueue(new Callback<List<BookInfo>>() {
-            @Override
-            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
-                List<BookInfo> books_1 = response.body();
-                if (response.isSuccessful()) {
-                    myAdapter2 = new MyAdapter(getApplicationContext(),books_1, tagNames);
-                    myAdapter2 .setOnClickListener(ReadBookActivity.this);
-                    mRecyclerView2.setAdapter(myAdapter2);
-
-                } else {
-                    Toast.makeText(ReadBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-            @Override
-            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
-                Toast.makeText(ReadBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        String userId = getLocalStore().getStringValue(LocalStore.UserId);
+//        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
+//        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
+//        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
+//
+//        //id으로 책 정보 가져오기
+//        Call<List<BookInfo>> bookInfo=null;
+//        if(string == null) {
+//            bookInfo = getNetworkManager().getBookApi().getListUserRead(userId, accessToken, idToken, refreshToken);
+//        }else if(string != null){
+//            bookInfo = getNetworkManager().getBookApi().getListWithSearch(string);
+//        }bookInfo.enqueue(new Callback<List<BookInfo>>() {
+//            @Override
+//            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
+//                List<BookInfo> books_1 = response.body();
+//                if (response.isSuccessful()) {
+//                    myAdapter2 = new MyAdapter(getApplicationContext(),books_1, tagNames);
+//                    myAdapter2 .setOnClickListener(ReadBookActivity.this);
+//                    mRecyclerView2.setAdapter(myAdapter2);
+//
+//                } else {
+//                    Toast.makeText(ReadBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            }
+//            @Override
+//            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+//                Toast.makeText(ReadBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 
