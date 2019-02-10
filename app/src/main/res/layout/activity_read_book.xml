@@ -31,6 +31,7 @@
             app:layoutManager="android.support.v7.widget.GridLayoutManager"
             app:layout_constraintTop_toBottomOf="@+id/tv"
             app:spanCount="3"
-            tools:layout_editor_absoluteX="16dp" />
+            tools:layout_editor_absoluteX="16dp"
+            tools:ignore="MissingConstraints" />
         <!--app:layout_constraintHorizontal_weight="1"-->
 </android.support.constraint.ConstraintLayout>

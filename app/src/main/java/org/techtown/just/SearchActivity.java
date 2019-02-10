@@ -102,32 +102,32 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     private void load_RecommendBooks(String name, int mode){
 
-        Call<List<BookInfo>> bookInfoCall=null;
-        //id으로 책 정보 가져오기
-        if(mode ==1){//tag
-            bookInfoCall = getNetworkManager().getBookApi().getListWithTag(name);
-        }
-        else if(mode ==2){//search
-            textView.setText(" ");
-            bookInfoCall = getNetworkManager().getBookApi().getListWithSearch(name);
-        }
-        bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
-            @Override
-            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
-                List<BookInfo> books = response.body();
-                if (response.isSuccessful()) {
-                    adapter = new RecyclerViewAdapter(getApplicationContext(), books, tagNames);
-                    recyclerView.setAdapter(adapter);
-
-                } else {
-                    Toast.makeText(SearchActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
-                Toast.makeText(SearchActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        Call<List<BookInfo>> bookInfoCall=null;
+//        //id으로 책 정보 가져오기
+//        if(mode ==1){//tag
+//            bookInfoCall = getNetworkManager().getBookApi().getListWithTag(name);
+//        }
+//        else if(mode ==2){//search
+//            textView.setText(" ");
+//            bookInfoCall = getNetworkManager().getBookApi().getListWithSearch(name);
+//        }
+//        bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
+//            @Override
+//            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
+//                List<BookInfo> books = response.body();
+//                if (response.isSuccessful()) {
+//                    adapter = new RecyclerViewAdapter(getApplicationContext(), books, tagNames);
+//                    recyclerView.setAdapter(adapter);
+//
+//                } else {
+//                    Toast.makeText(SearchActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+//                Toast.makeText(SearchActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.facebook.AccessToken;
 
 import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.BookInfoWithBool;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
 
@@ -54,7 +55,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
 
         //btnMy
         btnMy.setOnClickListener(this);
