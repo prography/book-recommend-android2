@@ -70,6 +70,8 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
     @BindView(R.id.searchStr)
     EditText searchStr;
 
+    String bookTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,6 +192,7 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
                     BOOK_READ.setSelected(false);
                 }
 
+                bookTitle = books.get(0).getBook_name();
                 BOOK_TITLE.setText(books.get(0).getBook_name());
                 BOOK_AUTHOR.setText(books.get(0).getAuthor());
                 BOOK_CONTENT.setText(books.get(0).getContents());
@@ -298,14 +301,14 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
             case R.id.like_btn:
                 if(BOOK_LIKE.isSelected()) {
                     //좋아요 취소
-                    Toast.makeText(this, "\"" + BOOK_TITLE + "\"" + " 좋아요 취소", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "\"" + bookTitle + "\"" + " 좋아요 취소", Toast.LENGTH_SHORT).show();
                     BOOK_LIKE.setSelected(false);
                     BOOK_LIKE.setImageResource(R.drawable.ic_like_empty);
                     like = 0;
 
                 }else {
                     //좋아요
-                    Toast.makeText(this, "\"" + BOOK_TITLE + "\"" + " 좋다!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "\"" + bookTitle + "\"" + " 좋다!", Toast.LENGTH_SHORT).show();
                     BOOK_LIKE.setSelected(true);
                     BOOK_LIKE.setImageResource(R.drawable.ic_like_full);
                     like = 1;
@@ -324,14 +327,14 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
             case R.id.read_btn:
                 if(BOOK_READ.isSelected()) {
                     //좋아요 취소
-                    Toast.makeText(this, "\"" + BOOK_TITLE + "\"" + "  안읽었음", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "\"" + bookTitle + "\"" + "  안읽었음", Toast.LENGTH_SHORT).show();
                     BOOK_READ.setSelected(false);
                     BOOK_READ.setImageResource(R.drawable.ic_check);
                     read = 0;
 
                 }else {
                     //좋아요
-                    Toast.makeText(this, "\"" + BOOK_TITLE + "\"" + " 읽었다!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "\"" + bookTitle + "\"" + " 읽었다!", Toast.LENGTH_SHORT).show();
                     BOOK_READ.setSelected(true);
                     BOOK_READ.setImageResource(R.drawable.ic_checked);
                     read = 1;

@@ -3,6 +3,7 @@ package org.techtown.just;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,6 +64,9 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend_detail);
         ButterKnife.bind(this);
+
+        //데이터 로딩화면
+        startProgress();
 
         Intent intent = getIntent();
 
@@ -231,5 +235,17 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
         }
     }
 
+    private void startProgress() {
+
+        progressON("Loading...");
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressOFF();
+            }
+        }, 3500);
+
+    }
 
 }

@@ -15,4 +15,16 @@ public class BaseActivity extends AppCompatActivity {
         return ((BaseApplication) getApplication()).getNetworkManager();
     }
 
+    public void progressON() {
+        BaseApplication.getBaseApplication().progressON(this, null);
+    }
+
+    public void progressON(String message) {
+        BaseApplication.getBaseApplication().progressON(this, message);
+    }
+
+    public void progressOFF() {
+        BaseApplication.getBaseApplication().progressOFF();
+    }
+
 }
