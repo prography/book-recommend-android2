@@ -77,7 +77,7 @@ public interface BookApiService {
 //            get
 //return : [{"isbn":"9788937460753","tags":";4;7;6;29;23;30;20;","book_name":"위대한 개츠비","author":"스콧 피츠제럴드","country":"영미소설","contents":"20세기의 가장 뛰어난 미국 소설로 꼽히는 스콧 피츠제럴드의 작품 『위대한 개츠비』. 1991년 영국 케임브리지 대학교 출판부에서 출간한 ‘결정판’ 텍스트를 바탕으로 완역한 책이다. ‘재즈의 시대’였던 1920년대 미국을 배경으로 무너져 가는 아메리칸 드림을 예리한 필치로 그려냈다. 이 작품은 2013년 레오나르도 디카프리오 주연의 영화로 개봉되며 다시 한 번 뜨거운 관심을 받고 있는데, 3D로 제작된 영화는 제66회 칸 국제영화제 개막작으로 선정되기","thumbnail":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540841%3Ftimestamp%3D20190123173033"}]
     @GET("books/listwithsearch/{search}/")
-    Call<ResponseBody> getListWithSearch(@Path("search") String search);
+    Call<BookInfoWithBool> getListWithSearch(@Path("search") String search);
 
 //    다. /read/:user_id : 사용자가 읽은 책 리스트
 //    get

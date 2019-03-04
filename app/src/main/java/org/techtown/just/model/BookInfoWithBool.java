@@ -4,22 +4,22 @@ import java.io.Serializable;
 import java.util.List;
 
 public class BookInfoWithBool implements Serializable {
-    List<BookInfo> bookInfoList;
-    Boolean bl;
+    Boolean isExist;
+    List<BookInfo> data;
 
-    public Boolean getBl() {
-        return bl;
+    public Boolean getIsExist() {
+        return isExist;
     }
 
-    public void setBl(Boolean bl) {
-        this.bl = bl;
+    public void setIsExist(Boolean isExist) {
+        this.isExist = isExist;
     }
 
-    public List<BookInfo> getBookInfoList() {
-        return bookInfoList;
+    public List<BookInfo> getData() {
+        return data;
     }
 
-    public void setBookInfoList(List<BookInfo> bookInfoList) {
-        this.bookInfoList = bookInfoList;
+    public void setData(List<BookInfo> data) {
+        this.data = data;
     }
 }

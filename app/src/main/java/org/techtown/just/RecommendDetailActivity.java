@@ -1,44 +1,27 @@
 package org.techtown.just;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.techtown.just.base.BaseActivity;
-import org.techtown.just.model.BookFlag;
 import org.techtown.just.model.BookInfo;
 import org.techtown.just.model.BookInfoWithBool;
 import org.techtown.just.model.TagNames;
-import org.techtown.just.network.NetworkManager;
 
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static org.techtown.just.base.BaseApplication.getLocalStore;
 
 public class RecommendDetailActivity extends BaseActivity implements View.OnClickListener {
 
@@ -146,62 +129,82 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
             });
         }
         else if(mode ==2){//search
-//            textView.setText(" ");
-            Toast.makeText(RecommendDetailActivity.this, "진입", Toast.LENGTH_SHORT).show();
-
-            Call<ResponseBody> call = getNetworkManager().getBookApi().getListWithSearch(name);
-            call.enqueue(new Callback<ResponseBody>() {
+            Call<BookInfoWithBool> call = getNetworkManager().getBookApi().getListWithSearch(name);
+            call.enqueue(new Callback<BookInfoWithBool>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    Toast.makeText(RecommendDetailActivity.this, "response는 받음", Toast.LENGTH_SHORT).show();
-
-                    try {
-                        String result = response.body().string();
-                        Log.v("Test", result); //받아온 데이터
-                        Toast.makeText(RecommendDetailActivity.this, "첫 try 진입", Toast.LENGTH_SHORT).show();
-                        try {
-                            JSONArray jsonArray = new JSONArray(result);
-//                            JSONObject jsonObject = jsonArray.getJSONObject(0);
-                            Toast.makeText(RecommendDetailActivity.this, "두번째 try 진입", Toast.LENGTH_SHORT).show();
-//                            Toast.makeText(RecommendDetailActivity.this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
-//                            data.setPostId(jsonObject.getInt("postId"));
-//                            data.setId(jsonObject.getInt("id"));
-//                            data.setName(jsonObject.getString("name"));
-//                            data.setEmail(jsonObject.getString("email"));
-//                            data.setBody(jsonObject.getString("body"));
-//                            //dataArrayList.add(data);
-//                            text.setText(data.toString());
-//                            Log.v("Test", jsonObject.toString());
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(RecommendDetailActivity.this, "안쪽 catch :(", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (IOException e) {
-                        Toast.makeText(RecommendDetailActivity.this, "첫 catch :(", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-//                    List<BookInfoWithBool> bookInfoWithBool = response.body();
-//
-//                    Boolean bl = bookInfoWithBool.get(0).getBl();
-//                    List<BookInfo> bookInfoList = bookInfoWithBool.get(1).getBookInfoList();
-//
-//                    String s = "" + bl;
-//                    Toast.makeText(RecommendDetailActivity.this, s, Toast.LENGTH_SHORT).show();
-//
-//                    if (response.isSuccessful()) {
-//                        adapter = new RecyclerViewAdapter(getApplicationContext(), bookInfoList, tagNames);
+                public void onResponse(Call<BookInfoWithBool> call, Response<BookInfoWithBool> response) {
+                    BookInfoWithBool bookInfoWithBools = response.body();
+                    if (response.isSuccessful()) {
+                        List<BookInfo> bookInfoList = bookInfoWithBools.getData();
+                        Boolean isExist = bookInfoWithBools.getIsExist();
+                        Toast.makeText(RecommendDetailActivity.this, isExist + " & " + bookInfoList.get(0).getBook_name() + " !!", Toast.LENGTH_SHORT).show();
+//                        adapter = new RecyclerViewAdapter(getApplicationContext(), books, tagNames);
 //                        recyclerView.setAdapter(adapter);
-//
-//                    } else {
-//                        Toast.makeText(RecommendDetailActivity.this, "a오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-//                    }
+
+                    } else {
+                        Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Toast.makeText(RecommendDetailActivity.this, "b오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                public void onFailure(Call<BookInfoWithBool> call, Throwable t) {
+                    Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
+//            Toast.makeText(RecommendDetailActivity.this, "진입", Toast.LENGTH_SHORT).show();
+//
+//            Call<BookInfoWithBool> call = getNetworkManager().getBookApi().getListWithSearch(name);
+//            call.enqueue(new Callback<BookInfoWithBool>() {
+//                @Override
+//                public void onResponse(Call<BookInfoWithBool> call, Response<BookInfoWithBool> response) {
+//                    Toast.makeText(RecommendDetailActivity.this, "response는 받음", Toast.LENGTH_SHORT).show();
+//
+//                    try {
+//                        String result = response.body().string();
+//                        Log.v("Test", result); //받아온 데이터
+//                        Toast.makeText(RecommendDetailActivity.this, "첫 try 진입", Toast.LENGTH_SHORT).show();
+//                        try {
+//                            JSONArray jsonArray = new JSONArray(result);
+////                            JSONObject jsonObject = jsonArray.getJSONObject(0);
+//                            Toast.makeText(RecommendDetailActivity.this, "두번째 try 진입", Toast.LENGTH_SHORT).show();
+////                            Toast.makeText(RecommendDetailActivity.this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
+////                            data.setPostId(jsonObject.getInt("postId"));
+////                            data.setId(jsonObject.getInt("id"));
+////                            data.setName(jsonObject.getString("name"));
+////                            data.setEmail(jsonObject.getString("email"));
+////                            data.setBody(jsonObject.getString("body"));
+////                            //dataArrayList.add(data);
+////                            text.setText(data.toString());
+////                            Log.v("Test", jsonObject.toString());
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                            Toast.makeText(RecommendDetailActivity.this, "안쪽 catch :(", Toast.LENGTH_SHORT).show();
+//                        }
+//                    } catch (IOException e) {
+//                        Toast.makeText(RecommendDetailActivity.this, "첫 catch :(", Toast.LENGTH_SHORT).show();
+//                        e.printStackTrace();
+//                    }
+////                    List<BookInfoWithBool> bookInfoWithBool = response.body();
+////
+////                    Boolean bl = bookInfoWithBool.get(0).getIsExist();
+////                    List<BookInfo> bookInfoList = bookInfoWithBool.get(1).getData();
+////
+////                    String s = "" + bl;
+////                    Toast.makeText(RecommendDetailActivity.this, s, Toast.LENGTH_SHORT).show();
+////
+////                    if (response.isSuccessful()) {
+////                        adapter = new RecyclerViewAdapter(getApplicationContext(), bookInfoList, tagNames);
+////                        recyclerView.setAdapter(adapter);
+////
+////                    } else {
+////                        Toast.makeText(RecommendDetailActivity.this, "a오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+////                    }
+//                }
+//                @Override
+//                public void onFailure(Call<BookInfoWithBool> call, Throwable t) {
+//                    Toast.makeText(RecommendDetailActivity.this, "b오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+//                }
+//            });
         }
 
 
