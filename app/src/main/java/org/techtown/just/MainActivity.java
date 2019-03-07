@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
 
         //tagNames 가져오기
-        Call<List<Tag>> list = getNetworkManager().getBookApi().getTags(accessToken, idToken, refreshToken);
+        Call<List<Tag>> list = getNetworkManager().getBookApi().getTags();
         list.enqueue(new Callback<List<Tag>>() {
             @Override
             public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     "org.techtown.just",
                     PackageManager.GET_SIGNATURES);
             for (android.content.pm.Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
+                MessageDigest md = MessageDigest.getBaseApplication("SHA");
                 md.update(signature.toByteArray());
                 Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }

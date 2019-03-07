@@ -76,9 +76,10 @@ public class Mod_ProfileActivity extends BaseActivity implements View.OnClickLis
         ButterKnife.bind(this);
 
 
+        String userId = getLocalStore().getStringValue(LocalStore.UserId);
         imageButton = (ImageButton) findViewById(R.id.profile_img);
         tv_name = (TextView) findViewById(R.id.profile_ID);
-        tv_name.setText("Wonny");
+        tv_name.setText(userId);
         rename = (Button)findViewById(R.id.edit_name);
         facebook = (Button)findViewById(R.id.facebook_logout) ;
 
