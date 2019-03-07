@@ -82,7 +82,6 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
 
     TagNames tagNames;
 
-    String mySelectedTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

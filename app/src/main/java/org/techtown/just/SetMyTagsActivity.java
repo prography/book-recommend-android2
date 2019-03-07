@@ -1,10 +1,14 @@
 package org.techtown.just;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.BinderThread;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.techtown.just.model.Tag;
@@ -32,6 +36,9 @@ public class SetMyTagsActivity extends AppCompatActivity implements View.OnClick
     @BindView(R.id.button)
     Button button;
 
+    @BindView(R.id.btn_back)
+    ImageView btnBack;
+
     String userId;
     String accessToken;
     String idToken;
@@ -44,6 +51,7 @@ public class SetMyTagsActivity extends AppCompatActivity implements View.OnClick
         ButterKnife.bind(this);
 
         button.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
 
         //정보 가져오기
         userId = getLocalStore().getStringValue(LocalStore.UserId);
@@ -61,6 +69,8 @@ public class SetMyTagsActivity extends AppCompatActivity implements View.OnClick
         //내가 선택한 태그 체크해두기
         setMySelectedTagsToFlowLayout();
 
+
+
     }
 
     private void setAllTagsToFlowLayout() {
@@ -68,7 +78,7 @@ public class SetMyTagsActivity extends AppCompatActivity implements View.OnClick
         String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
         String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
 
-        Call<List<Tag>> list = getNetworkManager().getBookApi().getTags(accessToken, idToken, refreshToken);
+        Call<List<Tag>> list = getNetworkManager().getBookApi().getTags();
         list.enqueue(new Callback<List<Tag>>() {
             @Override
             public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
@@ -126,7 +136,7 @@ public class SetMyTagsActivity extends AppCompatActivity implements View.OnClick
     private void setMySelectedTagsChecked(String s) {
         //tagNames이용
         List<Tag> allTags = tagNames.getAllTags();
-        String booksTags[] = s.split(";");
+        String[] booksTags = s.split(";");
 
         for (int i = 0; i < booksTags.length; i++) {
             try {
@@ -134,24 +144,34 @@ public class SetMyTagsActivity extends AppCompatActivity implements View.OnClick
                 flowLayout.setCheckedOnlyOne(true, toInt - 1);
                 flowLayout.addTag(allTags.get(toInt - 1));
             } catch (NumberFormatException e) {
+                Toast.makeText(SetMyTagsActivity.this, "NumberFormatException", Toast.LENGTH_SHORT).show();
 
+            } catch(NullPointerException e) {
+                Toast.makeText(SetMyTagsActivity.this, "NullPointerException", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View view) {
         Intent intent;
         switch(view.getId()) {
             case R.id.button:
                 //delete하고 post하기~!
+                String mySelectedTags = flowLayout.getCheckedValuesInString();
                 deleteTags();
-                postTags();
+//                if (mySelectedTags.equals(""))
+                postTags(mySelectedTags);
 
                 intent = new Intent(SetMyTagsActivity.this, MyPageActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("tagNames", tagNames);
                 startActivity(intent);
+                break;
+
+            case R.id.btn_back:
+                finish();
                 break;
         }
     }
@@ -164,19 +184,22 @@ public class SetMyTagsActivity extends AppCompatActivity implements View.OnClick
                 if (response.isSuccessful()) {
                     Toast.makeText(SetMyTagsActivity.this, "delete success", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(SetMyTagsActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SetMyTagsActivity.this, "deleteTags onResponse오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(SetMyTagsActivity.this, "b오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SetMyTagsActivity.this, "deleteTags onFailure오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void postTags() {
-        String mySelectedTags = flowLayout.getCheckedValuesInString();
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void postTags(String mySelectedTags) {
+
+//        if (mySelectedTags.equals(""))
+//            deleteTags();
 
         Call<ResponseBody> call = getNetworkManager().getBookApi().setUserSelectedTags(mySelectedTags, userId, accessToken, idToken, refreshToken);
         call.enqueue(new Callback<ResponseBody>() {
@@ -185,13 +208,13 @@ public class SetMyTagsActivity extends AppCompatActivity implements View.OnClick
                 if (response.isSuccessful()) {
                     Toast.makeText(SetMyTagsActivity.this, "post success", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(SetMyTagsActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SetMyTagsActivity.this, "postTags onResponse에서 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(SetMyTagsActivity.this, "b오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SetMyTagsActivity.this, "postTags onFailure에서 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
 
         //tagNames 가져오기
-        Call<List<Tag>> list = getNetworkManager().getBookApi().getTags(accessToken, idToken, refreshToken);
+        Call<List<Tag>> list = getNetworkManager().getBookApi().getTags();
         list.enqueue(new Callback<List<Tag>>() {
             @Override
             public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {

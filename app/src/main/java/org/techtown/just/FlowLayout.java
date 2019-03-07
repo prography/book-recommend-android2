@@ -2,6 +2,8 @@ package org.techtown.just;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -496,15 +498,22 @@ public class FlowLayout extends ViewGroup {
         return values;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public String getCheckedValuesInString() {
-        String values = "";
+        ArrayList<String> tags = new ArrayList<>();
         for (int i = 0; i < getChildCount(); i++) {
             View child = this.getChildAt(i);
             CheckBox checkbox = child.findViewById(R.id.checkbox);
             if (checkbox != null && checkbox.isChecked()) {
-                values += ((Tag) checkbox.getTag()).getTag_id() + ";";
+
+                String tag_id = String.valueOf(((Tag) checkbox.getTag()).getTag_id());
+                tags.add(tag_id);
+
+//                values += ((Tag) checkbox.getTag()).getTag_id() + ";";
             }
+
         }
+        String values = String.join(";", tags);
         return values;
     }
 
