@@ -11,6 +11,7 @@ public class LocalStore {
     */
     public static String my = "my";
     public static String UserId = "userId";
+    public static String UserPw = "userPw";
     public static String nickname = "nickname";
     public static String login = "login";
     public static String AccessToken = "accessToken";
@@ -55,7 +56,7 @@ public class LocalStore {
         return sf.getBoolean(key, defaultValue);
     }
 
-    public void clearTokenValues() {
+    public void clearTokenValues() { //logout
         setStringValue(AccessToken, null);
         setStringValue(IdToken, null);
         setStringValue(RefreshToken, null);

@@ -3,7 +3,6 @@ package org.techtown.just;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +22,6 @@ import com.kakao.auth.Session;
 import org.json.JSONObject;
 import org.techtown.just.base.BaseActivity;
 import org.techtown.just.model.LoginResult;
-import org.techtown.just.network.NetworkManager;
 
 import java.util.Arrays;
 
@@ -33,16 +31,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static org.techtown.just.base.BaseApplication.getLocalStore;
-
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.btn_general_login)
     Button btnGeneralLogin;
     @BindView(R.id.id)
-    EditText id;
+    EditText editText_id;
     @BindView(R.id.pw)
-    EditText pw;
+    EditText editText_pw;
     @BindView(R.id.btn_register)
     Button btnRegister;
     private Context mContext;
@@ -69,10 +65,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
         mContext = getApplicationContext();
         FacebookSdk.sdkInitialize(mContext);
         btnGeneralLogin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
+
+        //자동로그인
+        isLogined();
 
 //        String userId =  getLocalStore().getStringValue(LocalStore.UserId);
 //        if(userId != null) {
@@ -80,7 +80,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //            startActivity(intent);
 //        }
 
-            btn_facebook_login = (LoginButton) findViewById(R.id.btn_facebook_login);
+        btn_facebook_login = (LoginButton) findViewById(R.id.btn_facebook_login);
         btn_kakao_login = (com.kakao.usermgmt.LoginButton) findViewById(R.id.btn_kakao_login);
 
         btn_customKakao = (Button) findViewById(R.id.btn_custom_kakao);
@@ -90,42 +90,54 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         btn_customFacebook.setOnClickListener(this);
 
 
-        if (getLocalStore().getStringValue(LocalStore.AccessToken) != null) {
-            checkTokenIsValid();
-        } else {
-            //facebook, kakaoTalk login
-            if (AccessToken.getCurrentAccessToken() != null) {
-                mAccessTokenTracker = new AccessTokenTracker() {
-                    @Override
-                    protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                        mAccessTokenTracker.stopTracking();
-                        if (currentAccessToken == null) {
-                            //(the user has revoked your permissions -
-                            //by going to his settings and deleted your app)
-                            //do the simple login to FaceBook
-                            //case 1
-                        } else {
-                            //you've got the new access token now.
-                            //AccessToken.getToken() could be same for both
-                            //parameters but you should only use "currentAccessToken"
-                            //case 2
-                            fetchProfile();
-                        }
-                    }
-                };
-                mAccessTokenTracker.startTracking();
-                AccessToken.refreshCurrentAccessTokenAsync();
-            }
+//        if (getLocalStore().getStringValue(LocalStore.AccessToken) != null) {
+//            checkTokenIsValid();
+//        } else {
+//            //facebook, kakaoTalk login
+//            if (AccessToken.getCurrentAccessToken() != null) {
+//                mAccessTokenTracker = new AccessTokenTracker() {
+//                    @Override
+//                    protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+//                        mAccessTokenTracker.stopTracking();
+//                        if (currentAccessToken == null) {
+//                            //(the user has revoked your permissions -
+//                            //by going to his settings and deleted your app)
+//                            //do the simple login to FaceBook
+//                            //case 1
+//                        } else {
+//                            //you've got the new access token now.
+//                            //AccessToken.getToken() could be same for both
+//                            //parameters but you should only use "currentAccessToken"
+//                            //case 2
+//                            fetchProfile();
+//                        }
+//                    }
+//                };
+//                mAccessTokenTracker.startTracking();
+//                AccessToken.refreshCurrentAccessTokenAsync();
+//            }
+//
+//            //access token 유효성 확인 - 최초 1번
+//            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//            checkLogin = accessToken != null && !accessToken.isExpired();
+//
+//            callback_kakao = new KakaoSessionCallback();
+//
+//            Session.getCurrentSession().addCallback(callback_kakao);
+//
+//        }
 
-            //access token 유효성 확인 - 최초 1번
-            AccessToken accessToken = AccessToken.getCurrentAccessToken();
-            checkLogin = accessToken != null && !accessToken.isExpired();
+    }
 
-            callback_kakao = new KakaoSessionCallback();
-
-            Session.getCurrentSession().addCallback(callback_kakao);
-
+    public void isLogined() {
+        String id = getLocalStore().getStringValue(LocalStore.UserId);
+        String pw = getLocalStore().getStringValue(LocalStore.UserPw);
+        if (id != null && pw != null) {
+            Toast.makeText(mContext, "userid, pw있다", Toast.LENGTH_SHORT).show();
+            login(id, pw);
         }
+        else
+            Toast.makeText(mContext, "userid 없다", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -141,6 +153,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
     }
+
 
 
     @Override
@@ -162,43 +175,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 break;
             case R.id.btn_general_login:
-//                intent = new Intent(LoginActivity.this, MainActivity.class);
-//                startActivity(intent);
-                final String id = this.id.getText().toString();
-                String pw = this.pw.getText().toString();
+                String id = this.editText_id.getText().toString();
+                String pw = this.editText_pw.getText().toString();
+
                 if (id.length() == 0 || pw.length() == 0) {
                     Toast.makeText(LoginActivity.this, "아이디, 패스워드를 입력해주세요", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                final Call<LoginResult> login = getNetworkManager().getBookApi().login(id, pw);
-                login.enqueue(new Callback<LoginResult>() {
-                    @Override
-                    public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
-                        LoginResult loginResult = response.body();
-                        //user_id, LoginToken이 있다.
-                        if (loginResult != null && loginResult.getTokens() != null) {
-                            getLocalStore().setStringValue(LocalStore.AccessToken, loginResult.getTokens().getAccessToken());
-                            getLocalStore().setStringValue(LocalStore.IdToken, loginResult.getTokens().getIdToken());
-                            getLocalStore().setStringValue(LocalStore.RefreshToken, loginResult.getTokens().getRefreshToken());
-                            getLocalStore().setStringValue(LocalStore.UserId, id);
-
-                            Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        } else if (response.code() == 401) {
-                            Toast.makeText(LoginActivity.this, "이메일 인증이 필요합니다", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<LoginResult> call, Throwable t) {
-                        Toast.makeText(LoginActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-                        t.printStackTrace();
-                    }
-                });
+                login(id, pw);
                 break;
 
             case R.id.btn_register:
@@ -208,6 +192,40 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         }
 
+    }
+
+    private void login(final String id, final String pw) {
+        final Call<LoginResult> login = getNetworkManager().getBookApi().login(id, pw);
+        Toast.makeText(LoginActivity.this, id + " " + pw, Toast.LENGTH_SHORT).show();
+        login.enqueue(new Callback<LoginResult>() {
+            @Override
+            public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                LoginResult loginResult = response.body();
+                //user_id, LoginToken이 있다.
+                if (loginResult != null && loginResult.getTokens() != null) {
+                    getLocalStore().setStringValue(LocalStore.AccessToken, loginResult.getTokens().getAccessToken());
+                    getLocalStore().setStringValue(LocalStore.IdToken, loginResult.getTokens().getIdToken());
+                    getLocalStore().setStringValue(LocalStore.RefreshToken, loginResult.getTokens().getRefreshToken());
+                    getLocalStore().setStringValue(LocalStore.UserId, id);
+                    getLocalStore().setStringValue(LocalStore.UserPw, pw);
+
+                    Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else if (response.code() == 401) {
+                    Toast.makeText(LoginActivity.this, "이메일 인증이 필요합니다", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResult> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+            }
+        });
     }
 
 

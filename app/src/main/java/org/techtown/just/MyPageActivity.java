@@ -138,18 +138,18 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
     public void basic_setting() {
 
         if (LoggedIn_FB == true) {
-            //if facebook로그인시
-            facebookProfile = Profile.getCurrentProfile();
-            link = facebookProfile.getProfilePictureUri(200, 200).toString();
-
-            user_name.setText(facebookProfile.getName());
-            profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
-            //id값으로 facebookProfile uri설정
-            profilePictureView.setProfileId(facebookProfile.getId());
+//            //if facebook로그인시
+//            facebookProfile = Profile.getCurrentProfile();
+//            link = facebookProfile.getProfilePictureUri(200, 200).toString();
+//
+//            user_name.setText(facebookProfile.getName());
+//            profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
+//            //id값으로 facebookProfile uri설정
+//            profilePictureView.setProfileId(facebookProfile.getId());
         } else if (LoggedIn_KK == true) {
-            user_name.setText(kakaoTalkProfile.getNickName());
-            profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
-            profilePictureView.setProfileId(kakaoTalkProfile.getProfileImageUrl());
+//            user_name.setText(kakaoTalkProfile.getNickName());
+//            profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
+//            profilePictureView.setProfileId(kakaoTalkProfile.getProfileImageUrl());
 
         } else { //일반로그인
             //user_name <- user_id
