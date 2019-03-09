@@ -25,7 +25,7 @@
 
 
         <TextView
-            android:id="@+id/textview"
+            android:id="@+id/tv_toolbar"
             style="@style/TextTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,21 +39,20 @@
 
 
         <com.facebook.login.widget.ProfilePictureView
-            android:id="@+id/profile_img"
+            android:id="@+id/img_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-
             android:padding="0dp"
             android:src="@drawable/ic_launcher_background"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_back" />
 
         <TextView
-            android:id="@+id/profile_name"
+            android:id="@+id/tv_profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -61,12 +60,12 @@
             android:layout_marginTop="8dp"
             android:text="facebook_name"
             android:textSize="30sp"
-            app:layout_constraintStart_toEndOf="@+id/profile_img"
-            app:layout_constraintTop_toBottomOf="@+id/textview"
+            app:layout_constraintStart_toEndOf="@+id/img_profile"
+            app:layout_constraintTop_toBottomOf="@+id/tv_toolbar"
             tools:ignore="MissingConstraints" />
 
         <Button
-            android:id="@+id/mod_profile"
+            android:id="@+id/btn_mod_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20sp"
@@ -74,22 +73,34 @@
             android:background="#45e2e2e2"
             android:text="계정관리"
             android:textSize="15sp"
-            app:layout_constraintLeft_toRightOf="@id/profile_img"
-            app:layout_constraintTop_toBottomOf="@+id/profile_name" />
+            app:layout_constraintLeft_toRightOf="@id/img_profile"
+            app:layout_constraintTop_toBottomOf="@+id/tv_profile_name" />
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:layout_marginTop="15sp"
+            android:background="#45e2e2e2"
+            android:text="로그아웃"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toRightOf="@id/btn_mod_profile"
+            app:layout_constraintTop_toBottomOf="@+id/tv_profile_name" />
 
         <TextView
-            android:id="@+id/boundary"
+            android:id="@+id/tv_boundary"
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_marginTop="16dp"
             android:background="#dadada"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_img" />
+            app:layout_constraintTop_toBottomOf="@+id/img_profile" />
 
 
         <TextView
-            android:id="@+id/mytags"
+            android:id="@+id/tv_mytags"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -98,7 +109,7 @@
             android:text="나의 태그!"
             android:textSize="25dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/boundary" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_boundary" />
 
         <Button
             android:id="@+id/btn_setMyTags"
@@ -109,8 +120,8 @@
             android:layout_marginTop="12dp"
             android:background="#45e2e2e2"
             android:text="설정"
-            app:layout_constraintStart_toEndOf="@+id/mytags"
-            app:layout_constraintTop_toBottomOf="@+id/boundary" />
+            app:layout_constraintStart_toEndOf="@+id/tv_mytags"
+            app:layout_constraintTop_toBottomOf="@+id/tv_boundary" />
 
 
         <org.techtown.just.FlowLayout
@@ -121,12 +132,35 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mytags">
+            app:layout_constraintTop_toBottomOf="@+id/tv_mytags">
 
         </org.techtown.just.FlowLayout>
 
         <TextView
-            android:id="@+id/readbook"
+            android:id="@+id/tv_rcbook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="추천"
+            android:textSize="25dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flowLayout" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyler_rcbook"
+            android:layout_width="match_parent"
+            android:layout_height="141dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:paddingTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_rcbook" />
+
+        <TextView
+            android:id="@+id/tv_readbook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -135,34 +169,35 @@
             android:text="읽은 책"
             android:textSize="25dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/flowLayout" />
-
+            app:layout_constraintTop_toBottomOf="@+id/recyler_rcbook" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/img_readbook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginBottom="5dp"
             android:src="@drawable/ic_bookmark"
-            app:layout_constraintBottom_toBottomOf="@+id/readbook"
-            app:layout_constraintLeft_toRightOf="@+id/readbook" />
+            app:layout_constraintBottom_toBottomOf="@+id/tv_readbook"
+            app:layout_constraintLeft_toRightOf="@+id/tv_readbook" />
 
         <Button
-            android:id="@+id/more_read"
+            android:id="@+id/btn_more_read"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="46dp"
             android:layout_marginStart="148dp"
             android:layout_marginLeft="148dp"
+            android:layout_marginTop="8dp"
             android:background="#00ff0000"
             android:text="더보기"
             android:textColor="#bebebe"
             android:textSize="7dp"
-            app:layout_constraintStart_toEndOf="@+id/imageView4"
-            app:layout_constraintTop_toBottomOf="@+id/flowLayout" />
+            app:layout_constraintStart_toEndOf="@+id/img_readbook"
+            app:layout_constraintTop_toBottomOf="@+id/recyler_rcbook"
+            tools:ignore="MissingConstraints" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rc_readbook"
+            android:id="@+id/recycler_readbook"
             android:layout_width="match_parent"
             android:layout_height="141dp"
             android:layout_marginStart="8dp"
@@ -170,13 +205,13 @@
             android:layout_marginTop="8dp"
             android:paddingTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/readbook">
+            app:layout_constraintTop_toBottomOf="@+id/tv_readbook">
 
         </android.support.v7.widget.RecyclerView>
 
 
         <TextView
-            android:id="@+id/interest_book"
+            android:id="@+id/tv_interest_book"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -185,20 +220,20 @@
             android:text="관심 책"
             android:textSize="25dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rc_readbook" />
+            app:layout_constraintTop_toBottomOf="@+id/recycler_readbook" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/img_interest_book"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginBottom="5dp"
             android:src="@drawable/ic_booklike"
-            app:layout_constraintBottom_toBottomOf="@+id/interest_book"
-            app:layout_constraintLeft_toRightOf="@+id/interest_book" />
+            app:layout_constraintBottom_toBottomOf="@+id/tv_interest_book"
+            app:layout_constraintLeft_toRightOf="@+id/tv_interest_book" />
 
         <Button
-            android:id="@+id/more_interest"
+            android:id="@+id/btn_more_interest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="148dp"
@@ -208,18 +243,18 @@
             android:text="더보기"
             android:textColor="#bebebe"
             android:textSize="7dp"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toBottomOf="@+id/rc_readbook" />
+            app:layout_constraintStart_toEndOf="@+id/img_interest_book"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_readbook" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rc_intbook"
+            android:id="@+id/recycler_interest_book"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/interest_book">
+            app:layout_constraintTop_toBottomOf="@+id/tv_interest_book">
 
         </android.support.v7.widget.RecyclerView>
 

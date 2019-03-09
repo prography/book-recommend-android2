@@ -21,6 +21,7 @@ import com.kakao.auth.Session;
 
 import org.json.JSONObject;
 import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.LocalStore;
 import org.techtown.just.model.LoginResult;
 
 import java.util.Arrays;
@@ -57,7 +58,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
 
     //access token 유효성 확인
-    AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//    AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
 
     @Override
@@ -129,18 +130,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
-    public void isLogined() {
-        String id = getLocalStore().getStringValue(LocalStore.UserId);
-        String pw = getLocalStore().getStringValue(LocalStore.UserPw);
-        if (id != null && pw != null) {
-            Toast.makeText(mContext, "userid, pw있다", Toast.LENGTH_SHORT).show();
-            login(id, pw);
-        }
-        else
-            Toast.makeText(mContext, "userid 없다", Toast.LENGTH_SHORT).show();
-
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -190,6 +179,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 startActivity(intent);
                 break;
 
+        }
+
+    }
+
+    public void isLogined() {
+        String id = getLocalStore().getStringValue(LocalStore.UserId);
+        String pw = getLocalStore().getStringValue(LocalStore.UserPw);
+//        if (id != null && pw != null) {
+        if (getAccessToken() != null && getIdToken() != null && getRefreshToken() != null) {
+            showShortToastMsg("Token 있음" + getAccessToken());
+            login(id, pw);
+        }
+        else {
+            showShortToastMsg("Token 없음" + getAccessToken());
         }
 
     }

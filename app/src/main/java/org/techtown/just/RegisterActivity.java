@@ -2,7 +2,6 @@ package org.techtown.just;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,18 +11,14 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 
 import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.LocalStore;
 import org.techtown.just.model.LoginResult;
-import org.techtown.just.model.Tag;
-import org.techtown.just.network.NetworkManager;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Field;
 
 import static org.techtown.just.R.id.btn_register;
 

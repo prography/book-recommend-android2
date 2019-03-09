@@ -2,22 +2,19 @@ package org.techtown.just.network;
 
 import com.google.gson.JsonObject;
 
-import org.techtown.just.model.BookInfo;
-import org.techtown.just.model.BookInfoWithBool;
+import org.techtown.just.model.BookInfoList_Added;
+import org.techtown.just.model.BookInfoList_NotAdded;
+import org.techtown.just.model.BookInfo_Added;
+import org.techtown.just.model.IsExist;
 import org.techtown.just.model.LoginResult;
-import org.techtown.just.model.LoginToken;
-import org.techtown.just.model.Post;
 import org.techtown.just.model.Status;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.UserSelectedTags;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -26,7 +23,6 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface BookApiService {
     /**
@@ -62,30 +58,38 @@ public interface BookApiService {
 
     //Book
     @GET("books/listwithtag/{tags}/")
-    Call<List<BookInfo>> getListWithTag(@Path("tags") String tags);
+    Call<List<BookInfo_Added>> getListWithTag(@Path("tags") String tags);
 
 
     @GET("books/listwithsearch/{search}/")
-    Call<BookInfoWithBool> getListWithSearch(@Path("search") String search);
+    Call<BookInfoList_Added> getAddedListWithSearch(@Path("search") String search);
+
+    @GET("books/listwithsearch/{search}/")
+    Call<BookInfoList_NotAdded> getNotAddedListWithSearch(@Path("search") String search);
+
+    @GET("books/listwithsearch/{search}/")
+    Call<IsExist> getIsExist(@Path("search") String search);
+
+
 
     //user가 읽은 책 리스트
     @GET("books/read/{user_id}/")
-    Call<List<BookInfo>> getListUserRead(@Path("user_id") String user_id,
-                                         @Header("accessToken") String accessToken,
-                                         @Header("idToken") String idToken,
-                                         @Header("refreshToken") String refreshToken);
-
-
-    //user가 관심있는 책 리스트
-    @GET("books/interest/{user_id}/")
-    Call<List<BookInfo>> getListUserInterested(@Path("user_id") String user_id,
+    Call<List<BookInfo_Added>> getListUserRead(@Path("user_id") String user_id,
                                                @Header("accessToken") String accessToken,
                                                @Header("idToken") String idToken,
                                                @Header("refreshToken") String refreshToken);
 
+
+    //user가 관심있는 책 리스트
+    @GET("books/interest/{user_id}/")
+    Call<List<BookInfo_Added>> getListUserInterested(@Path("user_id") String user_id,
+                                                     @Header("accessToken") String accessToken,
+                                                     @Header("idToken") String idToken,
+                                                     @Header("refreshToken") String refreshToken);
+
     //isbn으로 책 검색
     @GET("books/{isbn}/")
-    Call<List<BookInfo>> getBookInfoWithIsbn(@Path("isbn") String isbn);
+    Call<List<BookInfo_Added>> getBookInfoWithIsbn(@Path("isbn") String isbn);
 
 
 
@@ -148,6 +152,11 @@ public interface BookApiService {
                                      @Header("idToken") String idToken,
                                      @Header("refreshToken") String refreshToken);
 
+    @GET("user/recommend/{user_id}")
+    Call<List<BookInfo_Added>> getUserRecommendBookList(@Path("user_id") String user_id,
+                                                        @Header("accessToken") String accessToken,
+                                                        @Header("idToken") String idToken,
+                                                        @Header("refreshToken") String refreshToken);
 
 
 //    사. /book/:user_id : 유저에 등록된 책리스트 출력

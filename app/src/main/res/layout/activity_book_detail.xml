@@ -136,6 +136,15 @@
             android:text="dummy_writer"
             android:textSize="17dp" />
 
+        <TextView
+            android:id="@+id/book_country"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="dummy_country"
+            android:textSize="17dp" />
+
 
         <TextView
             android:layout_width="match_parent"

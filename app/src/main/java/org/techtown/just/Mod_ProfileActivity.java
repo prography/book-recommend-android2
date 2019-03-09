@@ -21,7 +21,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,9 +31,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
-import com.kakao.auth.Session;
 
 import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.LocalStore;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,8 +42,6 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.kakao.usermgmt.api.UserApi.requestLogout;
 
 
 public class Mod_ProfileActivity extends BaseActivity implements View.OnClickListener{
@@ -77,7 +74,7 @@ public class Mod_ProfileActivity extends BaseActivity implements View.OnClickLis
 
 
         String userId = getLocalStore().getStringValue(LocalStore.UserId);
-        imageButton = (ImageButton) findViewById(R.id.profile_img);
+        imageButton = (ImageButton) findViewById(R.id.img_profile);
         tv_name = (TextView) findViewById(R.id.profile_ID);
         tv_name.setText(userId);
         rename = (Button)findViewById(R.id.edit_name);
@@ -440,7 +437,7 @@ public class Mod_ProfileActivity extends BaseActivity implements View.OnClickLis
                 finish();
 
                 break;
-            case R.id.profile_img:
+            case R.id.img_profile:
                 show();
                 break;
 

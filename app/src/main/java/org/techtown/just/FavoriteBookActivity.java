@@ -1,7 +1,6 @@
 package org.techtown.just;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,11 +9,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.techtown.just.base.BaseActivity;
-import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.BookInfo_Added;
+import org.techtown.just.model.LocalStore;
 import org.techtown.just.model.TagNames;
-import org.techtown.just.network.NetworkManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -81,12 +79,12 @@ public class FavoriteBookActivity extends BaseActivity implements MyAdapter.MyRe
         String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
 
         //id으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getListUserInterested(userId, accessToken, idToken, refreshToken);
+        Call<List<BookInfo_Added>> bookInfo = getNetworkManager().getBookApi().getListUserInterested(userId, accessToken, idToken, refreshToken);
 
-        bookInfo.enqueue(new Callback<List<BookInfo>>() {
+        bookInfo.enqueue(new Callback<List<BookInfo_Added>>() {
             @Override
-            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
-                List<BookInfo> books_1 = response.body();
+            public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
+                List<BookInfo_Added> books_1 = response.body();
                 if (response.isSuccessful()) {
                     myAdapter = new MyAdapter(getApplicationContext(), books_1, tagNames);
                     myAdapter.setOnClickListener(FavoriteBookActivity.this);
@@ -98,7 +96,7 @@ public class FavoriteBookActivity extends BaseActivity implements MyAdapter.MyRe
             }
 
             @Override
-            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+            public void onFailure(Call<List<BookInfo_Added>> call, Throwable t) {
                 Toast.makeText(FavoriteBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });

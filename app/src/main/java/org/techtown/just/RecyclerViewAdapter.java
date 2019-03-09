@@ -12,8 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.techtown.just.base.BaseApplication;
-import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.BookInfoList_Added;
+import org.techtown.just.model.BookInfo_Added;
+import org.techtown.just.model.LocalStore;
 import org.techtown.just.model.Status;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
@@ -36,16 +37,16 @@ import static org.techtown.just.base.BaseApplication.getNetworkManager;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private List<BookInfo> bookInfoList;
+    private List<BookInfo_Added> bookInfoAddedList;
     private Context mContext;
     private TagNames tagNames;
     private BookListListener listener;
 
     public interface BookListListener{
-        void saveFlag(int position, BookInfo bookInfo, int like, int read);
+        void saveFlag(int position, BookInfo_Added bookInfoAdded, int like, int read);
     }
-    public void updateBookInfo(int position, BookInfo bookInfo){
-        bookInfoList.set(position, bookInfo);
+    public void updateBookInfo(int position, BookInfo_Added bookInfoAdded){
+        bookInfoAddedList.set(position, bookInfoAdded);
         notifyItemChanged(position);
     }
     public void setBookListListener(BookListListener listener){
@@ -53,18 +54,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-    public RecyclerViewAdapter(Context mContext, List<BookInfo> BookInfoList, TagNames tagNames) {
+    public RecyclerViewAdapter(Context mContext, List<BookInfo_Added> bookInfoAddedList, TagNames tagNames) {
         this.mContext = mContext;
-        //this.bookInfoList = BookInfoList;
+        //this.bookInfoAddedList = bookInfoAddedList;
 
-        this.bookInfoList = new ArrayList<>();
-        this.bookInfoList.addAll(BookInfoList);
+        this.bookInfoAddedList = new ArrayList<>();
+        this.bookInfoAddedList.addAll(bookInfoAddedList);
         this.tagNames = tagNames;
         //this.itemLayout = itemLayout;
     }
+
+
+
+
+
     //책 정보가 추가되면 (flag)
-    public void addBookInfo(BookInfo bookInfo){
-        bookInfoList.add(bookInfo);
+    public void addBookInfo(BookInfo_Added bookInfoAdded){
+        bookInfoAddedList.add(bookInfoAdded);
         notifyDataSetChanged();
     }
 //
@@ -104,10 +110,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 //        ListViewItemData item = listViewItems.get(position);
 
-        viewHolder.ITEM_BOOKNAME.setText(bookInfoList.get(position).getBook_name());
-        viewHolder.ITEM_AUTHOR.setText(bookInfoList.get(position).getAuthor());
+        viewHolder.ITEM_BOOKNAME.setText(bookInfoAddedList.get(position).getBook_name());
+        viewHolder.ITEM_AUTHOR.setText(bookInfoAddedList.get(position).getAuthor());
 
-        String s = getTagNames(bookInfoList.get(position).getTags(), tagNames);
+        String s = getTagNames(bookInfoAddedList.get(position).getTags(), tagNames);
         viewHolder.ITEM_TAG.setText(s);
         setImageSrc(viewHolder.ITEM_IMG, position);
 
@@ -121,14 +127,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 if(viewHolder.ITEM_LIKE.isSelected()) {
                     //좋아요 취소
-                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + " 좋아요 취소", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "\"" + bookInfoAddedList.get(position).getBook_name() + "\"" + " 좋아요 취소", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_LIKE.setSelected(false);
                     viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_empty);
                     like = 0;
 
                 }else {
                     //좋아요
-                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + " 좋다!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "\"" + bookInfoAddedList.get(position).getBook_name() + "\"" + " 좋다!", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_LIKE.setSelected(true);
                     viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_full);
                     like = 1;
@@ -152,12 +158,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Context context = view.getContext();
                 if(viewHolder.ITEM_READ.isSelected()) {
                     //읽음 취소
-                    Toast.makeText(context, "아맞다 \"" + bookInfoList.get(position).getBook_name() + "\"" + "안읽었지...ㅎ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "아맞다 \"" + bookInfoAddedList.get(position).getBook_name() + "\"" + "안읽었지...ㅎ", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_READ.setSelected(false);
                     viewHolder.ITEM_READ.setImageResource(R.drawable.ic_check);
                     read = 0;
                 }else{
-                    Toast.makeText(context, "\"" + bookInfoList.get(position).getBook_name() + "\"" + "을(를) 읽었다!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "\"" + bookInfoAddedList.get(position).getBook_name() + "\"" + "을(를) 읽었다!", Toast.LENGTH_LONG).show();
                     viewHolder.ITEM_READ.setSelected(true);
                     viewHolder.ITEM_READ.setImageResource(R.drawable.ic_checked);
                     read = 1;
@@ -187,14 +193,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 //like, read버튼 클릭시 이벤트 처리 here
 
                 Intent intent = new Intent(v.getContext(), BookDetailActivity.class);
-                //              intent.putExtra("bookInfo", (Parcelable) bookInfoList.get(position));
+                //              intent.putExtra("bookInfoAdded", (Parcelable) bookInfoAddedList.get(position));
 
-                intent.putExtra("isbn", bookInfoList.get(position).getIsbn());
+                intent.putExtra("isbn", bookInfoAddedList.get(position).getIsbn());
                 intent.putExtra("tagNames", tagNames);
 
                 mContext.startActivity(intent);
 
-                Toast.makeText(context, bookInfoList.get(position).getBook_name() + " 클릭", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, bookInfoAddedList.get(position).getBook_name() + " 클릭", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -205,7 +211,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
         String userId = getLocalStore().getStringValue(LocalStore.UserId);
 
-        String isbn = bookInfoList.get(position).getIsbn();
+        String isbn = bookInfoAddedList.get(position).getIsbn();
 
         Call<ResponseBody> call = getNetworkManager().getBookApi().putBookFlags(isbn, userId, like, read, accessToken, idToken, refreshToken);
         call.enqueue(new Callback<ResponseBody>() {
@@ -235,7 +241,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
         String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
 
-        final String isbn = bookInfoList.get(position).getIsbn();
+        final String isbn = bookInfoAddedList.get(position).getIsbn();
 
         Call<List<Status>> call = getNetworkManager().getBookApi().getBookFlags(isbn, userId, accessToken, idToken, refreshToken);
         call.enqueue(new Callback<List<Status>>() {
@@ -334,7 +340,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void run() {
                 try {
-                    URL url = new URL(bookInfoList.get(position).getThumbnail());
+                    URL url = new URL(bookInfoAddedList.get(position).getThumbnail());
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setDoInput(true);
@@ -388,7 +394,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override // 데이터 수 반환
     public int getItemCount() {
-        return bookInfoList.size();
+        return bookInfoAddedList.size();
     }
 
 }

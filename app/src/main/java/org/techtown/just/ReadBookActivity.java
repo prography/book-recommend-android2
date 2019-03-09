@@ -1,28 +1,18 @@
 package org.techtown.just;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import org.techtown.just.base.BaseActivity;
-import org.techtown.just.model.BookInfo;
 import org.techtown.just.model.TagNames;
-import org.techtown.just.network.NetworkManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecyclerViewClickListener {
 
@@ -79,15 +69,15 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
 //        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
 //
 //        //id으로 책 정보 가져오기
-//        Call<List<BookInfo>> bookInfo=null;
+//        Call<List<BookInfo_Added>> bookInfoAdded=null;
 //        if(string == null) {
-//            bookInfo = getNetworkManager().getBookApi().getListUserRead(userId, accessToken, idToken, refreshToken);
+//            bookInfoAdded = getNetworkManager().getBookApi().getListUserRead(userId, accessToken, idToken, refreshToken);
 //        }else if(string != null){
-//            bookInfo = getNetworkManager().getBookApi().getListWithSearch(string);
-//        }bookInfo.enqueue(new Callback<List<BookInfo>>() {
+//            bookInfoAdded = getNetworkManager().getBookApi().getListWithSearch(string);
+//        }bookInfoAdded.enqueue(new Callback<List<BookInfo_Added>>() {
 //            @Override
-//            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
-//                List<BookInfo> books_1 = response.body();
+//            public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
+//                List<BookInfo_Added> books_1 = response.body();
 //                if (response.isSuccessful()) {
 //                    myAdapter2 = new MyAdapter(getApplicationContext(),books_1, tagNames);
 //                    myAdapter2 .setOnClickListener(ReadBookActivity.this);
@@ -99,7 +89,7 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
 //
 //            }
 //            @Override
-//            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+//            public void onFailure(Call<List<BookInfo_Added>> call, Throwable t) {
 //                Toast.makeText(ReadBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
 //            }
 //        });
@@ -109,8 +99,6 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
 
     @Override
     public void onItemClicked(int position) {
-        Toast.makeText(getApplicationContext(),position+" 번 아이템이 클릭됨",Toast.LENGTH_SHORT).show();
-
-
+        showShortToastMsg(position+" 번 아이템이 클릭됨");
     }
 }

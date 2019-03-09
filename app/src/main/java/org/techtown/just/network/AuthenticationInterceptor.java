@@ -1,6 +1,6 @@
 package org.techtown.just.network;
 
-import org.techtown.just.LocalStore;
+import org.techtown.just.model.LocalStore;
 
 import java.io.IOException;
 

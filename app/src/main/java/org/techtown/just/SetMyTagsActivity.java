@@ -3,7 +3,6 @@ package org.techtown.just;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.BinderThread;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.LocalStore;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
 import org.techtown.just.model.UserSelectedTags;
@@ -27,7 +28,7 @@ import retrofit2.Response;
 import static org.techtown.just.base.BaseApplication.getLocalStore;
 import static org.techtown.just.base.BaseApplication.getNetworkManager;
 
-public class SetMyTagsActivity extends AppCompatActivity implements View.OnClickListener {
+public class SetMyTagsActivity extends BaseActivity implements View.OnClickListener {
 
 //    @BindView(R.id.flowLayout)
     FlowLayout flowLayout;
@@ -106,14 +107,12 @@ public class SetMyTagsActivity extends AppCompatActivity implements View.OnClick
 
         for (int i = 0; i < booksTags.length; i++) {
             if (!booksTags[i].equals("")) {
-                try {
+//                try {
                     int toInt = Integer.parseInt(booksTags[i]);
                     flowLayout.setCheckedOnlyOne(true, toInt - 1);
-                } catch (NumberFormatException e) {
-                    Toast.makeText(SetMyTagsActivity.this, "NumberFormatException", Toast.LENGTH_SHORT).show();
-                } catch (NullPointerException e) {
-                    Toast.makeText(SetMyTagsActivity.this, booksTags[i] + " : NullPointerException " + (i + 1) + "번째 오류가 났습니다. 다시 시도해주세요! 새로고침 만들기", Toast.LENGTH_SHORT).show();
-                }
+//                } catch (NullPointerException e) {
+//                    Toast.makeText(SetMyTagsActivity.this, booksTags[i] + " : NullPointerException " + (i + 1) + "번째 오류가 났습니다. 다시 시도해주세요! 새로고침 만들기", Toast.LENGTH_SHORT).show();
+//                }
             }
         }
 //        Toast.makeText(SetMyTagsActivity.this, "setMySelectedTagsChecked 완료", Toast.LENGTH_SHORT).show();

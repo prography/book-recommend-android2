@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.BookInfo_Added;
 import org.techtown.just.model.TagNames;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //    private String[] mData;
 //    private LayoutInflater mInflater;
     private MyRecyclerViewClickListener mListener;
-    private List<BookInfo> bookInfoList;
+    private List<BookInfo_Added> bookInfoAddedList;
     private Context mContext;
     Bitmap bitmap;
     TagNames tagNames;
@@ -55,13 +55,13 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-//    MyAdapter(ArrayList<BookInfo> bookInfoList){
-//        this.bookInfoList = bookInfoList;
+//    MyAdapter(ArrayList<BookInfo_Added> bookInfoAddedList){
+//        this.bookInfoAddedList = bookInfoAddedList;
 //    }
 
-    MyAdapter(Context mContext, List<BookInfo> BookInfoList, TagNames tagNames){
+    MyAdapter(Context mContext, List<BookInfo_Added> bookInfoAddedList, TagNames tagNames){
         this.mContext = mContext;
-        this.bookInfoList = BookInfoList;
+        this.bookInfoAddedList = bookInfoAddedList;
         this.tagNames = tagNames;
     }
 
@@ -82,17 +82,17 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         //myViewHolder.my_book_img.setImageResource(BookInfoArrayList.get(position).id);
 //        myViewHolder.my_book_name.setText(BookInfoArrayList.get(position).id);
         //TODO::책 img 로 변경 필요.
-        //myViewHolder.my_book_name.setText(bookInfoList.get(position).book_name);
+        //myViewHolder.my_book_name.setText(bookInfoAddedList.get(position).book_name);
         setImageSrc(myViewHolder.my_book_img, position);
 
 
-        final String book_name = bookInfoList.get(position).getBook_name();
-        final String book_author = bookInfoList.get(position).getAuthor();
-        final String book_content = bookInfoList.get(position).getContents();
-        final String book_thumbnail = bookInfoList.get(position).getThumbnail();
-        final String book_country = bookInfoList.get(position).getCountry();
-        final String book_tags = bookInfoList.get(position).getTags();
-        final String isbn = bookInfoList.get(position).getIsbn();
+        final String book_name = bookInfoAddedList.get(position).getBook_name();
+        final String book_author = bookInfoAddedList.get(position).getAuthor();
+        final String book_content = bookInfoAddedList.get(position).getContents();
+        final String book_thumbnail = bookInfoAddedList.get(position).getThumbnail();
+        final String book_country = bookInfoAddedList.get(position).getCountry();
+        final String book_tags = bookInfoAddedList.get(position).getTags();
+        final String isbn = bookInfoAddedList.get(position).getIsbn();
 
         myViewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,14 +116,14 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 //like, read버튼 클릭시 이벤트 처리 here
 
                 Intent intent = new Intent(v.getContext(), BookDetailActivity.class);
-                //              intent.putExtra("bookInfo", (Parcelable) bookInfoList.get(position));
+                //              intent.putExtra("bookInfoAdded", (Parcelable) bookInfoAddedList.get(position));
 
-                intent.putExtra("isbn", bookInfoList.get(position).getIsbn());
+                intent.putExtra("isbn", bookInfoAddedList.get(position).getIsbn());
                 intent.putExtra("tagNames", tagNames);
 
                 mContext.startActivity(intent);
 
-                Toast.makeText(context, bookInfoList.get(position).getBook_name() + " 클릭", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, bookInfoAddedList.get(position).getBook_name() + " 클릭", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -131,7 +131,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return bookInfoList.size();
+        return bookInfoAddedList.size();
     }
 
     @Override
@@ -146,7 +146,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             @Override
             public void run() {
                 try {
-                    URL url = new URL(bookInfoList.get(position).getThumbnail());
+                    URL url = new URL(bookInfoAddedList.get(position).getThumbnail());
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setDoInput(true);

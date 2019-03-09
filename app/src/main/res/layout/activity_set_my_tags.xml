@@ -21,7 +21,7 @@
 
 
     <TextView
-        android:id="@+id/textview"
+        android:id="@+id/tv_toolbar"
         style="@style/TextTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         app:layout_constraintBottom_toTopOf="@id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview">
+        app:layout_constraintTop_toBottomOf="@+id/tv_toolbar">
 
         <org.techtown.just.FlowLayout
             android:id="@+id/flowLayout"

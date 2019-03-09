@@ -11,7 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.techtown.just.base.BaseActivity;
-import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.BookInfo_Added;
+import org.techtown.just.model.LocalStore;
 import org.techtown.just.model.Status;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
@@ -31,9 +32,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static org.techtown.just.base.BaseApplication.getLocalStore;
-import static org.techtown.just.base.BaseApplication.getNetworkManager;
-
 public class BookDetailActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.booknumber)
@@ -44,6 +42,8 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
     TextView BOOK_TITLE;
     @BindView(R.id.book_author)
     TextView BOOK_AUTHOR;
+    @BindView(R.id.book_country)
+    TextView BOOK_COUNTRY;
     @BindView(R.id.book_content)
     TextView BOOK_CONTENT;
     @BindView(R.id.like_btn)
@@ -51,7 +51,7 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
     @BindView(R.id.read_btn)
     ImageView BOOK_READ;
 
-    List<BookInfo> books;
+    List<BookInfo_Added> books;
 
     @BindView(R.id.flowLayout)
     FlowLayout flowLayout;
@@ -165,7 +165,7 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
 
     private void get_BOOKINFO() {
         Intent intent = getIntent();
-        //BookInfo bookInfo = intent.getParcelableExtra("bookInfoList");
+        //BookInfo_Added bookInfoAdded = intent.getParcelableExtra("bookInfoList");
 //        like = intent.getIntExtra("booklike",0);
 //        read = intent.getIntExtra("bookread",0);
 
@@ -173,10 +173,10 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
         tagNames = (TagNames) intent.getSerializableExtra("tagNames");
 
 
-        Call<List<BookInfo>> bookInfoCall = NetworkManager.getBookApi().getBookInfoWithIsbn(isbn);
-        bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
+        Call<List<BookInfo_Added>> bookInfoCall = NetworkManager.getBookApi().getBookInfoWithIsbn(isbn);
+        bookInfoCall.enqueue(new Callback<List<BookInfo_Added>>() {
             @Override
-            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
+            public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
                 books = response.body();
                 //thumbnail 설정
                 setThumbnail(BOOK_IMG, books.get(0).getThumbnail());
@@ -195,6 +195,7 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
                 bookTitle = books.get(0).getBook_name();
                 BOOK_TITLE.setText(books.get(0).getBook_name());
                 BOOK_AUTHOR.setText(books.get(0).getAuthor());
+                BOOK_COUNTRY.setText(books.get(0).getCountry());
                 BOOK_CONTENT.setText(books.get(0).getContents());
 //                String tagIdtoName = getTagNames(books.get(0).getTags(), tagNames);
 //                BOOK_TAGS.setText(tagIdtoName);
@@ -204,7 +205,7 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+            public void onFailure(Call<List<BookInfo_Added>> call, Throwable t) {
                 Toast.makeText(BookDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });

@@ -1,39 +1,26 @@
 package org.techtown.just;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.facebook.HttpMethod;
-import com.facebook.Profile;
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.kakao.usermgmt.UserManagement;
-import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
 import org.json.JSONObject;
+import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.LocalStore;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Arrays;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static org.techtown.just.base.BaseApplication.getLocalStore;
 
 //FIXME : class명을 FacebookLoginCallback으로 변경해주세요
-public class Login_FacebookActivity implements FacebookCallback<LoginResult> {
+public class Login_FacebookActivity extends BaseActivity implements FacebookCallback<LoginResult> {
 
     Context mContext;
 //

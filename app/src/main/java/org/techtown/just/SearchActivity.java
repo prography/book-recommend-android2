@@ -1,32 +1,25 @@
 package org.techtown.just;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.techtown.just.base.BaseActivity;
-import org.techtown.just.model.BookInfo;
+import org.techtown.just.model.BookInfo_Added;
+import org.techtown.just.model.LocalStore;
 import org.techtown.just.model.TagNames;
-import org.techtown.just.network.NetworkManager;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SearchActivity extends BaseActivity implements View.OnClickListener {
 
@@ -102,7 +95,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     private void load_RecommendBooks(String name, int mode){
 
-//        Call<List<BookInfo>> bookInfoCall=null;
+//        Call<List<BookInfo_Added>> bookInfoCall=null;
 //        //id으로 책 정보 가져오기
 //        if(mode ==1){//tag
 //            bookInfoCall = getNetworkManager().getBookApi().getListWithTag(name);
@@ -111,10 +104,10 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 //            textView.setText(" ");
 //            bookInfoCall = getNetworkManager().getBookApi().getListWithSearch(name);
 //        }
-//        bookInfoCall.enqueue(new Callback<List<BookInfo>>() {
+//        bookInfoCall.enqueue(new Callback<List<BookInfo_Added>>() {
 //            @Override
-//            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
-//                List<BookInfo> books = response.body();
+//            public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
+//                List<BookInfo_Added> books = response.body();
 //                if (response.isSuccessful()) {
 //                    adapter = new RecyclerViewAdapter(getApplicationContext(), books, tagNames);
 //                    recyclerView.setAdapter(adapter);
@@ -124,15 +117,15 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 //                }
 //            }
 //            @Override
-//            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+//            public void onFailure(Call<List<BookInfo_Added>> call, Throwable t) {
 //                Toast.makeText(SearchActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
 //            }
 //        });
 
     }
 
-    Call<List<BookInfo>> bookInfoWithIsbn;
-    BookInfo bookInfo;
+    Call<List<BookInfo_Added>> bookInfoWithIsbn;
+    BookInfo_Added bookInfoAdded;
 
 
 

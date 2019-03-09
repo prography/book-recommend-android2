@@ -1,28 +1,17 @@
 package org.techtown.just;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.techtown.just.base.BaseActivity;
-import org.techtown.just.model.BookInfo;
-import org.techtown.just.model.Post;
+import org.techtown.just.model.BookInfo_Added;
 import org.techtown.just.model.Tag;
-import org.techtown.just.network.NetworkManager;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,31 +49,31 @@ public class TagsActivity extends BaseActivity {
 //        });
 
         //tag id로 book 가져오기
-//        Call<List<BookInfo>> list = NetworkManager.getBookApi().getListWithTag(";3;4;");
-//        list.enqueue(new Callback<List<BookInfo>>() {
+//        Call<List<BookInfo_Added>> list = NetworkManager.getBookApi().getListWithTag(";3;4;");
+//        list.enqueue(new Callback<List<BookInfo_Added>>() {
 //            @Override
-//            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
-//                List<BookInfo> books = response.body();
+//            public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
+//                List<BookInfo_Added> books = response.body();
 //                text.setText(books.get(0).toString());
 //            }
 //
 //            @Override
-//            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+//            public void onFailure(Call<List<BookInfo_Added>> call, Throwable t) {
 //                Toast.makeText(TagsActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
 //            }
 //        });
 
         //isbn으로 책 정보 가져오기
-        Call<List<BookInfo>> bookInfo = getNetworkManager().getBookApi().getBookInfoWithIsbn("9788937460753");
-        bookInfo.enqueue(new Callback<List<BookInfo>>() {
+        Call<List<BookInfo_Added>> bookInfo = getNetworkManager().getBookApi().getBookInfoWithIsbn("9788937460753");
+        bookInfo.enqueue(new Callback<List<BookInfo_Added>>() {
             @Override
-            public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
-                List<BookInfo> books = response.body();
+            public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
+                List<BookInfo_Added> books = response.body();
                 text.setText(books.get(0).toString());
             }
 
             @Override
-            public void onFailure(Call<List<BookInfo>> call, Throwable t) {
+            public void onFailure(Call<List<BookInfo_Added>> call, Throwable t) {
                 Toast.makeText(TagsActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });

@@ -1,6 +1,5 @@
 package org.techtown.just;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +13,7 @@ import android.widget.Toast;
 import com.facebook.AccessToken;
 
 import org.techtown.just.base.BaseActivity;
-import org.techtown.just.model.BookInfoWithBool;
+import org.techtown.just.model.LocalStore;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
 
@@ -56,24 +55,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        //btnMy
+        //ClickListener
         btnMy.setOnClickListener(this);
         button.setOnClickListener(this);
         tv_userId.setOnClickListener(this);
         imageView.setOnClickListener(this);
 
-
-        //userId 설정
-        String userId = getLocalStore().getStringValue(LocalStore.UserId);
         if (userId != null)
             tv_userId.setText(userId + "님");
 
         //checkbox의 text <- tagNames의 text 대입
         tagNames = new TagNames();
-
-        String accessToken = getLocalStore().getStringValue(LocalStore.AccessToken);
-        String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
-        String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
 
         //tagNames 가져오기
         Call<List<Tag>> list = getNetworkManager().getBookApi().getTags();
@@ -153,9 +145,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onClick(View view) {
-        //aaaa
         Intent intent;
-        Random random = new Random();
         switch (view.getId()) {
 //            case R.id.btn_my:
 //                // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기

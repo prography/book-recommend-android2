@@ -4,9 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
-import java.util.List;
 
-public class BookInfo implements Serializable, Parcelable {
+public class BookInfoAdded implements Serializable, Parcelable {
 
     //book 속성
     public String isbn;
@@ -19,12 +18,7 @@ public class BookInfo implements Serializable, Parcelable {
     public String contents;
     public String thumbnail;
 
-    //서버에서 주지 않지만, list화면에서 편하게 구현하기 위해 넣음.
-    public BookFlag flag;
-//    public int like_flag;
-//    public int read_flag;
-
-    protected BookInfo(Parcel in) {
+    protected BookInfoAdded(Parcel in) {
         isbn = in.readString();
         tags = in.readString();
         book_name = in.readString();
@@ -32,18 +26,17 @@ public class BookInfo implements Serializable, Parcelable {
         country = in.readString();
         contents = in.readString();
         thumbnail = in.readString();
-        flag = in.readParcelable(BookFlag.class.getClassLoader());
     }
 
-    public static final Creator<BookInfo> CREATOR = new Creator<BookInfo>() {
+    public static final Creator<BookInfoAdded> CREATOR = new Creator<BookInfoAdded>() {
         @Override
-        public BookInfo createFromParcel(Parcel in) {
-            return new BookInfo(in);
+        public BookInfoAdded createFromParcel(Parcel in) {
+            return new BookInfoAdded(in);
         }
 
         @Override
-        public BookInfo[] newArray(int size) {
-            return new BookInfo[size];
+        public BookInfoAdded[] newArray(int size) {
+            return new BookInfoAdded[size];
         }
     };
 
@@ -66,7 +59,7 @@ public class BookInfo implements Serializable, Parcelable {
 
     @Override
     public String toString() {
-        return "BookInfo{" +
+        return "BookInfoAdded{" +
                 "isbn=" + isbn +
                 ", tags='" + tags + '\'' +
                 ", book_name='" + book_name + '\'' +
@@ -117,17 +110,8 @@ public class BookInfo implements Serializable, Parcelable {
         this.thumbnail = thumbnail;
     }
 
-    public BookInfo(String book_name){
+    public BookInfoAdded(String book_name){
         this.book_name = book_name;
-    }
-
-
-    public BookFlag getFlag() {
-        return flag;
-    }
-
-    public void setFlag(BookFlag flag) {
-        this.flag = flag;
     }
 
     @Override
@@ -144,6 +128,5 @@ public class BookInfo implements Serializable, Parcelable {
         parcel.writeString(country);
         parcel.writeString(contents);
         parcel.writeString(thumbnail);
-        parcel.writeParcelable(flag, i);
     }
 }

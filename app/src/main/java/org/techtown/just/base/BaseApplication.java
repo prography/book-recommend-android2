@@ -3,17 +3,17 @@ package org.techtown.just.base;
 
 import android.app.Activity;
 import android.app.Application;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatDialog;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kakao.auth.KakaoSDK;
 
 import org.techtown.just.KakaoSDKAdapter;
-import org.techtown.just.LocalStore;
+import org.techtown.just.model.LocalStore;
 import org.techtown.just.R;
 import org.techtown.just.network.NetworkManager;
 
@@ -25,6 +25,8 @@ public class BaseApplication extends Application {
 
    // private static volatile BaseApplication obj = null;
     private static volatile Activity currentActivity = null;
+
+
 
     @Override
     public void onCreate(){

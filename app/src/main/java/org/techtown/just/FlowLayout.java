@@ -471,10 +471,17 @@ public class FlowLayout extends ViewGroup {
         }
     }
 
-    public void setCheckedOnlyOne(Boolean bl, int i) {
-        View child = this.getChildAt(i);
-        CheckBox checkbox = child.findViewById(R.id.checkbox);
-        checkbox.setChecked(bl);
+    public void setCheckedOnlyOne(Boolean bl, int index) {
+//        View child = this.getChildAt(i);
+//        CheckBox checkbox = child.findViewById(R.id.checkbox);
+//        checkbox.setChecked(bl);
+        for (int i = 0; i < getChildCount(); i++) {
+            if (index == i) {
+                View child = this.getChildAt(i);
+                CheckBox checkbox = child.findViewById(R.id.checkbox);
+                checkbox.setChecked(bl);
+            }
+        }
     }
 
     public void setCheckable(Boolean bl) {

@@ -16,11 +16,11 @@
 
 
     <org.techtown.just.FlowLayout
-        android:padding="20dp"
         android:id="@+id/flowLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:layout_marginTop="8dp"
+        android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.031"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,11 +28,18 @@
 
     </org.techtown.just.FlowLayout>
 
+    <TextView
+        android:id="@+id/tv_boolean"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="true or false"
+        app:layout_constraintBottom_toBottomOf="@id/flowLayout"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rc_recommend"
         android:layout_width="369dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/flowLayout"
+        app:layout_constraintTop_toBottomOf="@+id/tv_boolean"
         tools:layout_editor_absoluteX="7dp"
         tools:ignore="MissingConstraints" />
 
