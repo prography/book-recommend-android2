@@ -12,6 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".AddBookInfoActivity"></activity>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -49,12 +51,10 @@
 
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
-        </activity>
-        <!-- <activity android:name=".Login_FacebookActivity"></activity> -->
-        <activity android:name=".Mod_ProfileActivity" />
-        <!-- <activity android:name=".Login2Activity" /> -->
+        </activity> <!-- <activity android:name=".Login_FacebookActivity"></activity> -->
+        <activity android:name=".Mod_ProfileActivity" /> <!-- <activity android:name=".Login2Activity" /> -->
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".SetMyTagsActivity"></activity>
+        <activity android:name=".SetMyTagsActivity" />
     </application>
 
 </manifest>

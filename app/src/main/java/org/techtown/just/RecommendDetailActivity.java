@@ -46,7 +46,9 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
     @BindView(R.id.tv_boolean)
     TextView tvBoolean;
 
-    private RecyclerViewAdapter_Added adapter;
+    private RecyclerViewAdapter_Added adapterAdded;
+    private RecyclerViewAdapter_NotAdded adapterNotAdded;
+
     TagNames tagNames;
 
 
@@ -71,7 +73,6 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
             loadSearchResult(search);
         }
         else {
-
             //flowlayout
             for (int i = 0; i < tagNames.getSelectedTags().size(); i++)
                 flowLayout.addTag(tagNames.getSelectedTags().get(i));
@@ -154,8 +155,8 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
                     BookInfoList_Added bookInfoList_added = response.body();
                     List<BookInfo_Added> data = bookInfoList_added.getData();
 
-                    adapter = new RecyclerViewAdapter_Added(getApplicationContext(), data, tagNames);
-                    recyclerView.setAdapter(adapter);
+                    adapterAdded = new RecyclerViewAdapter_Added(getApplicationContext(), data, tagNames);
+                    recyclerView.setAdapter(adapterAdded);
                 }
                 @Override
                 public void onFailure(Call<BookInfoList_Added> call, Throwable t) {
@@ -170,6 +171,10 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
                 public void onResponse(Call<BookInfoList_NotAdded> call, Response<BookInfoList_NotAdded> response) {
                     BookInfoList_NotAdded bookInfoList_notAdded = response.body();
                     List<BookInfo_NotAdded> data = bookInfoList_notAdded.getData();
+
+
+                    adapterNotAdded = new RecyclerViewAdapter_NotAdded(getApplicationContext(), data, tagNames);
+                    recyclerView.setAdapter(adapterNotAdded);
 
                     if (data.isEmpty()) //"data" : []인경 우우
                         showLongToastMsg("yes empty");
@@ -224,8 +229,8 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
 ////                            List<BookInfo_Added> bookInfoList = bookInfoWithBools.getData();
 ////                            tvBoolean.setText(isExist.toString());
 //////                        Toast.makeText(RecommendDetailActivity.this, isExist + " & " + bookInfoList.get(0).getBook_name() + " !!", Toast.LENGTH_SHORT).show();
-//////                        adapter = new RecyclerViewAdapter_Added(getApplicationContext(), bookInfoList, tagNames);
-//////                        recyclerView.setAdapter(adapter);
+//////                        adapterAdded = new RecyclerViewAdapter_Added(getApplicationContext(), bookInfoList, tagNames);
+//////                        recyclerView.setAdapter(adapterAdded);
 ////                        } else {
 ////                            tvBoolean.setText(isExist.toString());
 ////                        }
@@ -250,8 +255,8 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
             public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
                 List<BookInfo_Added> books = response.body();
                 if (response.isSuccessful()) {
-                    adapter = new RecyclerViewAdapter_Added(getApplicationContext(), books, tagNames);
-                    recyclerView.setAdapter(adapter);
+                    adapterAdded = new RecyclerViewAdapter_Added(getApplicationContext(), books, tagNames);
+                    recyclerView.setAdapter(adapterAdded);
 
                 } else {
                     Toast.makeText(RecommendDetailActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();

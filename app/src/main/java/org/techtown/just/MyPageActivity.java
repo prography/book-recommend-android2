@@ -56,9 +56,9 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
     @BindView(R.id.btn_more_interest)
     Button btn_mInterest;
     @BindView(R.id.recycler_readbook)
-    RecyclerView rc_readbook;
+    RecyclerView recycler_readbook;
     @BindView(R.id.recycler_interest_book)
-    RecyclerView rc_intbook;
+    RecyclerView recycler_intbook;
     @BindView(R.id.btn_setMyTags)
     Button btnSetMyTags;
     @BindView(R.id.flowLayout)
@@ -152,27 +152,27 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
     public void readbook_setting() {
         loadReadBooks();
 
-        rc_readbook.setHasFixedSize(true);
+        recycler_readbook.setHasFixedSize(true);
 
         mLayoutManager_1 = new LinearLayoutManager(this);
         ((LinearLayoutManager) mLayoutManager_1).setOrientation(HORIZONTAL);
-        rc_readbook.setLayoutManager(mLayoutManager_1);
+        recycler_readbook.setLayoutManager(mLayoutManager_1);
 
 //        recyclerViewAdapter_BookAlign_1 = new RecyclerViewAdapter_BookAlign(BookInfoArrayList);
-//        rc_readbook.setAdapter(recyclerViewAdapter_BookAlign_1);
+//        recycler_readbook.setAdapter(recyclerViewAdapter_BookAlign_1);
 
     }
 
     public void intbook_setting() {
         loadInterestBook();
-        rc_intbook.setHasFixedSize(true);
+        recycler_intbook.setHasFixedSize(true);
 
         mLayoutManager_2 = new LinearLayoutManager(this);
         ((LinearLayoutManager) mLayoutManager_2).setOrientation(HORIZONTAL);
-        rc_intbook.setLayoutManager(mLayoutManager_2);
+        recycler_intbook.setLayoutManager(mLayoutManager_2);
 
 //        recyclerViewAdapter_BookAlign_2 = new RecyclerViewAdapter_BookAlign(BookInfoArrayList2);
-//        rc_intbook.setAdapter(recyclerViewAdapter_BookAlign_2);
+//        recycler_intbook.setAdapter(recyclerViewAdapter_BookAlign_2);
 
     }
 
@@ -271,7 +271,7 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
                 List<BookInfo_Added> books_1 = response.body();
                 if (response.isSuccessful()) {
                     recyclerViewAdapter_BookAlign_1 = new RecyclerViewAdapter_BookAlign(getApplicationContext(), books_1, tagNames);
-                    rc_readbook.setAdapter(recyclerViewAdapter_BookAlign_1);
+                    recycler_readbook.setAdapter(recyclerViewAdapter_BookAlign_1);
                 } else {
                     Toast.makeText(MyPageActivity.this, "response 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                     Log.e("response error :: ", "" + response.message());
@@ -296,7 +296,7 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
                 List<BookInfo_Added> books_2 = response.body();
                 if (response.isSuccessful()) {
                     recyclerViewAdapter_BookAlign_2 = new RecyclerViewAdapter_BookAlign(getApplicationContext(), books_2, tagNames);
-                    rc_intbook.setAdapter(recyclerViewAdapter_BookAlign_2);
+                    recycler_intbook.setAdapter(recyclerViewAdapter_BookAlign_2);
                 } else {
                     Toast.makeText(MyPageActivity.this, "a오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                 }
