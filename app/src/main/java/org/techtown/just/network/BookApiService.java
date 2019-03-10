@@ -2,12 +2,12 @@ package org.techtown.just.network;
 
 import com.google.gson.JsonObject;
 
+import org.techtown.just.model.BookFlag;
 import org.techtown.just.model.BookInfoList_Added;
 import org.techtown.just.model.BookInfoList_NotAdded;
 import org.techtown.just.model.BookInfo_Added;
 import org.techtown.just.model.IsExist;
 import org.techtown.just.model.LoginResult;
-import org.techtown.just.model.Status;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.UserSelectedTags;
 
@@ -123,11 +123,11 @@ public interface BookApiService {
 
     //user가 ISBN값의 책과 관련된 flag값들(읽었어요/좋아요) 출력
     @GET("user/status/book/{isbn}/{user_id}/")
-    Call<List<Status>> getBookFlags(@Path("isbn") String isbn,
-                                    @Path("user_id") String user_id,
-                                    @Header("accessToken") String accessToken,
-                                    @Header("idToken") String idToken,
-                                    @Header("refreshToken") String refreshToken);
+    Call<List<BookFlag>> getBookFlags(@Path("isbn") String isbn,
+                                      @Path("user_id") String user_id,
+                                      @Header("accessToken") String accessToken,
+                                      @Header("idToken") String idToken,
+                                      @Header("refreshToken") String refreshToken);
 
     //user에 ISBN값의 책에 flag(읽었어요/좋아요) 정보 저장 (최초1회)
     @FormUrlEncoded

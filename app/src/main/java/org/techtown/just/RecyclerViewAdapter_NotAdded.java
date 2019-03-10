@@ -12,10 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.techtown.just.model.BookInfoList_Added;
+import org.techtown.just.model.BookFlag;
 import org.techtown.just.model.BookInfo_Added;
 import org.techtown.just.model.LocalStore;
-import org.techtown.just.model.Status;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
 
@@ -35,7 +34,7 @@ import retrofit2.Response;
 import static org.techtown.just.base.BaseApplication.getLocalStore;
 import static org.techtown.just.base.BaseApplication.getNetworkManager;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewAdapter_NotAdded extends RecyclerView.Adapter<RecyclerViewAdapter_NotAdded.ViewHolder> {
 
     private List<BookInfo_Added> bookInfoAddedList;
     private Context mContext;
@@ -54,7 +53,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-    public RecyclerViewAdapter(Context mContext, List<BookInfo_Added> bookInfoAddedList, TagNames tagNames) {
+    public RecyclerViewAdapter_NotAdded(Context mContext, List<BookInfo_Added> bookInfoAddedList, TagNames tagNames) {
         this.mContext = mContext;
         //this.bookInfoAddedList = bookInfoAddedList;
 
@@ -86,7 +85,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         //View view = LayoutInflater.from(viewGroup.getContext()).inflate(itemLayout,viewGroup,false);
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rcview_recommenditem, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_notadded, parent, false);
 
         return new ViewHolder(v);
     }
@@ -112,6 +111,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         viewHolder.ITEM_BOOKNAME.setText(bookInfoAddedList.get(position).getBook_name());
         viewHolder.ITEM_AUTHOR.setText(bookInfoAddedList.get(position).getAuthor());
+        viewHolder.ITEM_COUNTRY.setText(bookInfoAddedList.get(position).getCountry());
 
         String s = getTagNames(bookInfoAddedList.get(position).getTags(), tagNames);
         viewHolder.ITEM_TAG.setText(s);
@@ -222,7 +222,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 } catch (IndexOutOfBoundsException e) {
                     Toast.makeText(mContext, "catch", Toast.LENGTH_SHORT).show();
                 }
-//                List<Status> status = response.body();
+//                List<BookFlag> status = response.body();
 
 
             }
@@ -243,14 +243,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         final String isbn = bookInfoAddedList.get(position).getIsbn();
 
-        Call<List<Status>> call = getNetworkManager().getBookApi().getBookFlags(isbn, userId, accessToken, idToken, refreshToken);
-        call.enqueue(new Callback<List<Status>>() {
+        Call<List<BookFlag>> call = getNetworkManager().getBookApi().getBookFlags(isbn, userId, accessToken, idToken, refreshToken);
+        call.enqueue(new Callback<List<BookFlag>>() {
             @Override
-            public void onResponse(Call<List<Status>> call, Response<List<Status>> response) {
+            public void onResponse(Call<List<BookFlag>> call, Response<List<BookFlag>> response) {
                 try {
-                    List<Status> status = response.body();
+                    List<BookFlag> bookFlags = response.body();
 
-                    int like = status.get(0).getBe_interested();
+                    int like = bookFlags.get(0).getBe_interested();
                     if (like == 1) {
                         viewHolder.ITEM_LIKE.setSelected(true);
                         viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_full);
@@ -260,7 +260,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         viewHolder.ITEM_LIKE.setImageResource(R.drawable.ic_like_empty);
                     }
 
-                    int read = status.get(0).getHad_read();
+                    int read = bookFlags.get(0).getHad_read();
                     if (read == 1) {
                         viewHolder.ITEM_READ.setSelected(true);
                         viewHolder.ITEM_READ.setImageResource(R.drawable.ic_checked);
@@ -279,7 +279,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
 
             @Override
-            public void onFailure(Call<List<Status>> call, Throwable t) {
+            public void onFailure(Call<List<BookFlag>> call, Throwable t) {
                 //Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -373,7 +373,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public final View mView;
         ImageView ITEM_IMG, ITEM_LIKE, ITEM_READ;
-        TextView ITEM_BOOKNAME, ITEM_AUTHOR, ITEM_TAG;
+        TextView ITEM_BOOKNAME, ITEM_AUTHOR, ITEM_TAG, ITEM_COUNTRY;
 
 
         public ViewHolder(View itemView) {
@@ -385,6 +385,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             ITEM_BOOKNAME = itemView.findViewById(R.id.item_bookname);
             ITEM_AUTHOR = itemView.findViewById(R.id.item_author);
             ITEM_TAG = itemView.findViewById(R.id.item_tag);
+            ITEM_COUNTRY = itemView.findViewById(R.id.item_country);
 
             // 레이아웃 객체화 findViewById
 

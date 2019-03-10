@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="180dp">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:id="@+id/item_img"
+        android:background="#ffffff"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/item_bookname"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:singleLine="true"
+        android:maxLength="15"
+        android:text="커져버린 사소한 거짓말"
+        android:textSize="18dp"
+        app:layout_constraintLeft_toRightOf="@+id/item_img"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/item_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="author"
+        android:textSize="15dp"
+        app:layout_constraintLeft_toRightOf="@+id/item_img"
+        app:layout_constraintTop_toBottomOf="@id/item_bookname" />
+
+    <TextView
+        android:id="@+id/item_country"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="country"
+        app:layout_constraintStart_toEndOf="@+id/item_img"
+        app:layout_constraintTop_toBottomOf="@+id/item_author" />
+
+
+    <TextView
+        android:id="@+id/item_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="60dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="~~~~~~~"
+        android:textSize="15dp"
+        app:layout_constraintLeft_toRightOf="@+id/item_img"
+        app:layout_constraintTop_toBottomOf="@+id/item_author" />
+
+    <ImageView
+        android:id="@+id/item_like"
+        android:layout_width="29dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_like_empty"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="15dp"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/item_read"
+        android:layout_width="24dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_check"
+        app:layout_constraintEnd_toStartOf="@+id/item_like"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="15dp" />
+
+
+
+</android.support.constraint.ConstraintLayout>

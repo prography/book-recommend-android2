@@ -5,20 +5,19 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public class BookInfoAdded implements Serializable, Parcelable {
+public class BookInfo_Added implements Serializable, Parcelable {
 
     //book 속성
     public String isbn;
-    public String tags;
-
     public String book_name;
-
     public String author;
-    public String country;
     public String contents;
     public String thumbnail;
 
-    protected BookInfoAdded(Parcel in) {
+    public String tags;
+    public String country;
+
+    protected BookInfo_Added(Parcel in) {
         isbn = in.readString();
         tags = in.readString();
         book_name = in.readString();
@@ -28,15 +27,15 @@ public class BookInfoAdded implements Serializable, Parcelable {
         thumbnail = in.readString();
     }
 
-    public static final Creator<BookInfoAdded> CREATOR = new Creator<BookInfoAdded>() {
+    public static final Creator<BookInfo_Added> CREATOR = new Creator<BookInfo_Added>() {
         @Override
-        public BookInfoAdded createFromParcel(Parcel in) {
-            return new BookInfoAdded(in);
+        public BookInfo_Added createFromParcel(Parcel in) {
+            return new BookInfo_Added(in);
         }
 
         @Override
-        public BookInfoAdded[] newArray(int size) {
-            return new BookInfoAdded[size];
+        public BookInfo_Added[] newArray(int size) {
+            return new BookInfo_Added[size];
         }
     };
 
@@ -59,7 +58,7 @@ public class BookInfoAdded implements Serializable, Parcelable {
 
     @Override
     public String toString() {
-        return "BookInfoAdded{" +
+        return "BookInfo_Added{" +
                 "isbn=" + isbn +
                 ", tags='" + tags + '\'' +
                 ", book_name='" + book_name + '\'' +
@@ -110,7 +109,7 @@ public class BookInfoAdded implements Serializable, Parcelable {
         this.thumbnail = thumbnail;
     }
 
-    public BookInfoAdded(String book_name){
+    public BookInfo_Added(String book_name){
         this.book_name = book_name;
     }
 

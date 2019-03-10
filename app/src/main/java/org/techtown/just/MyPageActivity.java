@@ -87,7 +87,7 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
     Handler handler = new Handler(); //외부쓰레드에서 메인 ui화면을 그릴 때 사용
 
     RecyclerView.LayoutManager mLayoutManager_1, mLayoutManager_2, mLayoutManager_3;
-    MyAdapter myAdapter_1, myAdapter_2, myAdapter_3;
+    RecyclerViewAdapter_BookAlign recyclerViewAdapter_BookAlign_1, recyclerViewAdapter_BookAlign_2, recyclerViewAdapter_BookAlign_3;
 
     TagNames tagNames;
 
@@ -158,8 +158,8 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
         ((LinearLayoutManager) mLayoutManager_1).setOrientation(HORIZONTAL);
         rc_readbook.setLayoutManager(mLayoutManager_1);
 
-//        myAdapter_1 = new MyAdapter(BookInfoArrayList);
-//        rc_readbook.setAdapter(myAdapter_1);
+//        recyclerViewAdapter_BookAlign_1 = new RecyclerViewAdapter_BookAlign(BookInfoArrayList);
+//        rc_readbook.setAdapter(recyclerViewAdapter_BookAlign_1);
 
     }
 
@@ -171,8 +171,8 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
         ((LinearLayoutManager) mLayoutManager_2).setOrientation(HORIZONTAL);
         rc_intbook.setLayoutManager(mLayoutManager_2);
 
-//        myAdapter_2 = new MyAdapter(BookInfoArrayList2);
-//        rc_intbook.setAdapter(myAdapter_2);
+//        recyclerViewAdapter_BookAlign_2 = new RecyclerViewAdapter_BookAlign(BookInfoArrayList2);
+//        rc_intbook.setAdapter(recyclerViewAdapter_BookAlign_2);
 
     }
 
@@ -181,9 +181,7 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
 
         switch (view.getId()) {
             case R.id.btn_back:
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                finish();
                 break;
 
             case R.id.btn_mod_profile:
@@ -248,8 +246,8 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
                 List<BookInfo_Added> books_3 = response.body();
                 if (response.isSuccessful()) {
-                    myAdapter_3 = new MyAdapter(getApplicationContext(), books_3, tagNames);
-                    recyclerRcbook.setAdapter(myAdapter_3);
+                    recyclerViewAdapter_BookAlign_3 = new RecyclerViewAdapter_BookAlign(getApplicationContext(), books_3, tagNames);
+                    recyclerRcbook.setAdapter(recyclerViewAdapter_BookAlign_3);
                 } else {
                     showShortToastMsg("response 오류가 발생했습니다.");
                     Log.e("response error :: ", "" + response.message());
@@ -272,8 +270,8 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
                 List<BookInfo_Added> books_1 = response.body();
                 if (response.isSuccessful()) {
-                    myAdapter_1 = new MyAdapter(getApplicationContext(), books_1, tagNames);
-                    rc_readbook.setAdapter(myAdapter_1);
+                    recyclerViewAdapter_BookAlign_1 = new RecyclerViewAdapter_BookAlign(getApplicationContext(), books_1, tagNames);
+                    rc_readbook.setAdapter(recyclerViewAdapter_BookAlign_1);
                 } else {
                     Toast.makeText(MyPageActivity.this, "response 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                     Log.e("response error :: ", "" + response.message());
@@ -297,8 +295,8 @@ public class MyPageActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
                 List<BookInfo_Added> books_2 = response.body();
                 if (response.isSuccessful()) {
-                    myAdapter_2 = new MyAdapter(getApplicationContext(), books_2, tagNames);
-                    rc_intbook.setAdapter(myAdapter_2);
+                    recyclerViewAdapter_BookAlign_2 = new RecyclerViewAdapter_BookAlign(getApplicationContext(), books_2, tagNames);
+                    rc_intbook.setAdapter(recyclerViewAdapter_BookAlign_2);
                 } else {
                     Toast.makeText(MyPageActivity.this, "a오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                 }

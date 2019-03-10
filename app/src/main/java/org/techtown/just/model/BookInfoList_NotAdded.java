@@ -3,14 +3,14 @@ package org.techtown.just.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class BookInfoListAdded implements Serializable {
-    List<BookInfoAdded> data;
+public class BookInfoList_NotAdded implements Serializable {
+    List<BookInfo_NotAdded> data;
 
-    public List<BookInfoAdded> getData() {
+    public List<BookInfo_NotAdded> getData() {
         return data;
     }
 
-    public void setData(List<BookInfoAdded> data) {
+    public void setData(List<BookInfo_NotAdded> data) {
         this.data = data;
     }
 }

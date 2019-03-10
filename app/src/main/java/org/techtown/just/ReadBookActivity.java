@@ -14,7 +14,8 @@ import org.techtown.just.model.TagNames;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecyclerViewClickListener {
+public class ReadBookActivity extends BaseActivity implements RecyclerViewAdapter_BookAlign.
+        MyRecyclerViewClickListener {
 
     @BindView(R.id.btn_back)
     ImageView btnBack;
@@ -25,7 +26,7 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
     //@BindView(R.id.recycler_read)
     RecyclerView mRecyclerView2;
     RecyclerView.LayoutManager mLayoutManager2;
-    MyAdapter myAdapter2;
+    RecyclerViewAdapter_BookAlign recyclerViewAdapterBookAlign2;
 
     TagNames tagNames;
 
@@ -79,9 +80,9 @@ public class ReadBookActivity extends BaseActivity implements MyAdapter.MyRecycl
 //            public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
 //                List<BookInfo_Added> books_1 = response.body();
 //                if (response.isSuccessful()) {
-//                    myAdapter2 = new MyAdapter(getApplicationContext(),books_1, tagNames);
-//                    myAdapter2 .setOnClickListener(ReadBookActivity.this);
-//                    mRecyclerView2.setAdapter(myAdapter2);
+//                    recyclerViewAdapterBookAlign2 = new RecyclerViewAdapter_BookAlign(getApplicationContext(),books_1, tagNames);
+//                    recyclerViewAdapterBookAlign2 .setOnClickListener(ReadBookActivity.this);
+//                    mRecyclerView2.setAdapter(recyclerViewAdapterBookAlign2);
 //
 //                } else {
 //                    Toast.makeText(ReadBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();

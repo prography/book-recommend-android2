@@ -46,7 +46,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
     @BindView(R.id.tv_boolean)
     TextView tvBoolean;
 
-    private RecyclerViewAdapter adapter;
+    private RecyclerViewAdapter_Added adapter;
     TagNames tagNames;
 
 
@@ -79,9 +79,11 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
             flowLayout.setChecked(true);
             flowLayout.setCheckable(false);
 
-//        textView.setText(getTagNames());
             String tags = getTagId();
             loadRecommendBooks(tags);
+
+            flowLayout.setVisibility(View.VISIBLE);
+            tvBoolean.setVisibility(View.INVISIBLE);
         }
 
 
@@ -139,6 +141,8 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
     //검색
     private void loadSearchResult(String search) {
         int isExist = isExistBook(search);
+        tvBoolean.setVisibility(View.VISIBLE);
+        flowLayout.setVisibility(View.INVISIBLE);
         tvBoolean.setText(String.valueOf(isExist));
 
 
@@ -150,7 +154,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
                     BookInfoList_Added bookInfoList_added = response.body();
                     List<BookInfo_Added> data = bookInfoList_added.getData();
 
-                    adapter = new RecyclerViewAdapter(getApplicationContext(), data, tagNames);
+                    adapter = new RecyclerViewAdapter_Added(getApplicationContext(), data, tagNames);
                     recyclerView.setAdapter(adapter);
                 }
                 @Override
@@ -220,7 +224,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
 ////                            List<BookInfo_Added> bookInfoList = bookInfoWithBools.getData();
 ////                            tvBoolean.setText(isExist.toString());
 //////                        Toast.makeText(RecommendDetailActivity.this, isExist + " & " + bookInfoList.get(0).getBook_name() + " !!", Toast.LENGTH_SHORT).show();
-//////                        adapter = new RecyclerViewAdapter(getApplicationContext(), bookInfoList, tagNames);
+//////                        adapter = new RecyclerViewAdapter_Added(getApplicationContext(), bookInfoList, tagNames);
 //////                        recyclerView.setAdapter(adapter);
 ////                        } else {
 ////                            tvBoolean.setText(isExist.toString());
@@ -246,7 +250,7 @@ public class RecommendDetailActivity extends BaseActivity implements View.OnClic
             public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
                 List<BookInfo_Added> books = response.body();
                 if (response.isSuccessful()) {
-                    adapter = new RecyclerViewAdapter(getApplicationContext(), books, tagNames);
+                    adapter = new RecyclerViewAdapter_Added(getApplicationContext(), books, tagNames);
                     recyclerView.setAdapter(adapter);
 
                 } else {

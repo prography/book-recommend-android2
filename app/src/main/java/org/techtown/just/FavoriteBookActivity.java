@@ -21,14 +21,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FavoriteBookActivity extends BaseActivity implements MyAdapter.MyRecyclerViewClickListener {
+public class FavoriteBookActivity extends BaseActivity implements RecyclerViewAdapter_BookAlign.MyRecyclerViewClickListener {
 
     @BindView(R.id.btn_back)
     ImageView btnBack;
     //@BindView(R.id.recycler_int)
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
-    MyAdapter myAdapter;
+    RecyclerViewAdapter_BookAlign recyclerViewAdapterBookAlign;
 
     TagNames tagNames;
 
@@ -49,9 +49,9 @@ public class FavoriteBookActivity extends BaseActivity implements MyAdapter.MyRe
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         loadIntBooks();
-//        myAdapter = new MyAdapter(BookInfoArrayList);
-//        myAdapter.setOnClickListener(this); //버튼 연결
-//        mRecyclerView.setAdapter(myAdapter);
+//        recyclerViewAdapterBookAlign = new RecyclerViewAdapter_BookAlign(BookInfoArrayList);
+//        recyclerViewAdapterBookAlign.setOnClickListener(this); //버튼 연결
+//        mRecyclerView.setAdapter(recyclerViewAdapterBookAlign);
 
         View.OnClickListener mClickListener = new View.OnClickListener() {
             @Override
@@ -86,9 +86,9 @@ public class FavoriteBookActivity extends BaseActivity implements MyAdapter.MyRe
             public void onResponse(Call<List<BookInfo_Added>> call, Response<List<BookInfo_Added>> response) {
                 List<BookInfo_Added> books_1 = response.body();
                 if (response.isSuccessful()) {
-                    myAdapter = new MyAdapter(getApplicationContext(), books_1, tagNames);
-                    myAdapter.setOnClickListener(FavoriteBookActivity.this);
-                    mRecyclerView.setAdapter(myAdapter);
+                    recyclerViewAdapterBookAlign = new RecyclerViewAdapter_BookAlign(getApplicationContext(), books_1, tagNames);
+                    recyclerViewAdapterBookAlign.setOnClickListener(FavoriteBookActivity.this);
+                    mRecyclerView.setAdapter(recyclerViewAdapterBookAlign);
 
                 } else {
                     Toast.makeText(FavoriteBookActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();

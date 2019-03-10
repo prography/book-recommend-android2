@@ -11,9 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.techtown.just.base.BaseActivity;
+import org.techtown.just.model.BookFlag;
 import org.techtown.just.model.BookInfo_Added;
 import org.techtown.just.model.LocalStore;
-import org.techtown.just.model.Status;
 import org.techtown.just.model.Tag;
 import org.techtown.just.model.TagNames;
 import org.techtown.just.network.NetworkManager;
@@ -121,14 +121,14 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
         String idToken = getLocalStore().getStringValue(LocalStore.IdToken);
         String refreshToken = getLocalStore().getStringValue(LocalStore.RefreshToken);
 
-        Call<List<Status>> call = getNetworkManager().getBookApi().getBookFlags(isbn, userId, accessToken, idToken, refreshToken);
-        call.enqueue(new Callback<List<Status>>() {
+        Call<List<BookFlag>> call = getNetworkManager().getBookApi().getBookFlags(isbn, userId, accessToken, idToken, refreshToken);
+        call.enqueue(new Callback<List<BookFlag>>() {
             @Override
-            public void onResponse(Call<List<Status>> call, Response<List<Status>> response) {
+            public void onResponse(Call<List<BookFlag>> call, Response<List<BookFlag>> response) {
                 try {
-                    List<Status> status = response.body();
+                    List<BookFlag> bookFlags = response.body();
 
-                    int like = status.get(0).getBe_interested();
+                    int like = bookFlags.get(0).getBe_interested();
                     if (like == 1) {
                         BOOK_LIKE.setSelected(true);
                         BOOK_LIKE.setImageResource(R.drawable.ic_like_full);
@@ -138,7 +138,7 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
                         BOOK_LIKE.setImageResource(R.drawable.ic_like_empty);
                     }
 
-                    int read = status.get(0).getHad_read();
+                    int read = bookFlags.get(0).getHad_read();
                     if (read == 1) {
                         BOOK_READ.setSelected(true);
                         BOOK_READ.setImageResource(R.drawable.ic_checked);
@@ -157,7 +157,7 @@ public class BookDetailActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(Call<List<Status>> call, Throwable t) {
+            public void onFailure(Call<List<BookFlag>> call, Throwable t) {
                 //Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });

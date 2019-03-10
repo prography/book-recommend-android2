@@ -21,7 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecyclerViewAdapter_BookAlign extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 //    private String[] mData;
 //    private LayoutInflater mInflater;
@@ -55,11 +55,11 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-//    MyAdapter(ArrayList<BookInfo_Added> bookInfoAddedList){
+//    RecyclerViewAdapter_BookAlign(ArrayList<BookInfo_Added> bookInfoAddedList){
 //        this.bookInfoAddedList = bookInfoAddedList;
 //    }
 
-    MyAdapter(Context mContext, List<BookInfo_Added> bookInfoAddedList, TagNames tagNames){
+    RecyclerViewAdapter_BookAlign(Context mContext, List<BookInfo_Added> bookInfoAddedList, TagNames tagNames){
         this.mContext = mContext;
         this.bookInfoAddedList = bookInfoAddedList;
         this.tagNames = tagNames;
@@ -68,7 +68,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rcview_mybook , parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_bookalign, parent,false);
 
         return new MyViewHolder(v);
     }

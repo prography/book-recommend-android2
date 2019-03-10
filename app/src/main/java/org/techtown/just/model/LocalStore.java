@@ -1,4 +1,4 @@
-package org.techtown.just;
+package org.techtown.just.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
