@@ -1,6 +1,6 @@
 package org.techtown.just.model;
 
-public class Status {
+public class BookFlag {
     int had_read;
     int be_interested;
 
